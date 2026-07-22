@@ -11,19 +11,24 @@
 
 1. **每日總覽**：一分鐘總覽（3 個焦點卡＋5 條 takeaways）、本週重點盯盤時程。
 2. **市場總經**：美股與美國總經、台股、全球央行與總經。
-3. **產業與主題**：AI、科技、金融、生技。
+3. **產業與主題**：AI、科技、金融、生技、原物料。
 4. **政經**：地緣政治、美國政治。
 5. **關於與方法**：來源、合規、限制、規劃（大致固定，日期需更新）。
 
 ## 來源優先序
 
-1. **五大主要來源**：Bloomberg、WSJ、NYT、FT、華爾街見聞。
-2. **公開／官方補充**：Reuters 體系、CNBC、CBS、AP、官方央行／交易所／公司 IR、政府與司法機構公告。
+主要來源共 13 家（對應徽章）：
+
+- **付費訂閱（使用者本人，登入瀏覽器讀）**：Bloomberg `b-bbg`、WSJ `b-wsj`、NYT `b-nyt`、FT `b-ft`、Nikkei Asia `b-nikkei`、Washington Post `b-wapo`、Barron's `b-barrons`、IBD `b-ibd`。
+- **免費公開**：CNBC `b-cnbc`、MarketWatch `b-mw`、Tom's Hardware `b-toms`、Oil & Gas Journal `b-ogj`、華爾街見聞 `b-wscn`（wallstreetcn.com）。
+- **公開／官方補充** `b-pub`：Reuters 體系、CBS、AP、官方央行／交易所／公司 IR、政府與司法機構公告。
+
+各來源擅長領域（供分區取材參考）：Nikkei＝亞洲供應鏈／匯率；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG（原物料）；MarketWatch/IBD/Barron's＝美股與選股視角；WaPo＝美政治/地緣；CNBC＝即時盤勢與全球；華爾街見聞＝中文彙整西方財經。
 
 ### 模式差異
 
-- **每日自動版（無瀏覽器）**：以公開可讀來源＋華爾街見聞（wallstreetcn.com）＋WebSearch 跨源彙整。**不得**嘗試繞過付費牆或反爬蟲。
-- **加強版（使用者在場、Chrome 已登入）**：可透過 Claude in Chrome，在使用者已登入的分頁讀取其本人訂閱的 Bloomberg／WSJ／FT／NYT 全文重點。
+- **每日自動版（無瀏覽器）**：以免費公開來源（CNBC、MarketWatch、Tom's Hardware、OGJ、華爾街見聞）＋WebSearch 跨源彙整。**不得**嘗試繞過付費牆或反爬蟲。
+- **加強版（使用者在場、Chrome 已登入）**：可透過 Claude in Chrome，在使用者已登入的分頁讀取其本人訂閱 8 家（Bloomberg／WSJ／NYT／FT／Nikkei／WaPo／Barron's／IBD）的全文重點。
 
 ## 合規紅線（必守）
 
