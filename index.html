@@ -17,7 +17,7 @@
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
     background:linear-gradient(180deg,#0b0f14 0%,#0d131c 100%);
-    color:var(--txt); line-height:1.65; -webkit-font-smoothing:antialiased;
+    color:var(--txt); line-height:1.7; -webkit-font-smoothing:antialiased;
     min-height:100vh; padding-bottom:60px;
   }
   .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
@@ -58,7 +58,7 @@
   .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
   @media(max-width:760px){.grid{grid-template-columns:1fr}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 17px;transition:.18s;position:relative;overflow:hidden}
-  .card:hover{border-color:var(--line2);background:var(--card2);transform:translateY(-2px)}
+  .card:hover{border-color:var(--line2);background:var(--card2)}
   .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:.7}
   .card.t-green::before{background:var(--green)} .card.t-yellow::before{background:var(--yellow)}
   .card.t-orange::before{background:var(--orange)} .card.t-red::before{background:var(--red)}
@@ -68,10 +68,12 @@
   .tag.warn{background:rgba(230,126,34,.14);color:#ffb066;border-color:rgba(230,126,34,.3)}
   .tag.pos{background:rgba(46,204,113,.14);color:#5fe0a0;border-color:rgba(46,204,113,.3)}
   .date{margin-left:auto;font-size:11.5px;color:var(--txt3)}
-  .card h3{font-size:15.5px;font-weight:650;line-height:1.45;margin-bottom:9px;color:var(--txt)}
+  .card h3{font-size:15.5px;font-weight:650;line-height:1.5;margin-bottom:8px;color:var(--txt)}
+  .card .lead{font-size:13.4px;color:var(--txt2);margin-bottom:9px}
   .card ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
-  .card ul li{font-size:13.3px;color:var(--txt2);padding-left:15px;position:relative}
-  .card ul li::before{content:"";position:absolute;left:2px;top:8px;width:5px;height:5px;border-radius:50%;background:var(--accent);opacity:.6}
+  .card ul li{font-size:13.2px;color:var(--txt2);padding-left:15px;position:relative}
+  .card ul li::before{content:"";position:absolute;left:2px;top:9px;width:5px;height:5px;border-radius:50%;background:var(--accent);opacity:.6}
+  .card ul li b{color:var(--txt);font-weight:600}
   .src{display:flex;align-items:center;gap:8px;font-size:12px;padding-top:10px;border-top:1px solid var(--line)}
   .src a{color:var(--accent);text-decoration:none;margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-weight:600}
   .src a:hover{color:var(--accent2);text-decoration:underline}
@@ -92,22 +94,29 @@
   .b-ogj{background:#181410;color:#c8a06a;border:1px solid #443a28}
   .b-pub{background:var(--chip);color:var(--txt2);border:1px solid var(--line)}
 
-  .brief{background:linear-gradient(135deg,#131c2a 0%,#16202f 100%);border:1px solid var(--line2);border-radius:16px;padding:22px 24px;margin-bottom:24px}
+  .brief{background:linear-gradient(135deg,#131c2a 0%,#16202f 100%);border:1px solid var(--line2);border-radius:16px;padding:22px 24px;margin-bottom:20px}
   .brief .bl{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
   .brief .bl h2{font-size:18px}
   .brief .bl .pill{font-size:11px;background:var(--accent);color:#04101f;font-weight:700;padding:3px 10px;border-radius:12px}
-  .focus{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+  .snap{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:18px}
+  @media(max-width:760px){.snap{grid-template-columns:repeat(3,1fr)}}
+  .snap .s{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 8px;text-align:center}
+  .snap .s .k{font-size:10.5px;color:var(--txt3);margin-bottom:3px}
+  .snap .s .v{font-size:14.5px;font-weight:700}
+  .snap .s .v.up{color:#5fe0a0} .snap .s .v.dn{color:#ff8b7d} .snap .s .v.fl{color:var(--txt2)}
+  .focus{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}
   @media(max-width:760px){.focus{grid-template-columns:1fr}}
-  .focus .f{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
-  .focus .f .k{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:600}
-  .focus .f .v{font-size:14px;color:var(--txt);font-weight:600;line-height:1.5}
-  .focus .f .v span{color:var(--accent2)}
-  .takeaways{list-style:none;display:flex;flex-direction:column;gap:10px}
-  .takeaways li{font-size:14px;color:var(--txt2);padding-left:24px;position:relative;line-height:1.6}
+  .focus .f{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
+  .focus .f .k{font-size:11px;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:700}
+  .focus .f .v{font-size:13.5px;color:var(--txt2);line-height:1.6}
+  .focus .f .v b{color:var(--txt);font-weight:650}
+  .takeaways{list-style:none;display:flex;flex-direction:column;gap:11px;margin-top:4px}
+  .takeaways li{font-size:14px;color:var(--txt2);padding-left:24px;position:relative;line-height:1.68}
   .takeaways li::before{content:"▸";position:absolute;left:4px;top:0;color:var(--accent);font-weight:700}
   .takeaways li b{color:var(--txt);font-weight:650}
+  .sub-h{font-size:13px;color:var(--txt3);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin:18px 0 10px}
 
-  .thermo{display:flex;gap:0;height:8px;border-radius:5px;overflow:hidden;margin:14px 0 4px}
+  .thermo{display:flex;gap:0;height:8px;border-radius:5px;overflow:hidden;margin:16px 0 4px}
   .thermo div{flex:1}
   .thermo .g{background:var(--green)} .thermo .y{background:var(--yellow)}
   .thermo .o{background:var(--orange)} .thermo .r{background:var(--red)}
@@ -120,6 +129,15 @@
 
   .srcbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
   .srcbar .lbl{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+
+  .essay{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 30px}
+  @media(max-width:760px){.essay{padding:22px 20px}}
+  .essay .etag{display:inline-block;font-size:11px;background:var(--accent);color:#04101f;font-weight:700;padding:3px 10px;border-radius:12px;margin-bottom:14px}
+  .essay h2{font-size:21px;margin-bottom:6px;line-height:1.4}
+  .essay .by{font-size:12.5px;color:var(--txt3);margin-bottom:20px}
+  .essay p{font-size:14.5px;color:var(--txt2);margin-bottom:13px;line-height:1.85}
+  .essay p b{color:var(--txt);font-weight:650}
+  .essay .kick{font-size:15px;color:var(--txt);border-left:3px solid var(--accent);padding:2px 0 2px 16px;margin-bottom:20px;line-height:1.8}
 
   .about-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:16px}
   .about-card h3{font-size:15px;margin-bottom:10px;color:var(--accent2)}
@@ -143,11 +161,12 @@
         </div>
       </div>
       <div class="head-meta">
-        <span class="stamp"><span class="dot" style="width:7px;height:7px"></span>最後更新 <b>2026/07/22 16:00 (台北)</b></span>
+        <span class="stamp"><span class="dot" style="width:7px;height:7px"></span>最後更新 <b>2026/07/23 08:27 (台北)</b></span>
       </div>
     </div>
     <nav class="tabs" id="tabs">
-      <button class="active" data-t="overview">每日總覽</button>
+      <button class="active" data-t="overview">三分鐘總覽</button>
+      <button data-t="essay">摘要與心得</button>
       <button data-t="macro">市場總經</button>
       <button data-t="industry">產業與主題</button>
       <button data-t="politics">政經</button>
@@ -159,24 +178,39 @@
 <main>
 <div class="wrap">
 
-<!-- ============ OVERVIEW ============ -->
+<!-- ============ OVERVIEW (3-min) ============ -->
 <section class="tabpane active" data-p="overview">
   <div class="brief">
-    <div class="bl"><span class="pill">一分鐘總覽</span><h2>2026/07/22 · 週三</h2></div>
-    <div class="focus">
-      <div class="f"><div class="k">本週市場催化劑</div><div class="v"><span>AI 財報壓力測試</span>：Alphabet／Tesla（今日盤後）、Intel（7/23）；<span>ECB</span>（7/24）、<span>FOMC</span>（7/28–29）接力</div></div>
-      <div class="f"><div class="k">中東升級</div><div class="v">油價收破 <span>$90</span>、美伊第 11 晚空襲；紅海封鎖商船折返，Rubio 警告荷莫茲威脅全球外溢</div></div>
-      <div class="f"><div class="k">AI 一級市場與硬體</div><div class="v">Moonshot <span>Kimi K3</span> 低價震撼、洽談 $50B pre-IPO；Anthropic 傳 IPO、遭判 <span>$1.5B</span> 版權和解</div></div>
+    <div class="bl"><span class="pill">三分鐘總覽</span><h2>2026/07/23 · 週四</h2></div>
+
+    <div class="snap">
+      <div class="s"><div class="k">S&amp;P 500</div><div class="v dn">-0.14%</div></div>
+      <div class="s"><div class="k">那斯達克</div><div class="v dn">-0.57%</div></div>
+      <div class="s"><div class="k">布蘭特油</div><div class="v up">&gt;$95（六週高）</div></div>
+      <div class="s"><div class="k">黃金</div><div class="v fl">高檔持穩</div></div>
+      <div class="s"><div class="k">美元/日圓</div><div class="v dn">≈163（39年低）</div></div>
+      <div class="s"><div class="k">30年美債</div><div class="v dn">&gt;5%</div></div>
     </div>
+
+    <div class="focus">
+      <div class="f"><div class="k">財報結果出爐</div><div class="v"><b>Alphabet</b> 雲端營收年增 82%、但把 2026 資本支出上調至最高 <b>$205B</b>、自由現金流首度轉負；<b>Tesla</b> 獲利大跌靠折扣衝量；<b>IBM</b> 主機營收暴跌 42%、下修展望。AI 受惠與傳統業務兩極。</div></div>
+      <div class="f"><div class="k">中東油價衝擊升級</div><div class="v">油價漲破 <b>$95</b>、創六週高；Houthi 襲沙油輪、川普揚言美「不需要荷莫茲」並要對每次船襲炸橋或電廠。<b>高盛警告若海峽持續中斷，布蘭特恐上看 $120</b>。</div></div>
+      <div class="f"><div class="k">AI 資本競賽加碼</div><div class="v"><b>AMD 傳投資 Anthropic 最多 $5bn</b>（晶片綁模型）；白宮稱中國 Moonshot 取得受禁 Nvidia 晶片；中國 Psibot 成最新估值破 $10 億 AI 新創。資金懲罰「花錢平台」、獎勵「收錢鏟子」。</div></div>
+      <div class="f"><div class="k">債市與 Fed 警訊</div><div class="v"><b>30 年美債殖利率逾 5% 天數創近 20 年最多</b>，「債券義警」重現；川普盟友傳藉 SVB 檢討另闢罷免 Fed 理事路徑、預言 9 月政府恐關門。財政與央行獨立性尾部風險升。</div></div>
+    </div>
+
+    <div class="sub-h">六大重點（今日）</div>
     <ul class="takeaways">
-      <li><b>中東與能源</b>：油價收破 $90（Barron's），美伊連 11 晚空襲、紅海出現新封鎖、駛往沙烏地商船折返（WaPo）；Rubio 警告荷莫茲威脅全球外溢（CNBC）。利多能源、國防與避險，利空航空與風險資產。</li>
-      <li><b>AI 一級市場</b>：中國 Moonshot 以低價開源 Kimi K3 撼動產業、傳洽 $50B pre-IPO；Anthropic 傳籌備 IPO，同時遭判 15 億美元版權和解（史上最大，Tom's Hardware）；三星傳以 €20bn 投資 Mistral。<b>估值與治理／法律風險</b>並存。</li>
-      <li><b>半導體政策</b>：川普推「美國製 AI 晶片」壓縮台積電毛利（CNBC）；中國研擬收緊 AI 出口、傳禁本土企業用台積電（Tom's Hardware／FT）；緯創德州廠供 Nvidia、股價急拉（CNBC）。</li>
-      <li><b>金融底層</b>：私募股權「殭屍基金」規模創新高（WSJ）、SoftBank 破紀錄貸款讓 JPM／GS 各進帳約 1 億美元（Bloomberg）；Interactive Brokers 交易熱潮獲利跳升（IBD）。</li>
-      <li><b>日本與台股</b>：日圓貶至 39 年低點 163（Nikkei），東京揚言果斷行動、干預風險升；台股 7/21 靠 AI 權值股暴漲 1,783 點寫史上最大單日收盤漲點，惟外資連 13 賣、量能偏縮。</li>
+      <li><b>AI 資本支出「加速而非收斂」</b>：Google 用雲端 +82% 證明 AI 需求是真的，卻也把 2026 capex 上調到最高 $205B、單季燒約 60 億美元現金、自由現金流首度轉負。市場反應分裂——主指承壓收跌，AI 基建與算力股盤後大漲，資金正在「懲罰花錢的平台、獎勵收錢的鏟子」。</li>
+      <li><b>財報冷熱不均</b>：與 AI 直接掛鉤的雲端、算力在噴發（Google 雲端 +82%），傳統與消費端在退潮（Tesla 獲利大跌、IBM 主機 -42% 下修）。選股分水嶺是「離 AI 算力有多近、有沒有定價權」。</li>
+      <li><b>中東油價成最大煞車</b>：油破 $95 六週高、Houthi 襲沙油輪、川普揚言炸伊朗橋樑電廠，高盛示警荷莫茲持續受阻恐上看 $120。油價每往上一級，就壓縮 Fed 降息空間、墊高通膨黏著度；能源、國防、黃金對沖價值上升。</li>
+      <li><b>AI 軍備延燒到晶片與一級市場</b>：AMD 傳砸最多 $5bn 投資 Anthropic、以晶片綁定模型；中國 AI 新創估值續飆、高調基金棄消費追 AI；但白宮稱 Moonshot 取得受禁 Nvidia 晶片、OpenAI 資安事件延燒，治理與地緣裂縫同步擴大。</li>
+      <li><b>債市與央行獨立性是最該盯的尾部風險</b>：30 年美債殖利率逾 5% 天數創近 20 年最多，市場對財政赤字與關稅通膨投下不信任票；疊加罷免 Fed 理事的政治操作與 9 月關門疑慮，美元與長債承壓。</li>
+      <li><b>亞洲與台股</b>：韓國經濟因晶片榮景優於預期、日圓仍弱、東京揚言果斷行動。台股上一交易日（7/21）才寫史上最大單日漲點，惟外資連續調節、量能偏縮；續航要看「算力鏟子」這端能否持續受惠。</li>
     </ul>
+
     <div class="thermo"><div class="g"></div><div class="y"></div><div class="o"></div><div class="r"></div></div>
-    <div class="thermo-lbl"><span>風險偏好 · 低</span><span>綜合市場情緒：謹慎偏多（AI 熱潮撐盤 vs 中東＋關稅逆風）</span><span>高</span></div>
+    <div class="thermo-lbl"><span>風險偏好 · 低</span><span>綜合市場情緒：分歧（AI 算力續強 vs 平台燒錢＋中東油價＋債市殖利率三重逆風）</span><span>高</span></div>
 
     <div class="srcbar">
       <span class="lbl">主要來源（13）</span>
@@ -190,112 +224,137 @@
 
   <div class="group-label"><span class="bar"></span>本週重點盯盤時程<span class="n">Key dates</span></div>
   <div class="watch">
-    <div class="w"><span class="wd">7/22 盤後</span><span class="wt">Alphabet · Tesla 財報</span></div>
-    <div class="w"><span class="wd">7/23 盤後</span><span class="wt">Intel 財報</span></div>
+    <div class="w"><span class="wd">7/23 盤後</span><span class="wt">更多科技股財報（含 IBM 已公布）</span></div>
     <div class="w"><span class="wd">7/24</span><span class="wt">ECB 利率決議</span></div>
     <div class="w"><span class="wd">7/28–29</span><span class="wt">FOMC 利率決議</span></div>
     <div class="w"><span class="wd">7/31</span><span class="wt">藥品 232 關稅生效</span></div>
     <div class="w"><span class="wd">8/1</span><span class="wt">對等關稅大限（銅／巴西 50%）</span></div>
+    <div class="w"><span class="wd">9 月</span><span class="wt">政府關門風險（川普預言）</span></div>
+  </div>
+</section>
+
+<!-- ============ ESSAY ============ -->
+<section class="tabpane" data-p="essay">
+  <div class="essay">
+    <span class="etag">今日摘要與心得</span>
+    <h2>財報回答了 AI 的大哉問——資本支出「加速」，但代價是現金與耐心</h2>
+    <div class="by">2026/07/23 · 讀完當日 13 家主要來源後的綜合彙整與觀點（約 1,000 字）</div>
+
+    <div class="kick">昨晚（7/22）的財報季高潮，把市場吵了一年的問題攤開：<b>AI 到底是不是「只燒錢、不回本」？</b>Google 的答案很矛盾——雲端營收爆發、但資本支出上調到最高 2,050 億美元、自由現金流史上首度轉負。市場的反應也同樣分裂：主要指數承壓收跌，AI 基建股盤後卻大漲。</div>
+
+    <p><b>Google 的財報，是一面照出整個 AI 產業矛盾的鏡子。</b>它的雲端營收年增 82%、證明 AI 需求是真的；但為了支撐這股需求，它把 2026 年資本支出上調到最高 2,050 億美元，單季燒掉約 60 億美元現金、自由現金流首度轉負。這正是投顧該向客戶點明的核心張力：AI 的「需求」確實存在，但「回報時程」很長，中間這段路得靠不斷加碼的資本支出來鋪。市場給出的分裂反應——指數收跌、AI 基建與算力股卻在盤後大漲——說明資金正在重新分配：<b>懲罰「花錢的平台」，獎勵「收錢的鏟子」（晶片、伺服器、電力、記憶體）。</b></p>
+
+    <p><b>同一晚的財報也揭露 AI 世界的兩極。</b>Tesla 獲利大跌、靠折扣衝量，Musk 以「二戰以來最快的工業擴張」形容公司，但數字說的是壓力；IBM 更直接，資料中心大型主機營收暴跌四成、下修全年展望。訊息很清楚：與 AI 直接掛鉤的營收（雲端、算力）在噴發，傳統或消費端業務則在退潮。選股上，「離 AI 算力越近、越有定價權」正在成為財報季的分水嶺。</p>
+
+    <p><b>AI 的資本競賽同時往兩端擴散。</b>往上游，AMD 傳砸最多 50 億美元投資 Anthropic、以晶片綁定模型；往一級市場，中國 Psibot 成為最新估值破 10 億美元的 AI 新創，高調基金甚至棄消費股追 AI。但軍備競賽也帶出治理與地緣的裂縫：白宮官員稱中國 Moonshot 取得了受禁的 Nvidia 晶片，OpenAI 模型被用於 Hugging Face 入侵事件持續發酵。對投顧而言，AI 供應鏈的「估值紀律」與「政策風險」必須一起看。</p>
+
+    <p><b>如果說 AI 是市場的引擎，中東就是同時踩下的煞車。</b>油價漲破每桶 95 美元、創六週高，Houthi 襲擊沙烏地油輪、川普揚言美國「不需要荷莫茲」並要對每次船襲「炸一座橋或電廠」回應。高盛警告若海峽持續受阻，布蘭特恐上看 120 美元。這不只是能源股的事——油價每往上一級，就壓縮聯準會的降息空間、墊高通膨黏著度。能源、國防、黃金的地緣對沖價值持續上升。</p>
+
+    <p><b>更該警覺的是債市。</b>30 年期美債殖利率高於 5% 的天數，創下近 20 年最多，「債券義警」的陰影重現——市場正用長天期殖利率，對美國的財政赤字與關稅通膨投下不信任票。與此同時，川普盟友傳出想藉 SVB 檢討另闢罷免聯準會理事的路徑，川普本人則預言 9 月政府可能關門。財政擴張、關稅、央行獨立性受挑戰三者交織，是美元與長債最需要盯的尾部風險。</p>
+
+    <p><b>亞洲這邊</b>，韓國經濟因晶片榮景優於預期、日圓仍貶、東京再度揚言果斷行動。台股上一個交易日（7/21）才靠 AI 權值股寫下史上最大單日漲點，但外資連續調節、量能偏縮的結構未變——在美股 AI 財報的分裂訊號下，台積電與 AI 供應鏈的續航，仍要看「算力鏟子」這一端能不能持續受惠。</p>
+
+    <p><b>投顧視角小結：</b>一句話——AI 的需求被財報證實了，但「代價」也被攤開：燒現金、拉長回報，再加上中東與債市的逆風。策略上，與其押整個 AI 板塊，不如往「收錢的一端」（晶片、伺服器、電力、記憶體）集中，對「花錢的一端」（重資本平台）要求更嚴的估值；同時用能源／國防對沖地緣、留意長債殖利率對評價的壓力。今晚之後，盯三件事：<b>其餘大型科技股的 capex 指引、ECB（7/24）與 FOMC（7/28–29）、以及 8/1 關稅是否如期落地。</b></p>
+
+    <p style="font-size:12px;color:var(--txt3);margin-top:16px;border-top:1px solid var(--line);padding-top:12px">本文為當日新聞的綜合彙整與觀點整理，非投資建議；數據與事件請以各分頁卡片的原始來源為準。</p>
   </div>
 </section>
 
 <!-- ============ MACRO ============ -->
 <section class="tabpane" data-p="macro">
-  <div class="sec-head"><h2>市場總經</h2><span class="en">Markets &amp; Macro</span><span class="count">13 則</span></div>
+  <div class="sec-head"><h2>市場總經</h2><span class="en">Markets &amp; Macro</span><span class="count">12 則 · 均為當日新聞</span></div>
 
-  <div class="group-label"><span class="bar"></span>美股與美國總經<span class="n">5</span></div>
+  <div class="group-label"><span class="bar"></span>美股與財報<span class="n">4</span></div>
   <div class="grid">
     <div class="card t-yellow">
-      <div class="card-top"><span class="badge b-cnbc">CNBC</span><span class="tag warn">盤勢</span><span class="date">2026/07/22</span></div>
-      <h3>CNBC Daily Open：學名藥關稅、AI 估值與財報壓力同台</h3>
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="badge b-ft">FT</span><span class="tag warn">財報</span><span class="date">2026/07/22</span></div>
+      <h3>Alphabet 雲端營收爆發 +82%，卻上調資本支出至 $205B、自由現金流轉負</h3>
+      <p class="lead">Google 母公司 Q2 雲端營收年增 82%、證明 AI 需求強勁，但同時把 2026 年資本支出上調至最高 2,050 億美元，單季燒掉約 60 億美元現金、自由現金流史上首度轉負——AI 需求與燒錢代價同時攤開。</p>
       <ul>
-        <li>市場聚焦本週密集財報與 AI 估值是否撐得住。</li>
-        <li>川普學名藥關稅計畫為醫療與貿易增添變數。</li>
-        <li>期指於財報前偏震盪、方向未定。</li>
+        <li>雲端 +82% 顯示 AI 需求真實，搜尋營收略低於預期。</li>
+        <li>capex 上調至 $205B、FCF 轉負，凸顯「支出 vs 回報」缺口。</li>
+        <li>市場反應分裂：主指承壓，AI 基建／算力股盤後大漲。</li>
       </ul>
-      <div class="src"><a href="https://www.cnbc.com/2026/07/22/cnbc-daily-open-generic-problems-ai-valuations-and-earnings-on-tap.html" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-22/google-boosts-2026-spending-estimate-to-as-much-as-205-billion" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-ibd">IBD</span><span class="tag pos">大盤</span><span class="date">2026/07/21</span></div>
-      <h3>S&amp;P 500 收復 50 日線，AI 族群領軍，Google 財報在即</h3>
+    <div class="card t-red">
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="badge b-bbg">Bloomberg</span><span class="tag hot">財報</span><span class="date">2026/07/22</span></div>
+      <h3>Tesla 獲利大跌，靠深度折扣衝銷量</h3>
+      <p class="lead">Tesla 第二季獲利大幅下滑，Musk 以「二戰以來美國最快的工業規模擴張」形容公司願景，但財報反映的是靠折扣衝量的獲利壓力，市場關注售價與毛利的權衡。</p>
       <ul>
-        <li>指數收復關鍵均線，AI 相關股領漲；市場「無視」升息與高油價。</li>
-        <li>本週 Alphabet、Tesla、Micron 等財報接力，AI 伺服器股盤後跳升。</li>
-        <li>投顧觀察：跟隨盤面轉強訊號，但留意財報後波動放大。</li>
+        <li>折扣策略衝高交車量，卻侵蝕獲利率。</li>
+        <li>Musk 稱獲 Micron 大量記憶體晶片供應，牽動供應鏈。</li>
+        <li>反映消費／汽車端在高利率與競爭下的壓力。</li>
       </ul>
-      <div class="src"><a href="https://www.investors.com/market-trend/stock-market-today/dow-jones-futures-sp-500-sandisk-micron-google-tesla-earnings/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-22/tesla-second-quarter-earnings-miss-wall-street-s-expectations" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
-    <div class="card t-yellow">
-      <div class="card-top"><span class="badge b-mw">MarketWatch</span><span class="tag warn">策略</span><span class="date">2026/07/21</span></div>
-      <h3>七月回檔後，該逢低買進動能股嗎？歷史這樣說</h3>
+    <div class="card t-red">
+      <div class="card-top"><span class="badge b-wsj">WSJ</span><span class="tag hot">財報</span><span class="date">2026/07/22</span></div>
+      <h3>IBM 下修展望，資料中心大型主機營收暴跌 42%</h3>
+      <p class="lead">IBM 因大型主機（mainframe）銷售崩跌 42%、整體營收僅年增約 1%，下修全年展望，是傳統資料中心業務在 AI 時代退潮的縮影，與雲端／算力的噴發形成強烈對比。</p>
       <ul>
-        <li>動能股（momentum）經歷 7 月修正，市場討論是否為進場點。</li>
-        <li>MarketWatch 以歷史統計檢視回檔後續強機率。</li>
-        <li>投顧觀察：適合作為部位再平衡的參考框架。</li>
+        <li>主機營收 -42%，傳統企業 IT 需求疲弱。</li>
+        <li>全年財測下修，凸顯 AI 受惠與否的兩極分化。</li>
+        <li>投顧觀察：留意「非 AI」科技股的營收退潮風險。</li>
       </ul>
-      <div class="src"><a href="https://www.marketwatch.com/story/time-to-buy-the-dip-in-momentum-stocks-after-a-punishing-july-drawdown-heres-what-history-tells-us-bc5c0c4e" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.wsj.com/business/earnings/ibm-q2-earnings-report-2026-stock-ded1f568" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-pub">US Inflation Calc.</span><span class="tag pos">通膨</span><span class="date">2026/07/14</span></div>
-      <h3>6 月 CPI 大幅降溫至 3.5%，能源價格重挫帶動</h3>
+    <div class="card t-red">
+      <div class="card-top"><span class="badge b-wscn">華爾街見聞</span><span class="tag hot">債市</span><span class="date">2026/07/23</span></div>
+      <h3>「債券義警」陰影重現：30 年美債殖利率逾 5% 天數創近 20 年最多</h3>
+      <p class="lead">30 年期美債殖利率高於 5% 的天數創下近 20 年最多，市場以長天期殖利率對美國財政赤字與關稅通膨投下不信任票，「債券義警」（bond vigilantes）的說法重新浮現。</p>
       <ul>
-        <li>整體 CPI 年增 3.5%（前值 4.2%），月減 0.4%，為 2020/4 以來最大單月跌幅。</li>
-        <li>核心 CPI 年增 2.6%；汽油月跌 9.7%、能源月減 5.7%。</li>
-        <li>通膨趨緩但仍遠高於 Fed 2% 目標，能源波動為關鍵變數。</li>
+        <li>長債殖利率高居不下，墊高融資成本、壓抑高估值資產。</li>
+        <li>反映對財政擴張與通膨黏著度的疑慮。</li>
+        <li>對成長股評價與房市、REITs 構成壓力。</li>
       </ul>
-      <div class="src"><a href="https://www.usinflationcalculator.com/inflation/us-cpi-june-2026/100072543/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-orange">
-      <div class="card-top"><span class="badge b-pub">Fox Business</span><span class="tag warn">央行</span><span class="date">2026/06/17</span></div>
-      <h3>聯準會 6 月按兵不動，利率維持 3.5–3.75%，新主席 Warsh 偏鷹</h3>
-      <ul>
-        <li>FOMC 一致決維持不變；點陣圖 9 位委員預期年底前至少再升息一次。</li>
-        <li>新主席 Kevin Warsh 強調「將實現物價穩定」，移除前瞻指引。</li>
-        <li>下次 FOMC 為 7/28–29，市場觀望是否轉向。</li>
-      </ul>
-      <div class="src"><a href="https://www.foxbusiness.com/economy/federal-reserve-interest-rate-decision-june-17-2026" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://wallstreetcn.com/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
   </div>
 
-  <div class="group-label tw"><span class="bar"></span>台股<span class="n">4</span></div>
+  <div class="group-label tw"><span class="bar"></span>台股與亞太<span class="n">4</span></div>
   <div class="grid">
-    <div class="card t-red">
-      <div class="card-top"><span class="badge b-pub">Newtalk</span><span class="tag hot">大盤</span><span class="date">2026/07/21</span></div>
-      <h3>加權暴漲 1,783 點寫史上最大單日收盤漲點，外資連 13 賣、投信連 20 買</h3>
+    <div class="card t-green">
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag pos">亞太經濟</span><span class="date">2026/07/22</span></div>
+      <h3>韓國經濟優於預期，晶片榮景延續</h3>
+      <p class="lead">南韓經濟成長優於市場估計，主要受惠於半導體出口與 AI 記憶體（HBM）需求的持續榮景，凸顯亞洲科技供應鏈在 AI 週期中的核心地位。</p>
       <ul>
-        <li>指數收 44,232.87 點（+4.2%）；台積電漲 90 元至 2,410 元、聯發科攻漲停 3,670 元。</li>
-        <li>投信買超約 172 億（連 20 買），外資賣超約 43 億（連 13 賣）。</li>
-        <li>成交量縮至約 8,356 億元，市場對「量能不足、續航力」仍存疑。</li>
+        <li>晶片出口為經濟主要動能，AI 記憶體需求續強。</li>
+        <li>SK 海力士等記憶體廠受惠 HBM 拉貨。</li>
+        <li>對台灣半導體供應鏈具正向連動參考。</li>
+      </ul>
+      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-22/south-korea-s-economy-beats-estimates-as-chip-boom-continues" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+    </div>
+    <div class="card t-red">
+      <div class="card-top"><span class="badge b-pub">Newtalk</span><span class="tag hot">台股</span><span class="date">2026/07/21</span></div>
+      <h3>加權暴漲 1,783 點寫史上最大單日收盤漲點，惟外資連 13 賣</h3>
+      <p class="lead">台股上一交易日由 AI 權值股領軍爆量急拉、寫下史上最大單日收盤漲點，但外資已連 13 個交易日賣超、成交量卻縮，「權值撐指數、籌碼在調節」的矛盾結構使續航力受質疑。</p>
+      <ul>
+        <li>台積電漲 90 元至 2,410 元、聯發科攻漲停 3,670 元。</li>
+        <li>投信連 20 買、外資連 13 賣，量能縮至約 8,356 億元。</li>
+        <li>續航要看美股 AI 財報後、算力供應鏈能否持續受惠。</li>
       </ul>
       <div class="src"><a href="https://newtalk.tw/news/view/2026-07-21/1048515" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-cnbc">CNBC</span><span class="tag pos">供應鏈</span><span class="date">2026/07/22</span></div>
-      <h3>緯創德州 AI 超級晶片廠開幕、供貨 Nvidia，股價急拉</h3>
-      <ul>
-        <li>緯創（Wistron）美國德州廠啟用，供應 Nvidia AI 伺服器。</li>
-        <li>反映台廠加速赴美設 AI 產能、卡位供應鏈。</li>
-        <li>對台系 AI 伺服器代工題材偏正面。</li>
-      </ul>
-      <div class="src"><a href="https://www.cnbc.com/2026/07/22/wistron-shares-surge-after-opening-texas-plant-for-nvidia-ai-servers-.html" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
     <div class="card t-yellow">
-      <div class="card-top"><span class="badge b-cnbc">CNBC</span><span class="tag warn">權值股</span><span class="date">2026/07/22</span></div>
-      <h3>川普推「美國製 AI 晶片」，壓縮台積電毛利</h3>
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag warn">中國</span><span class="date">2026/07/22</span></div>
+      <h3>中國高調基金棄消費股、轉追 AI</h3>
+      <p class="lead">Bloomberg 指中國知名基金正大舉調整持股、棄守消費股轉向 AI 概念，反映在財政緊縮、內需疲弱下，資金向 AI 成長主題高度集中的現象。</p>
       <ul>
-        <li>台積電 Q2 獲利創高（年增約 77%），但赴美擴產推升成本、壓縮毛利。</li>
-        <li>已宣布亞利桑那再投資 1,000 億美元；地緣與政策為長期變數。</li>
-        <li>投顧觀察：留意「美國製溢價」對毛利率結構的中期影響。</li>
+        <li>資金向 AI 集中，消費股遭調節，題材兩極。</li>
+        <li>呼應中國 AI 新創估值續飆（如 Psibot 破 $10 億）。</li>
+        <li>凸顯內需疲弱下，成長主題的「擁擠交易」風險。</li>
       </ul>
-      <div class="src"><a href="https://www.cnbc.com/2026/07/22/trump-pressure-ai-chips-us-tsmc-margins.html" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-22/china-s-high-profile-funds-ditch-consumer-stocks-to-chase-ai" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
     <div class="card t-green">
-      <div class="card-top"><span class="badge b-wscn">華爾街見聞</span><span class="tag pos">亞太</span><span class="date">2026/07/21</span></div>
-      <h3>亞太股市集體衝高，韓股漲幅擴大至 6%、SK 海力士漲 7%</h3>
+      <div class="card-top"><span class="badge b-wscn">華爾街見聞</span><span class="tag pos">亞太</span><span class="date">2026/07/23</span></div>
+      <h3>油價六週高、美股承壓收跌，AI 基建股盤後大漲、金銀走強</h3>
+      <p class="lead">華爾街見聞彙整當日盤面：油價飆至六週高位、美股主指承壓收跌，但 AI 基建股在財報後盤後大漲、貴金屬再走強，呈現「油價與債市壓大盤、AI 算力續強」的分歧格局。</p>
       <ul>
-        <li>韓股領漲、日股漲逾 1%，半導體與 AI 記憶體族群回神。</li>
-        <li>Super Micro 因獲利率翻倍、股價盤後飆近 20%，帶動 AI 硬體氣氛。</li>
-        <li>Nvidia 次世代 Vera Rubin 實測性能首度披露、大幅提升。</li>
+        <li>油價與長債殖利率壓抑主指，AI 算力股逆勢走強。</li>
+        <li>金銀受地緣避險與通膨疑慮帶動走強。</li>
+        <li>亞太開盤情緒受美股分歧訊號牽動。</li>
       </ul>
       <div class="src"><a href="https://wallstreetcn.com/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
@@ -304,452 +363,368 @@
   <div class="group-label macro"><span class="bar"></span>全球央行與總經<span class="n">4</span></div>
   <div class="grid">
     <div class="card t-red">
-      <div class="card-top"><span class="badge b-nikkei">Nikkei</span><span class="tag hot">匯率</span><span class="date">2026/07/21</span></div>
-      <h3>日圓貶至 39 年低點 163／美元，受伊朗緊張與高市政策影響</h3>
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag hot">匯率</span><span class="date">2026/07/22</span></div>
+      <h3>日圓續貶、東京揚言採取「大膽」行動；公債憂成新「寡婦交易」</h3>
+      <p class="lead">日圓弱勢不止，東京揚言採取果斷／大膽行動、干預風險升溫；同時大型債券投資人擔憂押注日本公債恐重演「寡婦交易」（widow-maker）的風險，日本利率與匯率波動放大。</p>
       <ul>
-        <li>日圓貶破 163、創 39 年新低，伊朗情勢與財政政策預期為推手。</li>
-        <li>東京揚言採取「果斷／大膽」行動，市場戒備干預。</li>
-        <li>日銀月底會議預料維持約 1%，續漸進正常化。</li>
-      </ul>
-      <div class="src"><a href="https://asia.nikkei.com/business/markets/currencies/yen-falls-to-39-year-low-of-163-per-dollar-on-iran-tensions-takaichi-plan" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-yellow">
-      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">中國</span><span class="date">2026/07/22</span></div>
-      <h3>中國「國家隊」進場買股約 90 億美元護盤</h3>
-      <ul>
-        <li>官方相關資金大舉買入以穩定股市，反映政策托底意圖。</li>
-        <li>對陸港股短線情緒偏支撐，惟凸顯基本面信心仍偏弱。</li>
-        <li>對台股與亞太風險情緒具連動參考。</li>
+        <li>日圓極端弱勢透過套利交易牽動全球風險資產。</li>
+        <li>日本公債的「寡婦交易」風險再被提及。</li>
+        <li>干預與日銀正常化步調為近期焦點。</li>
       </ul>
       <div class="src"><a href="https://www.ft.com/markets" target="_blank" rel="noopener">FT Markets ↗</a></div>
     </div>
     <div class="card t-yellow">
-      <div class="card-top"><span class="badge b-cnbc">CNBC</span><span class="tag warn">印度</span><span class="date">2026/07/22</span></div>
-      <h3>印度加速能源轉向，成本與關稅壓力下推乙醇摻配引反彈</h3>
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">央行前瞻</span><span class="date">2026/07/23</span></div>
+      <h3>央行接力：ECB（7/24）明日登場、FOMC（7/28–29）在即</h3>
+      <p class="lead">ECB 明日決議、FOMC 下週接力。在油價衝擊與 30 年美債殖利率逾 5% 的背景下，市場對「降息 vs 觀望」的分歧加劇，央行的鷹鴿將直接牽動殖利率、美元與成長股評價。</p>
       <ul>
-        <li>伊朗戰事、俄油與關稅推升成本，印度加大生質燃料摻配。</li>
-        <li>油品摻配政策引發部分業者與消費端反彈。</li>
-        <li>反映新興市場在能源價格與地緣下的政策取捨。</li>
+        <li>ECB 聚焦通膨路徑與後續動向的措辭。</li>
+        <li>FOMC 在通膨降溫與關稅、能源風險間拉鋸。</li>
+        <li>長債殖利率高居不下，限縮寬鬆空間。</li>
       </ul>
-      <div class="src"><a href="https://www.cnbc.com/2026/07/22/india-oil-prices-tariff-ethanol-backlash-iran-war-russia-.html" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.ft.com/markets" target="_blank" rel="noopener">FT Markets ↗</a></div>
     </div>
-    <div class="card t-orange">
-      <div class="card-top"><span class="badge b-pub">ECB 官方</span><span class="tag warn">ECB</span><span class="date">2026/06/11</span></div>
-      <h3>ECB 6 月升息一碼至存款利率 2.25%，因中東戰事推升通膨</h3>
+    <div class="card t-yellow">
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">制裁</span><span class="date">2026/07/23</span></div>
+      <h3>EU 接近新對俄制裁協議，俄羅斯天然氣貨物暫獲豁免</h3>
+      <p class="lead">FT 報導歐盟接近敲定新一輪對俄制裁，但俄羅斯天然氣貨物將維持豁免，反映歐洲在制裁力道與自身能源安全之間的權衡，牽動天然氣供需與價格。</p>
       <ul>
-        <li>三大利率各升 25 bp：存款 2.25%、主要再融資 2.40%、邊際貸款 2.65%。</li>
-        <li>預估 2026 通膨平均 3.0%、2028 回落至 2.0%；下修 2026 成長至 0.8%。</li>
-        <li>7/24 決議市場預期按兵不動，聚焦是否釋出「9 月升息」訊號。</li>
+        <li>俄氣豁免顯示歐洲能源仍有依賴，制裁留有彈性。</li>
+        <li>與中東油價升溫並看，能源供給風險整體上行。</li>
+        <li>對歐洲天然氣、LNG 進口需求具影響。</li>
       </ul>
-      <div class="src"><a href="https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260611~4d41bd5e83.en.html" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.ft.com/markets" target="_blank" rel="noopener">FT ↗</a></div>
+    </div>
+    <div class="card t-yellow">
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag warn">監管</span><span class="date">2026/07/22</span></div>
+      <h3>SEC 通過新規，那斯達克將更快淘汰微型公司</h3>
+      <p class="lead">SEC 核准新規、允許那斯達克更快將不符資格的微型公司下市，意在提升市場品質與投資人保護，對小型股與殼公司生態具影響。</p>
+      <ul>
+        <li>加速淘汰不合規微型股，提升掛牌品質。</li>
+        <li>對小型／殼公司的上市維持門檻提高。</li>
+        <li>反映監管對市場結構與投資人保護的強化。</li>
+      </ul>
+      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-22/nasdaq-to-kick-off-tiny-companies-faster-after-sec-approves-rule" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
   </div>
 </section>
 
 <!-- ============ INDUSTRY ============ -->
 <section class="tabpane" data-p="industry">
-  <div class="sec-head"><h2>產業與主題</h2><span class="en">Sectors &amp; Themes</span><span class="count">24 則</span></div>
+  <div class="sec-head"><h2>產業與主題</h2><span class="en">Sectors &amp; Themes</span><span class="count">17 則 · 均為當日新聞</span></div>
 
   <div class="group-label"><span class="bar"></span>AI<span class="n">5</span></div>
   <div class="grid">
     <div class="card t-green">
-      <div class="card-top"><span class="badge b-toms">Tom's HW</span><span class="tag pos">模型</span><span class="date">2026/07/20</span></div>
-      <h3>Moonshot 開源 Kimi K3 以低價撼動 AI 產業，洽談 $50B pre-IPO</h3>
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag pos">晶片×模型</span><span class="date">2026/07/23</span></div>
+      <h3>AMD 傳投資 Anthropic 最多 50 億美元，以晶片綁定模型</h3>
+      <p class="lead">FT 報導 AMD 洽談以最多 50 億美元投資 Anthropic，透過晶片供應與股權綁定模型業者，直接挑戰 Nvidia 的算力霸權，也顯示 AI 資本競賽正往「晶片＋模型」縱向整合加速。</p>
       <ul>
-        <li>Kimi K3（2.8T 開源權重）以遠低於美系封閉模型的價格搶市。</li>
-        <li>Bloomberg 指 Moonshot 傳以約 500 億美元估值洽談上市前募資。</li>
-        <li>惟該巨型模型仍需可觀硬體才能大規模部署。</li>
+        <li>AMD 藉此切入前段班模型業者的算力供應。</li>
+        <li>與 Nvidia 綁定 OpenAI 生態形成正面競爭。</li>
+        <li>利多非 Nvidia 陣營的 AI 晶片與 ASIC 題材。</li>
       </ul>
-      <div class="src"><a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/kimi-k3-rocks-the-ai-industry-as-moonshot-ai-undercuts-closed-source-american-competitors-on-price-but-the-huge-2-8t-open-weight-model-still-needs-serious-hardware-to-deploy-at-scale" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.ft.com/technology" target="_blank" rel="noopener">FT Technology ↗</a></div>
     </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag pos">IPO</span><span class="date">2026/07/15</span></div>
-      <h3>Anthropic 傳籌備 IPO 投資人會議，上市漸近</h3>
+    <div class="card t-orange">
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag warn">出口管制</span><span class="date">2026/07/22</span></div>
+      <h3>白宮官員稱中國 Moonshot 取得受禁的 Nvidia 晶片</h3>
+      <p class="lead">白宮官員指中國 Moonshot（Kimi K3 開發商）取得了受出口管制的 Nvidia 晶片，OpenAI 總裁則稱 Kimi K3「相當不錯」、但不確定是否為蒸餾模型——凸顯低價開源模型背後的晶片來源與管制爭議。</p>
       <ul>
-        <li>據報導 Anthropic 正安排投資人會議，為潛在 IPO 鋪路。</li>
-        <li>若成行，將是 AI 前段班業者資本市場化的指標事件。</li>
-        <li>牽動一級市場估值與 AI 類股比價效應。</li>
+        <li>受禁晶片流向爭議，牽動出口管制執法與半導體政策。</li>
+        <li>低價開源模型的訓練來源與合規性受質疑。</li>
+        <li>加深中美在 AI 晶片與模型的對峙。</li>
       </ul>
-      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-15/anthropic-is-said-to-plan-ipo-investor-meetings-as-listing-nears" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-red">
-      <div class="card-top"><span class="badge b-toms">Tom's HW</span><span class="tag hot">法律</span><span class="date">2026/07/21</span></div>
-      <h3>Anthropic 遭判 15 億美元版權和解，史上最大賠付</h3>
-      <ul>
-        <li>法院認定「以書籍等訓練 AI」屬合理使用，但盜版書庫侵權。</li>
-        <li>約 700 萬本盜版書庫成關鍵，和解金額創 AI 版權案紀錄。</li>
-        <li>對 AI 訓練資料合規與成本結構具指標意義。</li>
-      </ul>
-      <div class="src"><a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-slapped-with-usd1-5-billion-settlement-in-copyright-lawsuit-largest-payout-ever-court-says-that-training-ai-on-books-other-publications-is-fair-use-but-ruled-that-the-startups-7-million-book-pirated-library-infringes-authors-rights" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag pos">投資</span><span class="date">2026/07/21</span></div>
-      <h3>三星傳以 200 億歐元估值投資法國 Mistral</h3>
-      <ul>
-        <li>據 FT，三星洽談投資歐洲 AI 新星 Mistral，估值約 €20bn。</li>
-        <li>顯示亞洲硬體巨頭加碼卡位歐洲 AI 模型陣營。</li>
-        <li>延續「綁定晶片＋模型」的縱向整合趨勢。</li>
-      </ul>
-      <div class="src"><a href="https://www.ft.com/content/67a5d255-c6e9-4269-b8a0-3105db69c1ec" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-22/white-house-official-says-moonshot-accessed-banned-nvidia-chips" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
     <div class="card t-red">
-      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag hot">資安</span><span class="date">2026/07/21</span></div>
-      <h3>OpenAI 坦言：自家 AI 被用於「史無前例」的 Hugging Face 資安事件</h3>
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="badge b-ft">FT</span><span class="tag hot">資安</span><span class="date">2026/07/22</span></div>
+      <h3>OpenAI 模型入侵 Hugging Face 事件延燒，資安警報升溫</h3>
+      <p class="lead">OpenAI 模型被用於 Hugging Face 入侵事件持續發酵，暴露 AI 軍備競賽下日益升高的資安風險；FT 指這是 AI「agent」自主造成的重大 breach，凸顯 AI 代理治理的迫切性。</p>
       <ul>
-        <li>OpenAI 表示其 AI 被用於一起前所未見的 Hugging Face 入侵事件。</li>
-        <li>凸顯 AI 代理（agent）自主行為的資安與治理風險升溫。</li>
+        <li>AI 代理自主行為造成的資安風險成新變數。</li>
         <li>可能加速監管與企業對 AI 安全控管的投入。</li>
+        <li>利多資安、AI 治理與合規相關供應鏈。</li>
       </ul>
-      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-21/openai-says-its-ai-used-for-unprecedented-hugging-face-breach" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-22/openai-models-breach-hugging-face-sparking-cyber-alarms" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+    </div>
+    <div class="card t-yellow">
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag warn">一級市場</span><span class="date">2026/07/23</span></div>
+      <h3>中國 Psibot 成最新估值破 10 億美元的 AI 新創</h3>
+      <p class="lead">中國機器人 AI 新創 Psibot 估值突破 10 億美元，成為最新一家「獨角獸」，反映中國 AI 一級市場估值續飆、資金高度集中於 AI 與機器人主題。</p>
+      <ul>
+        <li>中國 AI／機器人新創估值快速墊高。</li>
+        <li>與高調基金棄消費追 AI 的資金流向一致。</li>
+        <li>凸顯 AI 一級市場的熱度與潛在泡沫疑慮。</li>
+      </ul>
+      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-23/china-s-psibot-becomes-latest-ai-startup-to-hit-1-billion-value" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+    </div>
+    <div class="card t-green">
+      <div class="card-top"><span class="badge b-wscn">華爾街見聞</span><span class="tag pos">成本</span><span class="date">2026/07/22</span></div>
+      <h3>降低 AI 成本成大勢：Meta 推「模型路由」</h3>
+      <p class="lead">Meta 規劃以「模型路由」（依任務難易自動選用不同成本模型）降低 AI 推論成本，反映產業從「堆算力」轉向「精算成本」，與 Kimi K3 低價化是同一趨勢的兩面。</p>
+      <ul>
+        <li>模型路由依任務動態分配運算，壓低單位推論成本。</li>
+        <li>「降本」成為超大規模業者的共同課題。</li>
+        <li>利多推論優化、邊緣運算與高效晶片。</li>
+      </ul>
+      <div class="src"><a href="https://wallstreetcn.com/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
   </div>
 
-  <div class="group-label"><span class="bar"></span>科技<span class="n">5</span></div>
+  <div class="group-label"><span class="bar"></span>科技<span class="n">4</span></div>
   <div class="grid">
     <div class="card t-green">
-      <div class="card-top"><span class="badge b-toms">Tom's HW</span><span class="tag pos">半導體</span><span class="date">2026/07/21</span></div>
-      <h3>Nvidia 揭 Vera CPU 與 Rubin 推論優化，已出貨數十萬台 Grace 伺服器</h3>
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag pos">硬體</span><span class="date">2026/07/22</span></div>
+      <h3>Apple 傳全面翻新 iMac 與 MacBook，以迎接 AI 需求</h3>
+      <p class="lead">Bloomberg 報導 Apple 正籌備全面翻新 iMac 與 MacBook 產品線，以因應 AI 運算需求，反映終端裝置廠加速為「裝置端 AI」布局，牽動晶片與零組件供應鏈。</p>
       <ul>
-        <li>Nvidia 公布 Vera CPU 規格與 Rubin 架構針對推論的優化。</li>
-        <li>稱已出貨「數十萬台」Grace 獨立伺服器，CPU 在 agentic 資料中心份量提升。</li>
-        <li>Vera Rubin NVL72 已展示運行 OpenAI 工作負載、800VDC 供電。</li>
+        <li>Apple 押注裝置端 AI，帶動硬體升級週期。</li>
+        <li>利多 Mac 供應鏈與 AI 晶片、記憶體。</li>
+        <li>反映 AI 從資料中心延伸到終端裝置。</li>
       </ul>
-      <div class="src"><a href="https://www.tomshardware.com/pc-components/cpus/nvidia-spills-the-beans-on-vera-cpu-spec-benchmarks-revealed-olympus-architecture-detailed-and-more" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.bloomberg.com/news/videos/2026-07-22/apple-prepping-imac-macbooks-overhaul-to-meet-ai-demand-video" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
     <div class="card t-orange">
-      <div class="card-top"><span class="badge b-toms">Tom's HW</span><span class="tag warn">政策</span><span class="date">2026/07/22</span></div>
-      <h3>中國研擬 AI 出口管制，傳禁本土企業使用台積電</h3>
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">政策</span><span class="date">2026/07/23</span></div>
+      <h3>中國研擬收緊 AI 模型與晶片出口管制（FT 獨家）</h3>
+      <p class="lead">FT 指北京徵詢企業意見、研擬收緊 AI 模型與晶片出口，範圍涵蓋先進模型、訓練資料與海外併購，甚至傳出考慮限制本土企業使用台積電——中美科技脫鉤走向「雙向」。</p>
       <ul>
-        <li>報導稱管制範圍涵蓋先進 AI 模型、訓練資料與海外併購。</li>
-        <li>並考慮禁止本土公司使用台積電代工，形成「雙向科技脫鉤」。</li>
-        <li>對半導體與 AI 供應鏈是持續的政策尾部風險。</li>
+        <li>雙向築牆使半導體政策尾部風險上升。</li>
+        <li>「限用台積電」若成真將重塑代工版圖。</li>
+        <li>牽動晶圓代工、設備與 IP 授權的地緣配置。</li>
       </ul>
-      <div class="src"><a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/china-is-considering-export-controls-on-ai-technologies-including-banning-local-companies-from-using-tsmc-report-claims-restrictions-would-also-advanced-ai-models-training-data-and-overseas-acquisitions" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-cnbc">CNBC</span><span class="tag pos">日本</span><span class="date">2026/07/22</span></div>
-      <h3>日本的 AI 受惠股不做晶片：馬桶、玻璃纖維與調味料</h3>
-      <ul>
-        <li>CNBC 點名一批「非晶片」的日本 AI 供應鏈受惠股。</li>
-        <li>涵蓋資料中心用衛浴、玻纖與特用材料等隱形環節。</li>
-        <li>提供 AI 主題「非典型標的」的選股角度。</li>
-      </ul>
-      <div class="src"><a href="https://www.cnbc.com/2026/07/22/japanese-ai-winners-toilets-fiberglass-and-seasoning.html" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.ft.com/technology" target="_blank" rel="noopener">FT Technology ↗</a></div>
     </div>
     <div class="card t-orange">
-      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag warn">中美科技戰</span><span class="date">2026/07/21</span></div>
-      <h3>Bessent 稱美將審查中國 AI 模型是否涉 IP 竊取；中國以「AI 普及」反制</h3>
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">汽車×中國</span><span class="date">2026/07/23</span></div>
+      <h3>Mercedes 恐因參議院對中法案面臨美國銷售禁令風險</h3>
+      <p class="lead">FT 報導參議院一項對中法案可能使 Mercedes 面臨美國銷售禁令風險，凸顯供應鏈「去中國化」立法對跨國車廠的衝擊，地緣政治正深入產品層面。</p>
       <ul>
-        <li>美財長表態將審視中國 AI 模型的智財問題。</li>
-        <li>Bloomberg 指中國「AI 全民普及」戰略正挑戰美方圍堵劇本。</li>
-        <li>牽動 Nvidia、AMD 對中營收能見度與半導體政策風險。</li>
-      </ul>
-      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-21/bessent-says-us-will-scrutinize-chinese-ai-models-for-ip-theft" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-yellow">
-      <div class="card-top"><span class="badge b-wsj">WSJ</span><span class="tag warn">平台</span><span class="date">2026/07/21</span></div>
-      <h3>Google 搜尋與出版商就 AI 內容之爭升溫</h3>
-      <ul>
-        <li>AI 生成內容衝擊搜尋流量與出版商廣告收益，雙方角力升溫。</li>
-        <li>牽動數位廣告生態與內容授權商業模式。</li>
-        <li>為平台監管與 AI 版權議題的觀察點。</li>
-      </ul>
-      <div class="src"><a href="https://www.wsj.com/business/media/google-search-publishers-ai-content-0fb06e41" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-  </div>
-
-  <div class="group-label"><span class="bar"></span>金融<span class="n">5</span></div>
-  <div class="grid">
-    <div class="card t-orange">
-      <div class="card-top"><span class="badge b-wsj">WSJ</span><span class="tag warn">私募</span><span class="date">2026/07/21</span></div>
-      <h3>私募股權「殭屍基金」卡住資產規模創新高</h3>
-      <ul>
-        <li>大量到期卻無法退出的私募基金資產（zombie funds）規模創紀錄。</li>
-        <li>反映 IPO／併購退出管道不足，LP 資金回收受阻。</li>
-        <li>為私募與另類資產流動性風險的重要警訊。</li>
-      </ul>
-      <div class="src"><a href="https://www.wsj.com/finance/investing/private-equity-assets-stuck-in-zombie-funds-are-at-a-record-high-4dbd01be" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag pos">投行</span><span class="date">2026/07/21</span></div>
-      <h3>SoftBank 破紀錄貸款，JPMorgan、Goldman 各進帳約 1 億美元</h3>
-      <ul>
-        <li>SoftBank 破紀錄規模貸款讓承辦的 JPM、GS 各進帳約 $100M 手續費。</li>
-        <li>反映大型融資與資本市場活動回溫，投行收入受惠。</li>
-        <li>與 AI／科技資本支出的槓桿需求相呼應。</li>
-      </ul>
-      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-21/jpmorgan-goldman-set-for-100-million-paydays-on-softbank-s-record-loan" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-ibd">IBD</span><span class="tag pos">券商</span><span class="date">2026/07</span></div>
-      <h3>Interactive Brokers 獲利受交易熱潮帶動跳升，比肩 Schwab</h3>
-      <ul>
-        <li>交易量爆發推升 Interactive Brokers 獲利，動能與 Schwab 相當。</li>
-        <li>反映散戶與機構交易活絡、市場波動放大下的券商順風。</li>
-        <li>對經紀與交易平台類股偏正面。</li>
-      </ul>
-      <div class="src"><a href="https://www.investors.com/news/charles-schwab-earnings-q2-interactive-brokers-earnings/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-yellow">
-      <div class="card-top"><span class="badge b-barrons">Barron's</span><span class="tag warn">加密監管</span><span class="date">2026/07/21</span></div>
-      <h3>Coinbase 隨加密市場結構法案（Clarity Act）妥協進展受矚</h3>
-      <ul>
-        <li>國會就加密市場結構立法（Clarity Act）達成妥協進展。</li>
-        <li>Coinbase 等交易平台的法規能見度改善。</li>
-        <li>2026 年被視為穩定幣與加密進入主流的分水嶺。</li>
-      </ul>
-      <div class="src"><a href="https://www.barrons.com/articles/coinbase-stock-price-clarity-act-compromise-e2ea0b14" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-yellow">
-      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">資本市場</span><span class="date">2026/07/21</span></div>
-      <h3>私募資本在 IPO 與併購熱潮中相對失色，華爾街銀行受惠</h3>
-      <ul>
-        <li>IPO 與交易活絡讓華爾街銀行大賺，私募資本反而錯失部分紅利。</li>
-        <li>反映資金重回公開市場、退出管道改善。</li>
-        <li>與 WSJ「殭屍基金」形成對照，凸顯私募退出壓力。</li>
-      </ul>
-      <div class="src"><a href="https://www.ft.com/markets" target="_blank" rel="noopener">FT Markets ↗</a></div>
-    </div>
-  </div>
-
-  <div class="group-label"><span class="bar"></span>生技<span class="n">4</span></div>
-  <div class="grid">
-    <div class="card t-red">
-      <div class="card-top"><span class="badge b-cnbc">CNBC</span><span class="tag hot">關稅</span><span class="date">2026/07/22</span></div>
-      <h3>川普計畫對學名藥課關稅、給兩年緩衝，測試回流美國製造</h3>
-      <ul>
-        <li>對學名藥（generic）進口課關稅、延後兩年生效，推動在美生產。</li>
-        <li>另對專利藥 232 條款關稅 7/31 起分級生效。</li>
-        <li>利多本土製藥回流，利空高度依賴海外原料藥（API）的藥廠。</li>
-      </ul>
-      <div class="src"><a href="https://www.cnbc.com/2026/07/22/trump-generic-drugs-tariffs-medicine-trade-.html" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-orange">
-      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">訴訟</span><span class="date">2026/07/21</span></div>
-      <h3>Novo Nordisk 控告 Eli Lilly「蓄意不實」減肥藥廣告</h3>
-      <ul>
-        <li>Novo 指控 Lilly 就減肥藥療效發布誤導性比較廣告，提起訴訟。</li>
-        <li>凸顯 GLP-1 減肥藥雙雄競爭白熱化。</li>
-        <li>對兩大藥廠品牌與市占之爭具指標意義。</li>
+        <li>對中供應鏈法案擴大至終端產品銷售限制。</li>
+        <li>跨國車廠面臨供應鏈重組與合規壓力。</li>
+        <li>反映「去風險化」立法對產業的實質衝擊。</li>
       </ul>
       <div class="src"><a href="https://www.ft.com/companies" target="_blank" rel="noopener">FT Companies ↗</a></div>
     </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-pub">Pharm. Technology</span><span class="tag pos">FDA</span><span class="date">2026/07/15</span></div>
-      <h3>FDA 7 月核准三款新藥／新劑型</h3>
+    <div class="card t-yellow">
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">資料中心</span><span class="date">2026/07/22</span></div>
+      <h3>Oracle 恐面臨 70 億美元威州資料中心抵押帳單</h3>
+      <p class="lead">FT 獨家指 Oracle 可能因威斯康辛資料中心面臨高達 70 億美元的抵押／擔保帳單，凸顯 AI 資料中心龐大資本投入背後的財務與槓桿風險。</p>
       <ul>
-        <li>Vera 的 atacicept（7/7）核准用於原發性 IgA 腎病變，首款雙標靶療法。</li>
-        <li>Sanofi 的 isatuximab 皮下劑型（7/9）用於多發性骨髓瘤。</li>
-        <li>Merck 的 pembrolizumab（7/10）擴大用於肌肉侵犯性膀胱癌。</li>
+        <li>資料中心巨額投入帶來擔保與槓桿壓力。</li>
+        <li>呼應 Google capex 上調、FCF 轉負的燒錢主題。</li>
+        <li>提醒 AI 基建的資本結構與現金流風險。</li>
       </ul>
-      <div class="src"><a href="https://www.pharmtech.com/view/fda-activity-round-up-july-2026" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-pub">STAT News</span><span class="tag pos">併購</span><span class="date">2026/06/22</span></div>
-      <h3>2026 上半年生技併購創紀錄，AbbVie 收購 Apogee</h3>
-      <ul>
-        <li>H1 已完成 33 筆 10 億美元以上併購，總額約 1,340 億美元，超越 2025 全年。</li>
-        <li>AbbVie 收購 Apogee Therapeutics；Merck 傳洽購 Revolution Medicines。</li>
-        <li>大藥廠為填補專利懸崖積極併購、產業整併加速。</li>
-      </ul>
-      <div class="src"><a href="https://www.statnews.com/2026/06/22/pharma-biotech-ma-boom-2026-deals-total-123-billion/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.ft.com/technology" target="_blank" rel="noopener">FT Technology ↗</a></div>
     </div>
   </div>
 
-  <div class="group-label mat"><span class="bar"></span>原物料<span class="n">5</span></div>
+  <div class="group-label"><span class="bar"></span>金融<span class="n">4</span></div>
   <div class="grid">
-    <div class="card t-red">
-      <div class="card-top"><span class="badge b-barrons">Barron's</span><span class="tag hot">原油</span><span class="date">2026/07/21</span></div>
-      <h3>油價收破每桶 $90，反映伊朗戰事與荷莫茲風險</h3>
+    <div class="card t-green">
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag pos">投行</span><span class="date">2026/07/22</span></div>
+      <h3>華爾街銀行交易 350 億美元 AI 晶片交易的部分融資</h3>
+      <p class="lead">Bloomberg 報導華爾街銀行正參與一筆規模達 350 億美元的 AI 晶片交易的部分融資，反映 AI 資本支出熱潮直接轉化為投行的大型融資與交易收入。</p>
       <ul>
-        <li>布蘭特／WTI 收破 $90，美伊衝突與海峽航運威脅為主因。</li>
-        <li>OGJ 另指全球 LNG 2025 創紀錄，能源供給結構同步緊繃。</li>
-        <li>影響：利多油氣、能源設備，利空高耗能與運輸。</li>
+        <li>AI 晶片與資料中心的巨額融資挹注投行收入。</li>
+        <li>與 SoftBank 破紀錄貸款等大型交易同調。</li>
+        <li>對投行、資本市場類股偏正面。</li>
       </ul>
-      <div class="src"><a href="https://www.barrons.com/articles/oil-90-barrel-iran-war-trump-671299d1" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-22/wall-street-banks-trading-parts-of-35-billion-ai-chip-deal" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
     <div class="card t-orange">
-      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag warn">工業金屬</span><span class="date">2026/07/22</span></div>
-      <h3>銅價逼近 $14,000，交易員觀望川普關稅；Freeport 領漲</h3>
+      <div class="card-top"><span class="badge b-wsj">WSJ</span><span class="tag warn">市場結構</span><span class="date">2026/07/23</span></div>
+      <h3>華爾街「機器人」如何靠川普 Truth Social 貼文獲利</h3>
+      <p class="lead">WSJ 報導演算法交易正快速解析川普在 Truth Social 的貼文、搶在市場前反應獲利，凸顯政治訊息與高頻交易的交會，也提醒散戶「政策即行情」的資訊不對稱。</p>
       <ul>
-        <li>市場等待對進口銅 50% 關稅（8/1 生效）細節，銅價高檔震盪。</li>
-        <li>MarketWatch 指 Freeport-McMoRan 等銅礦股表現領先。</li>
-        <li>銅為電網、資料中心、電動車核心原料，關稅推升本土成本。</li>
+        <li>演算法交易將政治貼文轉為即時交易訊號。</li>
+        <li>凸顯政策驅動行情下的資訊不對稱。</li>
+        <li>提醒留意「政策消息面」對短線波動的放大。</li>
+      </ul>
+      <div class="src"><a href="https://www.wsj.com/finance/stocks/how-wall-streets-bots-are-cashing-in-on-trumps-truth-social-posts-572f9dfd" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+    </div>
+    <div class="card t-yellow">
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">創投</span><span class="date">2026/07/23</span></div>
+      <h3>Uber 創辦人 Kalanick 為新創募得 17 億美元</h3>
+      <p class="lead">Uber 創辦人 Travis Kalanick 為其新創事業募得 17 億美元，反映創投資金在 AI 與科技題材下仍高度活躍，一級市場的大型募資延續熱度。</p>
+      <ul>
+        <li>知名創辦人吸金能力強，一級市場資金充沛。</li>
+        <li>與 AI 新創估值續飆的熱潮相呼應。</li>
+        <li>凸顯私募／創投在科技題材的持續押注。</li>
+      </ul>
+      <div class="src"><a href="https://www.ft.com/companies" target="_blank" rel="noopener">FT Companies ↗</a></div>
+    </div>
+    <div class="card t-orange">
+      <div class="card-top"><span class="badge b-wsj">WSJ</span><span class="tag warn">私募</span><span class="date">2026/07/21</span></div>
+      <h3>私募股權「殭屍基金」卡住資產規模創新高</h3>
+      <p class="lead">WSJ 報導大量到期卻無法退出的私募基金資產（zombie funds）規模創紀錄，反映退出管道不足、LP 資金回收受阻，與華爾街銀行在 IPO 熱潮中大賺形成對照。</p>
+      <ul>
+        <li>退出困難導致 LP 現金回收延宕。</li>
+        <li>資金正從私募回流公開市場。</li>
+        <li>提醒配置另類資產須重估流動性溢價。</li>
+      </ul>
+      <div class="src"><a href="https://www.wsj.com/finance/investing/private-equity-assets-stuck-in-zombie-funds-are-at-a-record-high-4dbd01be" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+    </div>
+  </div>
+
+  <div class="group-label mat"><span class="bar"></span>原物料<span class="n">4</span></div>
+  <div class="grid">
+    <div class="card t-red">
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag hot">原油</span><span class="date">2026/07/23</span></div>
+      <h3>油價漲破 $95，高盛警告若荷莫茲持續中斷恐上看 $120</h3>
+      <p class="lead">布蘭特原油在川普揚言進一步升級對伊朗行動後漲破每桶 95 美元、創六週高；高盛警告若荷莫茲海峽持續受阻，布蘭特恐上看 120 美元。油價已成壓抑股市與墊高通膨的關鍵變數。</p>
+      <ul>
+        <li>Houthi 襲沙油輪、地緣升級推升油價與波動。</li>
+        <li>高盛示警 $120 情境，通膨與降息空間受壓。</li>
+        <li>利多油氣、能源設備與國防，利空航空、運輸。</li>
+      </ul>
+      <div class="src"><a href="https://www.ft.com/markets" target="_blank" rel="noopener">FT Markets ↗</a></div>
+    </div>
+    <div class="card t-green">
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag pos">貴金屬</span><span class="date">2026/07/22</span></div>
+      <h3>黃金高檔持穩，逢低買盤抵銷戰爭通膨疑慮</h3>
+      <p class="lead">金價在高檔持穩，逢低買盤抵銷了戰爭帶來的通膨疑慮；在中東升溫與長債殖利率高企的拉鋸下，黃金作為地緣與通膨對沖的配置價值上升。</p>
+      <ul>
+        <li>地緣避險與通膨疑慮支撐金價。</li>
+        <li>逢低買盤顯示配置需求穩健。</li>
+        <li>投顧觀察：黃金作為地緣對沖的價值上升。</li>
+      </ul>
+      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-22/gold-holds-gain-as-dip-buying-counters-inflation-fears-from-war" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+    </div>
+    <div class="card t-orange">
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="badge b-mw">MarketWatch</span><span class="tag warn">工業金屬</span><span class="date">2026/07/22</span></div>
+      <h3>銅價逼近 $14,000，交易員觀望川普關稅；Freeport 領漲</h3>
+      <p class="lead">市場等待對進口銅課 50% 關稅（8/1 生效）的細節，銅價在高檔震盪、逼近 $14,000；Freeport-McMoRan 等銅礦股表現領先。銅同時受 AI 資料中心電力需求的長線支撐。</p>
+      <ul>
+        <li>關稅推升美國本土銅價與製造成本。</li>
+        <li>利多本土礦業，利空下游製造與基建。</li>
+        <li>AI 資料中心電網需求為長線支撐。</li>
       </ul>
       <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-22/copper-wavers-near-14-000-as-traders-watch-for-trump-s-tariff" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
     <div class="card t-orange">
       <div class="card-top"><span class="badge b-nikkei">Nikkei</span><span class="tag warn">稀土</span><span class="date">2026/07/21</span></div>
       <h3>Lynas 稱中國出口管制推升其馬來西亞擴產成本</h3>
+      <p class="lead">稀土大廠 Lynas 表示中國的出口管制墊高其海外擴產成本，凸顯稀土／永磁供應鏈仍是國防、電動車、機器人的關鍵瓶頸，也是中美「以稀土為籌碼」雙軌角力的縮影。</p>
       <ul>
-        <li>稀土大廠 Lynas 表示中國管制墊高其海外擴產成本。</li>
-        <li>凸顯稀土／永磁供應鏈仍是國防、電動車、機器人瓶頸。</li>
-        <li>中美「稀土為籌碼」的雙軌角力持續。</li>
+        <li>稀土地緣風險轉化為實質成本上升。</li>
+        <li>永磁為國防、電動車、機器人的關鍵材料。</li>
+        <li>非中國稀土產能的戰略價值上升。</li>
       </ul>
       <div class="src"><a href="https://asia.nikkei.com/business/markets/commodities/lynas-says-china-s-export-curbs-pushing-up-costs-of-malaysia-expansion" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-ogj">OGJ</span><span class="tag pos">天然氣</span><span class="date">2026</span></div>
-      <h3>全球 LNG 貿易 2025 創紀錄；美 LNG 五年內將成第二大淨出口業</h3>
-      <ul>
-        <li>全球 LNG 貿易量 2025 創高，2026 進入市場韌性測試期。</li>
-        <li>S&amp;P Global 估美國 LNG 五年內成為美國第二大淨出口產業。</li>
-        <li>對美系 LNG 出口、天然氣基建為結構性順風。</li>
-      </ul>
-      <div class="src"><a href="https://www.ogj.com/general-interest/economics-markets/news/55392446/global-lng-trade-hits-record-in-2025-as-2026-tests-market-resilience" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-yellow">
-      <div class="card-top"><span class="badge b-wscn">華爾街見聞</span><span class="tag warn">貴金屬</span><span class="date">2026/07/21</span></div>
-      <h3>黃金重挫後逼近「超賣」，是否見底受關注</h3>
-      <ul>
-        <li>金價近期重挫、技術面逼近超賣區。</li>
-        <li>市場討論在實質利率與避險需求拉鋸下是否落底。</li>
-        <li>MarketWatch 另指能源股在大漲後評價仍相對便宜。</li>
-      </ul>
-      <div class="src"><a href="https://wallstreetcn.com/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
   </div>
 </section>
 
 <!-- ============ POLITICS ============ -->
 <section class="tabpane" data-p="politics">
-  <div class="sec-head"><h2>政經</h2><span class="en">Geopolitics &amp; US Politics</span><span class="count">13 則</span></div>
+  <div class="sec-head"><h2>政經</h2><span class="en">Geopolitics &amp; US Politics</span><span class="count">11 則 · 均為當日新聞</span></div>
 
-  <div class="group-label"><span class="bar"></span>地緣政治<span class="n">7</span></div>
+  <div class="group-label"><span class="bar"></span>地緣政治<span class="n">6</span></div>
   <div class="grid">
     <div class="card t-red">
-      <div class="card-top"><span class="badge b-cnbc">CNBC</span><span class="tag hot">中東</span><span class="date">2026/07/22</span></div>
-      <h3>Rubio 警告荷莫茲威脅恐全球外溢，美對伊朗連 11 晚空襲</h3>
+      <div class="card-top"><span class="badge b-wsj">WSJ</span><span class="tag hot">中東</span><span class="date">2026/07/23</span></div>
+      <h3>美軍向中東大舉增兵，給川普擴大伊朗戰爭的選項</h3>
+      <p class="lead">WSJ 報導美國正向中東大舉增兵，為川普擴大對伊朗軍事行動提供選項；川普同時出席陣亡官兵的移靈儀式，戰事規模與升級風險同步上升。</p>
       <ul>
-        <li>美對伊朗連續第 11 晚空襲，Rubio 警告德黑蘭的海峽威脅將全球外溢。</li>
-        <li>約 20% 海運原油經荷莫茲，供應中斷風險為能源與通膨最大上行變數。</li>
-        <li>影響：利多油氣、國防，利空航空、運輸與風險資產。</li>
+        <li>增兵提高衝突升級與長期化的風險。</li>
+        <li>直接推升油價與能源、國防類股。</li>
+        <li>對風險資產與航空、運輸構成壓力。</li>
       </ul>
-      <div class="src"><a href="https://www.cnbc.com/2026/07/22/us-iran-war-trump-hormuz-.html" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.wsj.com/world/middle-east/u-s-surges-forces-toward-middle-east-giving-trump-options-to-expand-iran-war-e5d627b1" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
     <div class="card t-red">
-      <div class="card-top"><span class="badge b-wapo">WaPo</span><span class="tag hot">航運</span><span class="date">2026/07/21</span></div>
-      <h3>紅海新封鎖恐成美伊戰新戰線，駛往沙烏地商船折返</h3>
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag hot">中東</span><span class="date">2026/07/23</span></div>
+      <h3>川普威脅摧毀伊朗橋樑與電廠，希臘油輪被拖入伊朗水域</h3>
+      <p class="lead">FT 報導川普威脅摧毀伊朗的橋樑與電廠、揚言美國「不需要荷莫茲」；同時一艘希臘船東的油輪被拖入伊朗水域，海峽航運風險與能源供給疑慮進一步升高。</p>
       <ul>
-        <li>紅海出現新封鎖跡象，部分駛往沙烏地的商船中途折返。</li>
-        <li>WaPo 指這可能開闢美伊衝突的新戰線。</li>
-        <li>影響：航運成本與能源供應鏈風險再升，避險需求走高。</li>
+        <li>對能源基礎設施的威脅升高地緣與油價風險。</li>
+        <li>油輪遭扣凸顯海峽航運的實質中斷風險。</li>
+        <li>與高盛 $120 情境並看，能源溢價結構性上行。</li>
       </ul>
-      <div class="src"><a href="https://www.washingtonpost.com/world/2026/07/21/ships-bound-saudi-arabia-turn-around-sign-new-red-sea-blockade/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-orange">
-      <div class="card-top"><span class="badge b-wapo">WaPo</span><span class="tag warn">財政</span><span class="date">2026/07/21</span></div>
-      <h3>五角大廈砸重金對伊朗，卻「很快現金吃緊」</h3>
-      <ul>
-        <li>WaPo 指對伊朗軍事行動耗費龐大，國防預算快速吃緊。</li>
-        <li>WSJ 另引 Hegseth 估此輪戰爭成本約 375 億美元。</li>
-        <li>影響：財政與國防支出議題，牽動國防股與赤字預期。</li>
-      </ul>
-      <div class="src"><a href="https://www.washingtonpost.com/national-security/2026/07/21/pentagon-sinking-billions-into-iran-is-quickly-running-short-cash/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.ft.com/markets" target="_blank" rel="noopener">FT ↗</a></div>
     </div>
     <div class="card t-yellow">
-      <div class="card-top"><span class="badge b-wsj">WSJ</span><span class="tag warn">中東</span><span class="date">2026/07/21</span></div>
-      <h3>川普核准與沙烏地里程碑核能協議</h3>
+      <div class="card-top"><span class="badge b-wsj">WSJ</span><span class="badge b-ft">FT</span><span class="tag warn">中東</span><span class="date">2026/07/22</span></div>
+      <h3>美國與沙烏地達成里程碑核能協議</h3>
+      <p class="lead">美沙達成核能合作協議，被視為對利雅德的重大外交勝利；惟 WSJ 社論質疑允許沙烏地鈾濃縮的風險。協議牽動中東能源、國防與核能供應鏈的長期布局。</p>
       <ul>
-        <li>美沙達成核能合作協議，被視為對利雅德的重大外交勝利。</li>
-        <li>NYT 亦大幅報導此協議的地緣與能源意涵。</li>
-        <li>影響：牽動中東能源、國防與核能供應鏈布局。</li>
+        <li>深化美沙戰略綁定，影響中東能源版圖。</li>
+        <li>鈾濃縮條款引發防擴散疑慮。</li>
+        <li>核能合作利多相關供應鏈與設備商。</li>
       </ul>
-      <div class="src"><a href="https://www.wsj.com/world/middle-east/trump-approves-landmark-nuclear-deal-with-saudi-arabia-in-big-win-for-kingdom-2ed77584" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.wsj.com/opinion/saudi-nuclear-enrichment-donald-trump-iran-uranium-90be14a6" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
-    <div class="card t-red">
-      <div class="card-top"><span class="badge b-nyt">NYT</span><span class="tag hot">中東</span><span class="date">2026/07/21</span></div>
-      <h3>葉門 Houthi 恐開闢新戰線</h3>
+    <div class="card t-yellow">
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">歐洲國防</span><span class="date">2026/07/23</span></div>
+      <h3>德國將入股國防新創，強化本土軍工能力</h3>
+      <p class="lead">FT 報導德國政府將入股國防新創企業，反映歐洲在地緣緊張下加速強化本土軍工與國防科技能力，國防產業獲政策與資金雙重支撐。</p>
       <ul>
-        <li>NYT 分析葉門 Houthi 武裝可能成為美伊衝突的新戰場。</li>
-        <li>紅海與荷莫茲航運風險進一步外溢。</li>
-        <li>影響：航運成本與能源供應鏈風險再升。</li>
+        <li>政府入股顯示歐洲國防自主的政策決心。</li>
+        <li>利多歐洲國防、軍工與相關供應鏈。</li>
+        <li>與美增兵中東並看，全球國防支出趨勢向上。</li>
       </ul>
-      <div class="src"><a href="https://www.nytimes.com/2026/07/21/world/middleeast/houthis-yemen-iran-war.html" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.ft.com/companies" target="_blank" rel="noopener">FT Companies ↗</a></div>
     </div>
     <div class="card t-orange">
-      <div class="card-top"><span class="badge b-nikkei">Nikkei</span><span class="tag warn">亞洲</span><span class="date">2026/07/21</span></div>
-      <h3>Rubio 在 ASEAN 會議重申美國對亞洲的承諾</h3>
+      <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">制裁</span><span class="date">2026/07/23</span></div>
+      <h3>EU 接近新對俄制裁，俄羅斯天然氣暫獲豁免</h3>
+      <p class="lead">歐盟接近敲定新一輪對俄制裁，但俄羅斯天然氣貨物維持豁免，顯示歐洲在制裁力道與自身能源安全之間的權衡，對天然氣供需與價格具影響。</p>
       <ul>
-        <li>美國務卿於 ASEAN 場合強調對亞洲的安全與經貿承諾。</li>
-        <li>在中美角力與關稅談判背景下釋出安撫訊號。</li>
-        <li>影響：對亞洲供應鏈與區域資產情緒具參考。</li>
+        <li>俄氣豁免反映歐洲能源仍有依賴。</li>
+        <li>制裁與能源安全的兩難持續。</li>
+        <li>對歐洲天然氣、LNG 需求具影響。</li>
+      </ul>
+      <div class="src"><a href="https://www.ft.com/markets" target="_blank" rel="noopener">FT ↗</a></div>
+    </div>
+    <div class="card t-yellow">
+      <div class="card-top"><span class="badge b-nikkei">Nikkei</span><span class="tag warn">亞洲</span><span class="date">2026/07/21</span></div>
+      <h3>Rubio 在 ASEAN 重申美國對亞洲承諾，惟關稅令區域憂心</h3>
+      <p class="lead">美國務卿 Rubio 於 ASEAN 場合強調對亞洲的安全與經貿承諾，但川普的關稅政策仍令區域國家憂心，凸顯美國「安全承諾」與「貿易施壓」並行的矛盾。</p>
+      <ul>
+        <li>對亞洲供應鏈與區域資產情緒具參考。</li>
+        <li>關稅陰影下，區域對美經貿信心受考驗。</li>
+        <li>牽動供應鏈重組與資金流向。</li>
       </ul>
       <div class="src"><a href="https://asia.nikkei.com/politics/international-relations/rubio-stresses-us-commitment-to-asia-at-asean-meeting2" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
-    <div class="card t-yellow">
-      <div class="card-top"><span class="badge b-wapo">WaPo</span><span class="tag warn">烏俄</span><span class="date">2026/07/21</span></div>
-      <h3>澤倫斯基在抗議聲中撤換烏克蘭軍事指揮官</h3>
-      <ul>
-        <li>連日民眾抗議後，澤倫斯基撤換武裝部隊指揮官，人事持續動盪。</li>
-        <li>WSJ、NYT、FT 同步報導此重大變動。</li>
-        <li>影響：戰事指揮變動牽動地緣與能源市場情緒。</li>
-      </ul>
-      <div class="src"><a href="https://www.washingtonpost.com/world/2026/07/21/zelensky-ousts-ukraines-military-commander-major-shake-up-continues/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
   </div>
 
-  <div class="group-label"><span class="bar"></span>美國政治<span class="n">6</span></div>
+  <div class="group-label"><span class="bar"></span>美國政治<span class="n">3</span></div>
   <div class="grid">
     <div class="card t-orange">
-      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag warn">關稅</span><span class="date">2026/07/21</span></div>
-      <h3>美擬週五前開徵新關稅，臨時撥款將到期</h3>
+      <div class="card-top"><span class="badge b-bbg">Bloomberg</span><span class="tag warn">Fed 獨立性</span><span class="date">2026/07/22</span></div>
+      <h3>川普盟友傳藉 SVB 檢討，另闢罷免 Fed 理事的路徑</h3>
+      <p class="lead">Bloomberg 報導川普盟友考慮以矽谷銀行（SVB）倒閉的監管檢討為由，另闢罷免一名聯準會理事的路徑，市場對 Fed 獨立性受損的疑慮升高，為債匯市重要尾部風險。</p>
       <ul>
-        <li>美方預定本週五前對多國開徵新關稅，銜接 8/1 對等關稅大限。</li>
-        <li>同時政府臨時撥款（stopgap）將到期，財政雜訊升高。</li>
-        <li>影響：進口成本與企業獲利指引的關鍵風險日。</li>
+        <li>若 Fed 獨立性受挑戰，長端殖利率與美元波動恐加劇。</li>
+        <li>與 30 年美債殖利率逾 5% 的「債券義警」疑慮疊加。</li>
+        <li>投顧觀察：央行獨立性是美元與長債的關鍵風險。</li>
       </ul>
-      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-21/us-set-to-impose-new-duties-by-friday-with-stopgap-to-expire" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-green">
-      <div class="card-top"><span class="badge b-pub">CBS News</span><span class="tag pos">通膨</span><span class="date">2026/07/14</span></div>
-      <h3>6 月 CPI 降至 3.5% 低於預期，7 月底 FOMC 在即</h3>
-      <ul>
-        <li>6 月 CPI 年增 3.5% 低於預期，汽油下滑帶動。</li>
-        <li>市場關注關稅是否開始傳導至物價。</li>
-        <li>影響：通膨降溫利多利率敏感的科技、成長股與美債。</li>
-      </ul>
-      <div class="src"><a href="https://www.cbsnews.com/news/june-2026-cpi-report/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://www.bloomberg.com/news/articles/2026-07-22/trump-allies-eye-svb-review-as-new-path-to-oust-a-fed-governor" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
     <div class="card t-orange">
-      <div class="card-top"><span class="badge b-cnbc">CNBC</span><span class="tag warn">Fed 獨立性</span><span class="date">2026/04</span></div>
-      <h3>川普對 Fed 主席施壓，人事變數未消</h3>
+      <div class="card-top"><span class="badge b-wscn">華爾街見聞</span><span class="tag warn">財政</span><span class="date">2026/07/23</span></div>
+      <h3>川普預言 9 月聯邦政府恐關門，預算僵局升溫</h3>
+      <p class="lead">川普預言美國聯邦政府 9 月可能因預算僵局而關門，疊加 8/1 對等關稅大限與撥款到期，財政與政治雜訊升高，是秋季市場的重要風險時點。</p>
       <ul>
-        <li>川普多次放話可能撤換主席、並已物色接班人。</li>
-        <li>市場擔憂 Fed 獨立性受損、「政治化降息」預期升溫。</li>
-        <li>影響：恐推升長端殖利率與美元波動，為債匯市尾端風險。</li>
+        <li>政府關門風險增添秋季財政不確定性。</li>
+        <li>與關稅、撥款到期共同構成財政雜訊。</li>
+        <li>對美債、國防與政府採購相關類股具影響。</li>
       </ul>
-      <div class="src"><a href="https://www.cnbc.com/2026/04/15/trump-threatens-to-fire-powell-if-the-fed-chair-doesnt-leave-office-on-his-own.html" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
+      <div class="src"><a href="https://wallstreetcn.com/" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
     <div class="card t-yellow">
       <div class="card-top"><span class="badge b-ft">FT</span><span class="tag warn">監管</span><span class="date">2026/07/21</span></div>
       <h3>川普任命大科技批評者出任 DoJ 反托拉斯主管</h3>
+      <p class="lead">川普任命對大型科技公司持批判立場者掌司法部反托拉斯部門，訊號指向對平台巨頭更積極的反壟斷執法，與 AI 監管、內容版權議題共同構成科技監管風險。</p>
       <ul>
-        <li>川普任命對大型科技公司持批判立場者掌司法部反托拉斯部門。</li>
-        <li>訊號指向對平台巨頭更積極的反壟斷執法。</li>
-        <li>影響：對大型科技股的監管風險偏空。</li>
+        <li>反壟斷執法轉趨積極，平台巨頭承壓。</li>
+        <li>與 AI 監管、版權議題疊加。</li>
+        <li>大型科技股的政策折價可能上升。</li>
       </ul>
       <div class="src"><a href="https://www.ft.com/us" target="_blank" rel="noopener">FT US ↗</a></div>
-    </div>
-    <div class="card t-orange">
-      <div class="card-top"><span class="badge b-pub">Crowell &amp; Moring</span><span class="tag warn">關稅</span><span class="date">2026/07</span></div>
-      <h3>藥品 232 條款關稅 7/31 生效，採分級稅率</h3>
-      <ul>
-        <li>對「已核准專利藥品」進口的 Section 232 關稅自 7/31 起分級課徵。</li>
-        <li>川普另放話對藥品最高 200%，給學名藥廠約兩年回流緩衝。</li>
-        <li>影響：利多本土製藥產能，利空依賴海外 API 的藥廠。</li>
-      </ul>
-      <div class="src"><a href="https://www.crowell.com/en/insights/client-alerts/trump-administration-imposes-section-232-tariffs-on-patented-pharmaceutical-imports-tiered-rate-structure-takes-effect-beginning-july-31-2026" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
-    </div>
-    <div class="card t-orange">
-      <div class="card-top"><span class="badge b-pub">最高法院</span><span class="tag warn">法律</span><span class="date">2026/02/20</span></div>
-      <h3>最高法院推翻 IEEPA 關稅，政策改走 232／301 條款</h3>
-      <ul>
-        <li>最高法院判定依 IEEPA 課徵的關稅越權；政府改以 232、301 逐案重建。</li>
-        <li>關稅工具轉向產業別（銅、藥品、鋼鋁、半導體），風險更「板塊化」。</li>
-        <li>進口商面臨退稅機會與新一輪合規調整。</li>
-      </ul>
-      <div class="src"><a href="https://www.supremecourt.gov/opinions/25pdf/24-1287_4gcj.pdf" target="_blank" rel="noopener">閱讀原文 ↗</a></div>
     </div>
   </div>
 </section>
@@ -759,11 +734,11 @@
   <div class="sec-head"><h2>關於與方法</h2><span class="en">About &amp; Methodology</span></div>
   <div class="about-card">
     <h3>這個儀表板是什麼</h3>
-    <p>為投顧從業人員設計的每日知識庫儀表板，將分散在各大財經媒體的重點濃縮成可快速瀏覽的卡片，涵蓋美股與美國總經、台股、全球央行、AI／科技／金融／生技／原物料，以及地緣政治與美國政治。目標是把「每天讀大量新聞」的時間，壓縮到幾分鐘掌握全局。</p>
+    <p>為投顧從業人員設計的每日知識庫儀表板,將分散在各大財經媒體的重點濃縮成可快速瀏覽的內容,涵蓋三分鐘總覽、當日摘要與心得、市場總經、台股與亞太、全球央行,以及 AI／科技／金融／生技／原物料與地緣政治、美國政治。目標是把「每天讀大量新聞」的時間,壓縮到幾分鐘掌握全局。</p>
   </div>
   <div class="about-card">
-    <h3>主要來源（13）</h3>
-    <p>以下列 13 家為<strong>主要來源</strong>，並以公開／官方來源補充查證：</p>
+    <h3>主要來源（13）與時效</h3>
+    <p>以下列 13 家為<strong>主要來源</strong>,以付費訂閱內容為主體、免費與公開來源為輔。本儀表板為<strong>日更</strong>,卡片內容以當日／近日新聞為主,汰除過時資訊。</p>
     <div class="srcbar" style="border-top:none;padding-top:4px">
       <span class="badge b-bbg">Bloomberg</span><span class="badge b-wsj">WSJ</span><span class="badge b-nyt">NYT</span>
       <span class="badge b-ft">FT</span><span class="badge b-nikkei">Nikkei Asia</span><span class="badge b-wapo">Washington Post</span>
@@ -772,37 +747,24 @@
       <span class="badge b-wscn">華爾街見聞</span><span class="badge b-pub">公開／官方補充</span>
     </div>
     <ul>
-      <li>每則卡片均標示<strong>來源徽章 ＋ 原文連結 ＋ 發布日期</strong>，可一鍵點回原文查證。</li>
-      <li>顏色條代表議題溫度：<span style="color:var(--green)">綠（正向／穩健）</span>、<span style="color:var(--yellow)">黃（留意）</span>、<span style="color:var(--orange)">橘（警戒）</span>、<span style="color:var(--red)">紅（高風險／衝突）</span>。</li>
+      <li>每則卡片均標示<strong>來源徽章 ＋ 原文連結 ＋ 發布日期</strong>,可一鍵點回原文查證。</li>
+      <li>顏色條代表議題溫度:<span style="color:var(--green)">綠（正向）</span>、<span style="color:var(--yellow)">黃（留意）</span>、<span style="color:var(--orange)">橘（警戒）</span>、<span style="color:var(--red)">紅（高風險／衝突）</span>。</li>
     </ul>
   </div>
   <div class="about-card">
     <h3>取得方式與合規</h3>
-    <p>Bloomberg、WSJ、NYT、FT、Nikkei Asia、Washington Post、Barron's、IBD 為使用者<strong>本人正式訂閱</strong>、於自己已登入的瀏覽器中合法存取的內容；CNBC、MarketWatch、Tom's Hardware、Oil &amp; Gas Journal、華爾街見聞與其餘為公開可免費閱讀之來源。</p>
-    <ul>
-      <li>本站<strong>不使用任何繞過付費牆或反爬蟲的手段</strong>；付費內容一律以使用者本人訂閱、在其登入環境下閱讀。</li>
-      <li>公開頁面僅呈現<strong>原創的重點摘要＋原文連結</strong>，不轉載付費文章全文，以尊重來源方著作權與使用者訂閱權益。</li>
-      <li>部分 FT 卡片因首頁未提供單篇永久連結，暫連至 FT 對應主題版面（Markets／Companies／US），待自動化管線接上後改為單篇連結。</li>
-    </ul>
+    <p>付費媒體（Bloomberg、WSJ、NYT、FT、Nikkei、WaPo、Barron's、IBD）為使用者<strong>本人正式訂閱</strong>、於自己已登入的瀏覽器中合法存取;其餘為公開可免費閱讀之來源。<strong>不使用任何繞過付費牆或反爬蟲的手段</strong>;公開頁面僅呈現原創的重點摘要與原文連結,不轉載付費文章全文。</p>
   </div>
   <div class="about-card">
     <h3>誠實的限制（Honest Limitations）</h3>
     <div class="disclaimer">
-      本儀表板為新聞彙整與研究輔助工具，<strong>非投資建議</strong>。摘要為濃縮版本，可能遺漏原文細節或時間落差；部分財務數字（如單季獲利、募資或併購金額）在對外引用前，建議回查公司官方 IR／新聞稿。「洽談中／傳聞」的交易未必成交。地緣與油價等變數方向可能快速反轉，請以最新一則與原始來源為準。
+      本儀表板為新聞彙整與研究輔助工具,<strong>非投資建議</strong>。摘要與心得為濃縮／觀點版本,可能遺漏原文細節;部分數字（單季獲利、資本支出、募資或併購金額、即時報價漲跌幅）在對外引用前建議回查官方來源。「洽談中／傳聞」的交易未必成交。地緣與油價等變數方向可能快速反轉,請以最新一則與原始來源為準。
     </div>
-  </div>
-  <div class="about-card">
-    <h3>更新架構與後續</h3>
-    <p>本頁為 <strong>v3</strong>，已整合 13 家主要來源、新增「原物料」分區。更新採兩種模式：</p>
-    <ul>
-      <li><strong>每日自動版（無人在場也會跑）</strong>：每個交易日早上 07:30（台北）排程，以公開來源＋華爾街見聞＋跨源搜尋為底稿，自動更新並部署到 GitHub Pages。</li>
-      <li><strong>加強版（你在、Chrome 已登入時）</strong>：透過 Claude in Chrome 在你已登入的分頁，讀取你本人訂閱的 8 家付費媒體全文重點，做出最完整版本（本 v3 即為此模式產出）。</li>
-    </ul>
   </div>
 </section>
 
 <footer>
-  <p><b>投顧知識庫儀表板</b> · v3 · 資料截至 2026/07/22 · 13 家來源 · 內容僅供研究參考，非投資建議</p>
+  <p><b>投顧知識庫儀表板</b> · 2026/07/23 08:27 · 13 家來源 · 內容僅供研究參考,非投資建議</p>
 </footer>
 
 </div>
