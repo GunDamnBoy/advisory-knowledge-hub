@@ -12,17 +12,19 @@
 
 ---
 
-## 1. 主要來源（13 家，付費為主體、免費為輔）
+## 1. 主要來源（15 家，付費為主體、免費為輔）
 
 **付費訂閱**（使用者本人訂閱，於其已登入的 Chrome 讀）：
-Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)、FT (ft.com)、Nikkei Asia (asia.nikkei.com)、Washington Post (washingtonpost.com)、Barron's (barrons.com)、IBD (investors.com)
+Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)、FT (ft.com)、Nikkei Asia (asia.nikkei.com)、Washington Post (washingtonpost.com)、Barron's (barrons.com)、IBD (investors.com)、**Politico (politico.com)**、**The Hill (thehill.com)**
 
 **免費公開**：
 CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)
 
 **公開／官方補充**：Reuters 體系、CBS、AP、官方央行／交易所／公司 IR、政府與司法機構公告。
 
-來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-wscn`/`b-pub`。
+**Politico 與 The Hill 專供政經分頁**（地緣政治＋美國政治）的深度與時效——國會立法、國防／撥款、選舉、司法與 Fed 獨立性等。
+
+來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-pub`。
 
 各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲。
 
@@ -47,7 +49,11 @@ CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshard
 
 ## 4. 版面結構（單頁 HTML，六個分頁）
 
-沿用現有 `index.html` 的 CSS、版面、分頁與互動邏輯、徽章 class；只更新內容與最上方「最後更新」時間戳（台北時間）。
+沿用現有 `index.html` 的 **淺色系 CSS**、版面、分頁與互動邏輯、徽章 class；只更新內容與最上方「最後更新」時間戳（台北時間）。**配色為淺色系**（`--bg:#eef2f7`、`--card:#fff`、深藍灰字），勿改回深色。
+
+**定位＝新聞閱讀中心（reading hub），內容越充實越好。** 市場總經／產業與主題／政經三大分頁的**每個子類別至少 10 則**；採「分層摘要」：
+- **重點則（每子類別 2 則左右）**：用 `.card.wide`（跨兩欄）＋ `.longread`（多段落、約 800～1,000 字的深度摘要）＋標 `.tag.deep`「深度」；深入說明事件來龍去脈與對市場的意義。
+- **其餘則**：一般 `.card` ＋ `.lead`（約 300～400 字中長摘要）＋ 2～3 條重點 bullet。
 
 1. **三分鐘總覽**：
    - 跨資產快照列（`.snap`）：S&P 500、那斯達克、布蘭特油、黃金、美元/日圓、30 年美債或銅等 6 格（漲綠 `.up`／跌紅 `.dn`／平 `.fl`）。
