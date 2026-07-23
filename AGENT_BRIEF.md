@@ -1,54 +1,91 @@
-# AGENT BRIEF — 每日重生內容標準作業說明
+# AGENT BRIEF — 投顧知識庫儀表板・每日重生標準說明
 
-這份文件是每日排程工作階段重生 `index.html` 時遵循的標準說明。目標：產出一份當日投顧知識庫儀表板，維持既有版面與風格，只更新內容。
+這份文件是「投顧知識庫儀表板」的完整規格。任何一個新的 Cowork 對話（或換裝置）讀了這份，就能完整重現整套系統。使用者說「**跑今天的儀表板**」時，即依本文件執行。全程使用繁體中文（台灣用語），讀者為投顧從業人員。
 
-## 觸發與時區
+---
 
-- 每個**交易日**（週一至週五）早上 **07:30（台北，UTC+8）** 執行。
-- 對應 UTC cron：`30 23 * * 0-4`（UTC 週日至週四 23:30 = 台北週一至週五 07:30）。
+## 0. 觸發與環境前提（重要）
 
-## 涵蓋範圍（分頁與分區）
+- **只能在「使用者本人開的互動 Cowork 對話、且桌機 Chrome 外掛已連線」時執行。** 讀付費訂閱要靠 Claude in Chrome 附著於互動對話；排程／背景階段連不到瀏覽器，只能出免費版。
+- 每天早上使用者到公司（Chrome 開著、手機熱點連著電腦）後，說一句「跑今天的儀表板」即觸發。
+- 另有一個平日 08:00 的手機推播提醒，提醒使用者來說這句話。
 
-1. **每日總覽**：一分鐘總覽（3 個焦點卡＋5 條 takeaways）、本週重點盯盤時程。
-2. **市場總經**：美股與美國總經、台股、全球央行與總經。
-3. **產業與主題**：AI、科技、金融、生技、原物料。
-4. **政經**：地緣政治、美國政治。
-5. **關於與方法**：來源、合規、限制、規劃（大致固定，日期需更新）。
+---
 
-## 來源優先序
+## 1. 主要來源（13 家，付費為主體、免費為輔）
 
-主要來源共 13 家（對應徽章）：
+**付費訂閱**（使用者本人訂閱，於其已登入的 Chrome 讀）：
+Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)、FT (ft.com)、Nikkei Asia (asia.nikkei.com)、Washington Post (washingtonpost.com)、Barron's (barrons.com)、IBD (investors.com)
 
-- **付費訂閱（使用者本人，登入瀏覽器讀）**：Bloomberg `b-bbg`、WSJ `b-wsj`、NYT `b-nyt`、FT `b-ft`、Nikkei Asia `b-nikkei`、Washington Post `b-wapo`、Barron's `b-barrons`、IBD `b-ibd`。
-- **免費公開**：CNBC `b-cnbc`、MarketWatch `b-mw`、Tom's Hardware `b-toms`、Oil & Gas Journal `b-ogj`、華爾街見聞 `b-wscn`（wallstreetcn.com）。
-- **公開／官方補充** `b-pub`：Reuters 體系、CBS、AP、官方央行／交易所／公司 IR、政府與司法機構公告。
+**免費公開**：
+CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)
 
-各來源擅長領域（供分區取材參考）：Nikkei＝亞洲供應鏈／匯率；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG（原物料）；MarketWatch/IBD/Barron's＝美股與選股視角；WaPo＝美政治/地緣；CNBC＝即時盤勢與全球；華爾街見聞＝中文彙整西方財經。
+**公開／官方補充**：Reuters 體系、CBS、AP、官方央行／交易所／公司 IR、政府與司法機構公告。
 
-### 模式差異
+來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-wscn`/`b-pub`。
 
-- **每日自動版（無瀏覽器）**：以免費公開來源（CNBC、MarketWatch、Tom's Hardware、OGJ、華爾街見聞）＋WebSearch 跨源彙整。**不得**嘗試繞過付費牆或反爬蟲。
-- **加強版（使用者在場、Chrome 已登入）**：可透過 Claude in Chrome，在使用者已登入的分頁讀取其本人訂閱 8 家（Bloomberg／WSJ／NYT／FT／Nikkei／WaPo／Barron's／IBD）的全文重點。
+各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲。
 
-## 合規紅線（必守）
+**內容優先序**：每個分區以付費來源卡片打底、排前面；免費來源只補付費沒涵蓋到的角度。**核可的免費來源僅限**上列五家＋官方／通訊社；**嚴禁**內容農場或小報（Motley Fool、ETtoday、Intellectia、內容聚合站等）。
 
-- 不使用任何繞過付費牆／反爬蟲手段。
-- 公開頁面只放**原創重點摘要＋原文連結**，不轉載付費文章全文（勿逐字複製大段內容）。
-- 財務數字（單季獲利、募資／併購金額等）盡量以官方 IR 或多來源交叉為準；不確定者標註。
+---
 
-## 每則卡片格式
+## 2. 合規紅線（必守）
 
-- 來源徽章（`b-bbg` / `b-wsj` / `b-nyt` / `b-ft` / `b-wscn` / `b-pub`）＋主題標籤＋日期。
-- 標題（繁體中文，台灣用語）。
-- 2～3 條重點摘要（bullet），濃縮到投顧一眼看懂；地緣／政策類點出對市場影響。
-- 溫度色條：`t-green`（正向）/ `t-yellow`（留意）/ `t-orange`（警戒）/ `t-red`（高風險）。
-- 來源連結 `href` 指向可點的原文（FT 若無單篇連結，暫連對應版面）。
+- 只讀使用者本人訂閱、在其登入的 Chrome 中合法存取的付費內容；以及免費公開來源。
+- **絕不使用任何繞過付費牆或反爬蟲的手段。**
+- 公開頁面只放「原創重點摘要＋原文連結」，不轉載付費文章全文或逐字複製大段內容。
+- 財務數字（單季獲利、資本支出、募資／併購金額、即時報價漲跌）盡量以官方或多來源交叉；不確定者標註。
 
-## 產出
+---
 
-- 只改 `index.html` 的內容與最上方「最後更新」時間戳；保留 CSS、版面結構與互動邏輯。
-- commit（訊息如 `chore: daily refresh YYYY-MM-DD`）後推送至 `main`，由 Actions 自動部署。
+## 3. 時效性
 
-## 語氣
+本儀表板為**日更**。卡片內容以**當日／近日（數日內）**新聞為主，**汰除兩個月前的舊聞**。央行等結構性事件改以「前瞻／最新一次」框架（如「ECB 7/24 前瞻」而非引用兩個月前的會議）。日期一律標於卡片。
 
-- 繁體中文（台灣慣用語）、精簡、可快速掃讀；面向投顧專業讀者。
+---
+
+## 4. 版面結構（單頁 HTML，六個分頁）
+
+沿用現有 `index.html` 的 CSS、版面、分頁與互動邏輯、徽章 class；只更新內容與最上方「最後更新」時間戳（台北時間）。
+
+1. **三分鐘總覽**：
+   - 跨資產快照列（`.snap`）：S&P 500、那斯達克、布蘭特油、黃金、美元/日圓、30 年美債或銅等 6 格（漲綠 `.up`／跌紅 `.dn`／平 `.fl`）。
+   - 四張焦點卡（`.focus`）：當日最重要的四條主軸。
+   - 六條重點 takeaways（`.takeaways`）：濃縮當日跨版面重點。
+   - 溫度條＋情緒註解、主要來源徽章列、本週盯盤時程（`.watch`）。
+2. **摘要與心得**：讀完當日 13 家後，寫一篇**約 1,000 字**的綜合彙整＋觀點（`.essay`）。要有一句 kick 破題、5～6 段分主題論述（如 AI 資本支出、財報冷熱、能源地緣、央行/債市、亞洲/台股），結尾給「投顧視角小結」與 2～3 個可驗證盯盤節點。非投資建議。
+3. **市場總經**：美股與財報／台股與亞太／全球央行與總經（各分組用 `.group-label`）。
+4. **產業與主題**：AI／科技／金融／生技／原物料。
+5. **政經**：地緣政治／美國政治。
+6. **關於與方法**：來源、時效、合規、限制（大致固定，日期需更新）。
+
+**每則卡片**：來源徽章＋主題標籤（`.tag`，可 hot/warn/pos）＋日期＋標題（`h3`）＋一段詳細闡述（`.lead`）＋2～3 條重點 bullet（`.card ul`）＋原文連結（真實可點）＋溫度色條（`t-green`/`t-yellow`/`t-orange`/`t-red`）。摘要要「詳細一點、多一些闡述」，不只列點。
+
+---
+
+## 5. 產出與發布流程
+
+1. 用 Claude in Chrome 逐一讀 13 家當日重點（付費為主）。
+2. 依本文件重生 `index.html`（保留 CSS 與結構，只換內容＋時間戳）。
+3. **更新桌面 artifact**：`mcp__remote-devices__update_artifact`，id = `advisory-knowledge-hub`（先 SendUserFile 取 file_uuid）。
+4. **寫入使用者 Mac 的 repo**：`mcp__remote-devices__device_commit_files` 寫到 **`/Users/kennychiang/advisory-knowledge-hub/index.html`**（force:true）。
+5. 之後**不需手動 push**：使用者 Mac 上的 launchd 背景程式（`com.kenny.dashpush`，每 3 分鐘）會自動 `git add`＋`commit`＋`push`；GitHub Actions 自動部署到 `https://gundamnboy.github.io/advisory-knowledge-hub/`。
+
+**重要操作禁忌**：不要用 `device_bash` 跑任何 `git` 指令（含 `git status`）。device_bash 是無網路的沙箱、且不能刪檔，跑 git 會留下 `.git/index.lock` 鎖檔擋住背景推送。只用 `cat`/`ls`/`grep` 等唯讀指令檢查狀態即可。
+
+---
+
+## 6. 基礎設施備忘
+
+- **Repo（本機）**：`/Users/kennychiang/advisory-knowledge-hub`（已移出 `~/Documents`，因 macOS TCC 會擋背景程式存取受保護資料夾）。掛載於沙箱 `mnt/kennychiang--advisory-knowledge-hub/`。
+- **GitHub**：`GunDamnBoy/advisory-knowledge-hub`，GitHub Pages（Source＝GitHub Actions），`.github/workflows/deploy.yml` 自動部署。
+- **推送認證**：remote URL 內嵌 fine-grained PAT（只授權此 repo、Contents 讀寫），存於本機 `.git/config`。換 token：產新 PAT →「`git -C ~/advisory-knowledge-hub remote set-url origin https://<新PAT>@github.com/GunDamnBoy/advisory-knowledge-hub.git`」→ 撤舊。
+- **背景推送腳本**：`~/.dashpush/auto-push.sh`（有變動就 commit、本機領先遠端就 push）；由 launchd agent `com.kenny.dashpush` 每 180 秒觸發。
+- **模式限制備忘**：互動階段能讀 Chrome、但雲端不能直接推 GitHub；背景/排程階段能推 GitHub、但讀不到 Chrome。故付費版必在互動階段產出、由本機背景程式負責推送。
+
+---
+
+## 7. 語氣
+
+繁體中文（台灣慣用語）、精簡、可快速掃讀、面向投顧專業讀者；摘要詳實但不冗長；心得有觀點但保持中立、非投資建議。
