@@ -6,10 +6,12 @@
 
 ## 0. 觸發與環境前提（重要）
 
-- **執行機器＝家中的 MacBook Pro（使用者名稱 `kenny`）**，一週七天每日更新。辦公室那台已停用（launchd 代理已 unload），不再作為發布機器。
+- **執行機器＝家中的 MacBook Pro（使用者名稱 `kenny`）**，該機 24 小時開機，**一週七天每日更新（含週六日與國定假日）**。辦公室那台已停用（launchd 代理已 unload），不再作為發布機器。
+- **固定排程：每天台北時間 07:30**，排程任務 ID＝`advisory-dashboard-daily`。刻意與 09:00 的 `podcast-digest-daily` 錯開，避免兩個任務搶 Chrome。
 - 執行前提：**該台 Mac 醒著、Claude 桌面版開著、`advisory-knowledge-hub` 已加入連線資料夾、Chrome 外掛已連線且各付費站台維持登入狀態。**
 - 讀付費訂閱要靠 Claude in Chrome 附著於對話；若該次執行連不到瀏覽器，只能以免費公開來源產出，並在「關於與方法」註明本次未涵蓋付費來源。
-- 觸發方式有二：(a) 使用者在互動對話說「跑今天的儀表板」；(b) 每日排程自動觸發（排程開的是**全新對話、沒有任何記憶**，所以一切以本文件為準）。
+- 觸發方式有二：(a) 使用者在互動對話說「跑今天的儀表板」；(b) 每日 07:30 排程自動觸發（排程開的是**全新對話、沒有任何記憶**，所以一切以本文件為準）。
+- **週末與清淡日不得跳過。** 新聞量少時改用第 3 節的「前瞻／最新一次」框架把版面補滿，並在心得中誠實說明當日是清淡日；**絕不可為了湊數而放舊聞或編造內容**。
 
 ---
 
@@ -42,24 +44,63 @@ CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshard
 
 ---
 
-## 3. 時效性
+## 3. 時效性與歷史封存
 
-本儀表板為**日更**，使用者最重視的就是「每天打開都看到最新資訊」。
+本儀表板為**日更（一週七天）**，使用者最重視的就是「每天打開都看到最新資訊」。
 
-**核心規則：全站只保留最近 3 個日期（約當日與前兩日）的卡片。** 例如 7/28 這一版，全站日期只會出現 7/26、7/27、7/28。
+**核心規則：每一天的版本，全站只保留最近 3 個日期（約當日與前兩日）的卡片。** 例如 7/28 這一版，全站日期只會出現 7/26、7/27、7/28。
+
+**重要：這條規則只約束「單一天的版本內部」，不是刪除歷史。** 自 2026/08/02 起改為封存制——**每天的版本都獨立存成 `data/YYYY-MM-DD.json` 永久保留**，使用者可用頁面最上方的日期切換列回看任何一天。**絕對不要刪除或覆寫舊的日期檔**，也不要為了「汰舊」去動 `data/` 裡前幾天的 JSON。每天要做的是**新增一個檔案**，不是改寫昨天的檔案。
 
 - **超過 3 個日期的卡片一律處理掉**：能用當日最新進度改寫的就改寫（換新來源、換新標題、更新數字），改寫不了的就直接刪除，不留在頁面上。
 - **每日新增量**：當日新卡片至少佔全站的 1/4～1/3（近期實務約 35～40 則），確保「今天」是版面主角，不是靠舊卡撐版面。
 - **刪完仍要守版面下限**：每個子類別 ≥10 則的規定優先——先補齊當日新內容，再刪舊卡，不可為了汰舊讓子類別掉到 10 則以下。
 - **結構性事件用「前瞻／最新一次」框架**：CPI、非農、FOMC／ECB／BOJ 決議等本來就是低頻事件，不可直接引用一兩個月前的舊會議當新聞；要改寫成「下次會議前瞻」或「最新一次決議＋至今的市場反應」，日期掛在寫作當日。
-- **日期一律標於每張卡片**（`<span class="date">`），發布前用日期直方圖檢查一次，確認只剩 3 個日期。
+- **日期一律標於每張卡片**（卡片 dict 的 `date` 欄），發布前用日期直方圖檢查一次，確認只剩 3 個日期。
 - 「關於與方法」分頁的時效性說明要同步寫出本次保留的日期區間。
 
 ---
 
-## 4. 版面結構（單頁 HTML，六個分頁）
+## 3.5 封存架構（2026/08/02 起）
 
-沿用現有 `index.html` 的 **淺色系 CSS**、版面、分頁與互動邏輯、徽章 class；只更新內容與最上方「最後更新」時間戳（台北時間）。**配色為淺色系**（`--bg:#eef2f7`、`--card:#fff`、深藍灰字），勿改回深色。
+`index.html` 已改為**讀 JSON 的單頁應用**，內容與外殼分離。每天產出的是資料檔，不是 HTML。
+
+```
+index.html            # 外殼：CSS ＋ 渲染邏輯 ＋ 日期切換列（約 23KB，很少需要改）
+data/index.json       # 封存索引：days 陣列，由新到舊
+data/2026-08-02.json  # 每日內容，一天一個檔，永久保留
+data/2026-07-30.json
+```
+
+**`data/index.json`**：
+
+```json
+{ "updated": "2026/08/02 18:40 (台北) · 週日盤前",
+  "count": 2,
+  "days": [ { "date": "2026-08-02", "weekday": "週日",
+              "stamp": "2026/08/02 18:40 (台北) · 週日盤前",
+              "headline": "當日心得標題", "cards": 131,
+              "keptDates": ["2026/07/31","2026/08/01","2026/08/02"],
+              "file": "data/2026-08-02.json" } ] }
+```
+
+**`data/YYYY-MM-DD.json`** 的頂層鍵：`date`／`weekday`／`stamp`／`headline`／`keptDates`／`cards`／`overview`／`essay`／`sections`／`about`。
+
+- `overview`：`snap`（6 格，各含 `k`/`v`/`tone`，tone＝`up`/`dn`/`fl`）、`focus`（4 張，`k`/`v`）、`takeawaysTitle`、`takeaways`（7 條）、`thermo`（`level`/`note`）、`watch`（`d`/`t`）
+- `essay`：`title`／`by`／`kick`／`paras`（5–6 段）
+- `sections`：三個區塊（id＝`macro`/`industry`/`politics`），各含 `title`/`en`/`intro`/`groups`；`groups` 內為 `label`/`accent`（``/`tw`/`macro`/`mat`）/`cards`
+- **卡片 dict**：`src`（來源代碼）／`tag`／`tagcls`（``/`hot`/`warn`/`pos`）／`date`（`YYYY/MM/DD`）／`title`／`deep`（bool）／`body`（deep 時為段落 list，否則字串）／`bullets`／`url`／`tone`（`t-green`/`t-yellow`/`t-orange`/`t-red`）
+- `about`：`timeliness`／`notes`（list）／`access`／`run`／`limits`
+
+**欄位值可含 `<b>`、`<strong>`、`<span>` 等行內 HTML**，由前端 `innerHTML` 渲染，寫入時請自行確保標籤成對。
+
+**每日發布動作只有兩個**：(1) 新增 `data/<今天>.json`；(2) 把今天這筆 **加進** `index.json` 的 `days` 並依日期由新到舊排序。**不要動任何既有的日期檔。** 若同一天重跑，覆蓋當天那一個檔即可。
+
+---
+
+## 4. 版面結構（六個分頁）
+
+沿用現有 `index.html` 的 **淺色系 CSS**、版面、分頁與互動邏輯、徽章 class；只更新資料與 `stamp`（台北時間）。**配色為淺色系**（`--bg:#eef2f7`、`--card:#fff`、深藍灰字），勿改回深色。頁面最上方為**日期切換列**（顯示最近 7 天，更早的收進下拉選單）。
 
 **定位＝新聞閱讀中心（reading hub），內容越充實越好。** 市場總經／產業與主題／政經三大分頁的**每個子類別至少 10 則**；採「分層摘要」：
 - **重點則（每子類別 2 則左右）**：用 `.card.wide`（跨兩欄）＋ `.longread`（多段落、約 800～1,000 字的深度摘要）＋標 `.tag.deep`「深度」；深入說明事件來龍去脈與對市場的意義。
@@ -82,13 +123,15 @@ CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshard
 
 ## 5. 產出與發布流程
 
-1. 用 Claude in Chrome 逐一讀 15 家當日重點（付費為主）。
-2. 依本文件重生 `index.html`（保留 CSS 與結構，只換內容＋時間戳）。
-3. **更新桌面 artifact**：`mcp__remote-devices__update_artifact`，id = `advisory-knowledge-hub`（先 SendUserFile 取 file_uuid）。
-4. **寫入使用者 Mac 的 repo**：`mcp__remote-devices__device_commit_files` 寫到 **`/Users/kenny/advisory-knowledge-hub/index.html`**（force:true）。
+1. **先讀 `data/index.json`**，確認今天是否已產出（同日重跑就覆蓋當天的檔），並看昨天的 `keptDates` 以決定今天要汰換哪些日期。
+2. 用 Claude in Chrome 逐一讀 15 家當日重點（付費為主）。
+3. 依本文件與第 3.5 節的 schema 產生 `data/<今天>.json`，並把今天加進 `index.json` 的 `days`。
+4. **直接用檔案工具寫入** `/Users/kenny/advisory-knowledge-hub/data/`。`index.html` 是外殼，**除非要改版面，否則不需要動它**。
 5. 之後**不需手動 push**：使用者 Mac 上的 launchd 背景程式（`com.kenny.dashpush`，每 3 分鐘）會自動 `git add`＋`commit`＋`push`；GitHub Actions 自動部署到 `https://gundamnboy.github.io/advisory-knowledge-hub/`。
+6. **發布前自我檢查**（做不到就不要發）：日期直方圖只剩 3 個日期；當日新卡佔全站 1/4～1/3；每個子類別 ≥10 則；每張卡片都有真實可點的原文連結；JSON 可被 `json.load` 正常解析。
+7. 等 2–4 分鐘後抓 `https://gundamnboy.github.io/advisory-knowledge-hub/data/index.json` 驗證 `days[0].date` 是今天。若拿到舊內容可能是 CDN 快取，改用 Chrome 以 `cache:'no-store'` 重抓確認。
 
-**重要操作禁忌**：不要用 `device_bash` 跑任何 `git` 指令（含 `git status`）。device_bash 是無網路的沙箱、且不能刪檔，跑 git 會留下 `.git/index.lock` 鎖檔擋住背景推送。只用 `cat`/`ls`/`grep` 等唯讀指令檢查狀態即可。
+**重要操作禁忌**：不要跑任何 `git` 指令（含 `git status`）。沙箱無網路、且不能刪檔，跑 git 會留下 `.git/index.lock` 鎖檔擋住背景推送。只用 `cat`/`ls`/`grep` 等唯讀指令檢查狀態即可。
 
 ---
 
@@ -98,6 +141,8 @@ CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshard
 - **GitHub**：`GunDamnBoy/advisory-knowledge-hub`，GitHub Pages（Source＝GitHub Actions），`.github/workflows/deploy.yml` 自動部署。
 - **推送認證**：fine-grained PAT `home-mac push`（只授權此 repo 與 podcast repo、Contents 讀寫），**存於 macOS 鑰匙圈**（`git config --global credential.helper osxkeychain`），**不內嵌於 remote URL、不以明碼存在任何檔案中**。換 token：產新 PAT → 在終端機手動 `git push` 一次、於提示輸入新 token（Username＝`GunDamnBoy`）→ 鑰匙圈自動覆蓋 → 撤舊。**任何情況下都不要把 token 寫進檔案或 remote URL。**
 - **背景推送腳本**：`~/.dashpush/auto-push.sh`（有變動就 commit、本機領先遠端就 push）；由 launchd agent `com.kenny.dashpush` 每 180 秒觸發。
+- **排程任務**：`advisory-dashboard-daily`，cron `30 7 * * *`（台北時間，一週七天）。另一個任務 `podcast-digest-daily` 排在 09:00，兩者刻意錯開。
+- **容量**：每日 JSON 約 200KB，一年約 70MB，GitHub Pages 綽綽有餘，因此**歷史全部保留、不設汰除**。若未來單日檔案明顯變大，優先檢查是不是深度卡寫太多，而不是刪歷史。
 - **模式限制備忘**：互動階段能讀 Chrome、但雲端不能直接推 GitHub；背景/排程階段能推 GitHub、但讀不到 Chrome。故付費版必在互動階段產出、由本機背景程式負責推送。
 
 ---
