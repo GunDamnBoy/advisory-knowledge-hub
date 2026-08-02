@@ -314,6 +314,9 @@ async function load(date){
   cur=meta.date;
   location.hash=cur;
   $("#panes").innerHTML='<div class="loading">載入 '+cur+" …</div>";
+  $("#dayscount").textContent=idx.days.length+" 天封存 · 更新 "+md(idx.days[0].date);
+  renderDaybar();                       // 先畫日期列，不必等當日資料下載完
+  window.scrollTo({top:0});
   try{
     if(!cache[cur]){
       const r=await fetch(meta.file,{cache:"no-cache"});
@@ -327,7 +330,6 @@ async function load(date){
   }
   const d=cache[cur];
   $("#stamp").innerHTML='<span class="dot" style="width:7px;height:7px"></span>最後更新 <b>'+d.stamp+"</b>";
-  $("#dayscount").textContent=idx.days.length+" 天封存 · 更新 "+md(idx.days[0].date);
   const stale=cur!==idx.days[0].date
     ? '<div class="stale">你正在看 <b>'+cur.replace(/-/g,"/")+"</b> 的封存版本（非最新）。"
       +'本頁內容為當時產出，數字與判斷未再更新。<a href="#" id="tolatest">回到最新一天 ('
@@ -336,10 +338,8 @@ async function load(date){
     +d.sections.map(sectionHTML).join("")+aboutHTML(d);
   const tl=$("#tolatest"); if(tl)tl.onclick=e=>{e.preventDefault();load(idx.days[0].date)};
   document.querySelectorAll("nav.tabs button").forEach((b,i)=>b.classList.toggle("active",i===0));
-  renderDaybar();
   $("#foot").innerHTML="<b>投顧知識庫儀表板</b> · "+d.stamp+" · 15 家來源 · "
     +d.cards+" 則卡片 · 內容僅供研究參考，非投資建議";
-  window.scrollTo({top:0});
 }
 
 document.getElementById("tabs").addEventListener("click",e=>{
