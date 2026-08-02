@@ -6,9 +6,10 @@
 
 ## 0. 觸發與環境前提（重要）
 
-- **只能在「使用者本人開的互動 Cowork 對話、且桌機 Chrome 外掛已連線」時執行。** 讀付費訂閱要靠 Claude in Chrome 附著於互動對話；排程／背景階段連不到瀏覽器，只能出免費版。
-- 每天早上使用者到公司（Chrome 開著、手機熱點連著電腦）後，說一句「跑今天的儀表板」即觸發。
-- 另有一個平日 08:00 的手機推播提醒，提醒使用者來說這句話。
+- **執行機器＝家中的 MacBook Pro（使用者名稱 `kenny`）**，一週七天每日更新。辦公室那台已停用（launchd 代理已 unload），不再作為發布機器。
+- 執行前提：**該台 Mac 醒著、Claude 桌面版開著、`advisory-knowledge-hub` 已加入連線資料夾、Chrome 外掛已連線且各付費站台維持登入狀態。**
+- 讀付費訂閱要靠 Claude in Chrome 附著於對話；若該次執行連不到瀏覽器，只能以免費公開來源產出，並在「關於與方法」註明本次未涵蓋付費來源。
+- 觸發方式有二：(a) 使用者在互動對話說「跑今天的儀表板」；(b) 每日排程自動觸發（排程開的是**全新對話、沒有任何記憶**，所以一切以本文件為準）。
 
 ---
 
@@ -84,7 +85,7 @@ CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshard
 1. 用 Claude in Chrome 逐一讀 15 家當日重點（付費為主）。
 2. 依本文件重生 `index.html`（保留 CSS 與結構，只換內容＋時間戳）。
 3. **更新桌面 artifact**：`mcp__remote-devices__update_artifact`，id = `advisory-knowledge-hub`（先 SendUserFile 取 file_uuid）。
-4. **寫入使用者 Mac 的 repo**：`mcp__remote-devices__device_commit_files` 寫到 **`/Users/kennychiang/advisory-knowledge-hub/index.html`**（force:true）。
+4. **寫入使用者 Mac 的 repo**：`mcp__remote-devices__device_commit_files` 寫到 **`/Users/kenny/advisory-knowledge-hub/index.html`**（force:true）。
 5. 之後**不需手動 push**：使用者 Mac 上的 launchd 背景程式（`com.kenny.dashpush`，每 3 分鐘）會自動 `git add`＋`commit`＋`push`；GitHub Actions 自動部署到 `https://gundamnboy.github.io/advisory-knowledge-hub/`。
 
 **重要操作禁忌**：不要用 `device_bash` 跑任何 `git` 指令（含 `git status`）。device_bash 是無網路的沙箱、且不能刪檔，跑 git 會留下 `.git/index.lock` 鎖檔擋住背景推送。只用 `cat`/`ls`/`grep` 等唯讀指令檢查狀態即可。
@@ -93,9 +94,9 @@ CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshard
 
 ## 6. 基礎設施備忘
 
-- **Repo（本機）**：`/Users/kennychiang/advisory-knowledge-hub`（已移出 `~/Documents`，因 macOS TCC 會擋背景程式存取受保護資料夾）。掛載於沙箱 `mnt/kennychiang--advisory-knowledge-hub/`。
+- **Repo（本機）**：`/Users/kenny/advisory-knowledge-hub`（家中 MacBook Pro；放在家目錄下，不要移進 `~/Documents`，因 macOS TCC 會擋背景程式存取受保護資料夾）。掛載於沙箱 `mnt/kenny--advisory-knowledge-hub/`（實際掛載名稱以當下 `ls` 為準）。分支＝`main`。
 - **GitHub**：`GunDamnBoy/advisory-knowledge-hub`，GitHub Pages（Source＝GitHub Actions），`.github/workflows/deploy.yml` 自動部署。
-- **推送認證**：remote URL 內嵌 fine-grained PAT（只授權此 repo、Contents 讀寫），存於本機 `.git/config`。換 token：產新 PAT →「`git -C ~/advisory-knowledge-hub remote set-url origin https://<新PAT>@github.com/GunDamnBoy/advisory-knowledge-hub.git`」→ 撤舊。
+- **推送認證**：fine-grained PAT `home-mac push`（只授權此 repo 與 podcast repo、Contents 讀寫），**存於 macOS 鑰匙圈**（`git config --global credential.helper osxkeychain`），**不內嵌於 remote URL、不以明碼存在任何檔案中**。換 token：產新 PAT → 在終端機手動 `git push` 一次、於提示輸入新 token（Username＝`GunDamnBoy`）→ 鑰匙圈自動覆蓋 → 撤舊。**任何情況下都不要把 token 寫進檔案或 remote URL。**
 - **背景推送腳本**：`~/.dashpush/auto-push.sh`（有變動就 commit、本機領先遠端就 push）；由 launchd agent `com.kenny.dashpush` 每 180 秒觸發。
 - **模式限制備忘**：互動階段能讀 Chrome、但雲端不能直接推 GitHub；背景/排程階段能推 GitHub、但讀不到 Chrome。故付費版必在互動階段產出、由本機背景程式負責推送。
 
