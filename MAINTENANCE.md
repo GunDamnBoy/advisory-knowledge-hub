@@ -96,11 +96,16 @@
 sudo pmset -c sleep 0          # 插電時永不睡眠（螢幕仍可關）
 sudo pmset -c disksleep 0
 sudo pmset -c womp 1           # 允許網路喚醒
-sudo pmset -c autorestart 1    # 斷電復電後自動開機
 sudo pmset repeat wakeorpoweron MTWRFSU 00:55:00   # 保險：萬一仍睡著
 ```
 
+**2026-08-03 實測驗證**（`pmset -g custom | awk '/AC Power/,0'`）：`sleep 0`、`disksleep 0`、`womp 1`、`displaysleep 10` 皆已生效；`pmset -g ps` 顯示 `AC Power`；`pmset -g sched` 顯示 `wakepoweron at 0:55AM every day`。
+
 全天開機之後 `repeat wakeorpoweron` 理論上用不到，**但務必保留**——它是唯一能救「意外睡著或斷電」的機制，且不衝突。
+
+**待確認項目**：`sudo pmset -c autorestart 1`（斷電復電後自動開機）在本機的 AC Power 清單中未出現。可能尚未執行，也可能是機型不支援——Apple Silicon 機種已移除此鍵（預設即會復電開機），僅 Intel 機種會列出。
+
+**建議一併調整**：`sudo pmset -b sleep 30`。電池模式預設為 `sleep 1`，代表電源瞬斷（插頭鬆脫、跳電數十秒）切到電池後一分鐘就睡，正在跑的任務會直接中斷。改成 30 分鐘可撐過短暫停電，又不至於把電池放到全空。
 
 ### 為什麼不用 AlDente（或任何充電管理軟體）
 
