@@ -218,9 +218,10 @@ data/2026-07-30.json
    ```python
    import json,datetime as dt,collections,re
    TODAY='<今天 YYYY-MM-DD>'
+   REPO='/Users/kenny/advisory-knowledge-hub'   # 絕對路徑：避免掛載到其他 repo 時讀錯同名檔
    SRCOK={'bbg','wsj','nyt','ft','nikkei','wapo','barrons','cnbc','ibd','mw','toms',
           'ogj','politico','thehill','wscn','reuters','anue','moneydj','twse','pub'}
-   d=json.load(open('data/%s.json'%TODAY))
+   d=json.load(open('%s/data/%s.json'%(REPO,TODAY)))
    w=d.get('window')
    assert w, '★致命：頂層缺 window 欄，補上再檢查'
    frm=dt.datetime.fromisoformat(w['from']); to=dt.datetime.fromisoformat(w['to'])
@@ -240,9 +241,9 @@ data/2026-07-30.json
    badsrc=[(c.get('src'),c['title'][:30]) for _,c in cards if c.get('src') not in SRCOK]
    listy=sorted({c['url'] for _,c in cards if islist(c['url'])})
    # 前一版＝index.json 裡「日期不等於今天」的最新一筆，不可直接用 days[1]
-   days=json.load(open('data/index.json'))['days']
+   days=json.load(open('%s/data/index.json'%REPO))['days']
    prevmeta=next((x for x in days if x['date']!=TODAY),None)
-   prev=json.load(open(prevmeta['file'])) if prevmeta else {'sections':[]}
+   prev=json.load(open('%s/%s'%(REPO,prevmeta['file']))) if prevmeta else {'sections':[]}
    prevurl={c['url'] for s in prev['sections'] for g in s['groups'] for c in g['cards']}
    dup=[c['title'] for _,c in cards if c['url'] in prevurl]
    u=collections.defaultdict(list)
@@ -268,6 +269,8 @@ data/2026-07-30.json
    **「疑似列表頁」是警告不是硬性失敗**——它用啟發式判斷（最後一段網址沒有連字號也沒有長數字 ID），TWSE 那幾個 `.html` 表單頁會被標出來但屬正常。看到就人工確認一次：是真的列表頁就把該卡的數據併進別張卡，是官方數據頁就放行。
 
    **這支腳本刻意設計成「缺 `ts` 也不會中斷」。** 舊版直接寫 `c['ts']`，任何一張漏填就 `KeyError` 讓整支腳本掛掉——而執行者很可能因此跳過檢查直接發布。**檢查機制自己安靜失效，比沒有檢查更危險。**
+
+   **檔案路徑一律用 `REPO` 絕對路徑，不要用相對路徑。** `~/podcast-knowledge-digest` 與本 repo 有 **7 個同名檔案**（`AGENT_BRIEF.md`、`MAINTENANCE.md`、`README.md`、`index.html`、`data/index.json`，以及 `data/2026-07-30.json`、`data/2026-08-02.json`）。若工作階段同時掛了兩個資料夾、而腳本用相對路徑又剛好在錯的目錄下執行，就會讀到另一個 repo 的同名檔。**排程執行時只需要本 repo，不要連 podcast 資料夾。**
 
    **彙整型文章的拆卡規則（2026/08/03 第 4 次修訂新增）**
 
@@ -327,6 +330,12 @@ data/2026-07-30.json
 ## 8. 變更紀錄（CHANGELOG）
 
 **維護規則**：這份 brief 與排程任務 `advisory-dashboard-daily` 的 prompt 是**一組兩份**，改任一邊都必須同步另一邊，並在本節加一筆。詳見 `MAINTENANCE.md`。日期由新到舊。
+
+### 2026-08-03（第 7 次修訂 · 檢查腳本改用絕對路徑）
+
+- **`data/` 的三處讀取改用 `REPO` 絕對路徑**（原為 `data/...` 相對路徑）。起因是維護作業當天為了寫 podcast 那條的文件，把 `~/podcast-knowledge-digest` 也連進了排程任務的工作資料夾。**兩個 repo 有 7 個同名檔案**：`AGENT_BRIEF.md`、`MAINTENANCE.md`、`README.md`、`index.html`、`data/index.json`，以及 `data/2026-07-30.json`、`data/2026-08-02.json`。相對路徑在錯的目錄下執行就會讀到另一個 repo 的同名檔。
+- **這次的失效多半會吵而不會安靜**（podcast 的 `index.json` 的 `days` 沒有 `file` 鍵，會 `KeyError`），但不能靠這個僥倖——結構哪天改了就變成安靜失效。絕對路徑讓整類問題消失，成本是三行。
+- **排程執行時只需要本 repo 的工作資料夾**，不要連 podcast 那個。維護作業若需要同時操作兩邊，做完記得移除。
 
 ### 2026-08-03（第 6 次修訂 · 讓檢查腳本自己不會安靜失效）
 
