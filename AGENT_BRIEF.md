@@ -7,8 +7,9 @@
 ## 0. 觸發與環境前提（重要）
 
 - **執行機器＝家中的 MacBook Pro（使用者名稱 `kenny`）**，該機 24 小時開機，**一週七天每日更新（含週六日與國定假日）**。辦公室那台已停用（launchd 代理已 unload），不再作為發布機器。
-- **固定排程：每天台北時間 07:30**，排程任務 ID＝`advisory-dashboard-daily`。刻意與 09:00 的 `podcast-digest-daily` 錯開，避免兩個任務搶 Chrome。
+- **固定排程：每天台北時間 07:30**，排程任務 ID＝`advisory-dashboard-daily`。另一條線 `podcast-digest-daily` 排在 **03:00**（2026/08/03 起，原為 09:00），兩者刻意錯開以分散 token 用量。**它已改用 podfetch＋Gemini API、不再使用 Chrome，所以「搶 Chrome」不再是錯開的理由。**
 - 執行前提：**該台 Mac 醒著、Claude 桌面版開著、`advisory-knowledge-hub` 已加入連線資料夾、Chrome 外掛已連線且各付費站台維持登入狀態。**
+- **機器與電源設定見 `MAINTENANCE.md` 第 6 節。** 那台 Mac 需要從 00:55 連續醒著到中午（涵蓋 01:00 轉錄、03:00 podcast、07:35 本線至 11:30），靠的是 `pmset -c sleep 0` 加排定喚醒，且**不裝任何第三方充電管理軟體**。這組設定不存在於任何設定檔中，重灌或換機不會遷移。
 - 讀付費訂閱要靠 Claude in Chrome 附著於對話；若該次執行連不到瀏覽器，只能以免費公開來源產出，並在「關於與方法」註明本次未涵蓋付費來源。
 - 觸發方式有二：(a) 使用者在互動對話說「跑今天的儀表板」；(b) 每日 07:30 排程自動觸發（排程開的是**全新對話、沒有任何記憶**，所以一切以本文件為準）。
 - **週末與清淡日不得跳過。** 新聞量少時改用第 3 節的「前瞻／最新一次」框架把版面補滿，並在心得中誠實說明當日是清淡日；**絕不可為了湊數而放舊聞或編造內容**。
@@ -179,7 +180,7 @@ data/2026-07-30.json
 ## 5. 產出與發布流程
 
 1. **先讀 `data/index.json`**，確認今天是否已產出（同日重跑就覆蓋當天的檔）。**不需要看昨天的內容來決定汰換什麼**——24 小時窗口制之下，今天的版本與昨天的版本完全獨立，唯一要跟昨天比對的是**原文連結去重**（見第 7 點）。
-1.5. **算出本次窗口**：`from` ＝ 前一日台北 07:00，`to` ＝ 預計寫入時刻。用 `TZ=Asia/Taipei date` 取得，寫進 JSON 的 `window` 欄，並在讀新聞時就拿它當收錄門檻——**在採集階段就篩掉窗口外的文章，不要等到寫卡時才發現要丟掉**，那等於白讀。
+   - **1.5 算出本次窗口**：`from` ＝ 前一日台北 07:00，`to` ＝ 預計寫入時刻。用 `TZ=Asia/Taipei date` 取得，寫進 JSON 的 `window` 欄，並在讀新聞時就拿它當收錄門檻——**在採集階段就篩掉窗口外的文章，不要等到寫卡時才發現要丟掉**，那等於白讀。
 2. 用 Claude in Chrome 逐一讀 19 家當日重點（付費為主）。建議開 **6 個 subagent 平行分組**，每個先自己開新分頁再作業：
    - A：Bloomberg ＋ WSJ
    - B：FT ＋ NYT ＋ WaPo
@@ -210,18 +211,34 @@ data/2026-07-30.json
    - **本版內部原則上一個 `url` 只成一張卡**，例外見下方「彙整型文章的拆卡規則」
    - **`url` 必須是單篇文章的永久連結**，不得使用列表頁、指數頁、首頁或分類頁
    - **每張卡片的 `src` 值必須在第 1 節的徽章清單內**，否則前端會渲染出沒有樣式的空徽章
+   - **沒有「未來的 `ts`」**（晚於 `window.to`）——出現通常代表時區換算錯了，而且錯得很安靜
    - JSON 可被 `json.load` 正常解析、`index.json` 的 `days` 已含今天且由新到舊排序
 
    檢查腳本（直接跑，不要用眼睛掃）：
    ```python
-   import json,datetime as dt,collections
+   import json,datetime as dt,collections,re
    TODAY='<今天 YYYY-MM-DD>'
+   SRCOK={'bbg','wsj','nyt','ft','nikkei','wapo','barrons','cnbc','ibd','mw','toms',
+          'ogj','politico','thehill','wscn','reuters','anue','moneydj','twse','pub'}
    d=json.load(open('data/%s.json'%TODAY))
-   frm=dt.datetime.fromisoformat(d['window']['from'])
+   w=d.get('window')
+   assert w, '★致命：頂層缺 window 欄，補上再檢查'
+   frm=dt.datetime.fromisoformat(w['from']); to=dt.datetime.fromisoformat(w['to'])
    cards=[(g['label'],c) for s in d['sections'] for g in s['groups'] for c in g['cards']]
-   bad=[c['title'] for _,c in cards if dt.datetime.fromisoformat(c['ts'])<frm]
-   mism=[c['title'] for _,c in cards
-         if dt.datetime.fromisoformat(c['ts']).strftime('%Y/%m/%d')!=c['date']]
+   def T(c):                      # 缺 ts 或格式錯時回 None，不要讓整支腳本中斷
+       try: return dt.datetime.fromisoformat(c['ts'])
+       except Exception: return None
+   def islist(u):                 # 單篇文章的最後一段通常有連字號或長數字 ID
+       p=re.sub(r'^https?://[^/]+','',u).split('?')[0].strip('/')
+       if not p: return True
+       last=p.split('/')[-1]
+       return '-' not in last and not re.search(r'\d{4,}',last)
+   nots=[c['title'] for _,c in cards if T(c) is None]
+   bad =[c['title'] for _,c in cards if T(c) and T(c)<frm]
+   fut =[c['title'] for _,c in cards if T(c) and T(c)>to]
+   mism=[c['title'] for _,c in cards if T(c) and T(c).strftime('%Y/%m/%d')!=c['date']]
+   badsrc=[(c.get('src'),c['title'][:30]) for _,c in cards if c.get('src') not in SRCOK]
+   listy=sorted({c['url'] for _,c in cards if islist(c['url'])})
    # 前一版＝index.json 裡「日期不等於今天」的最新一筆，不可直接用 days[1]
    days=json.load(open('data/index.json'))['days']
    prevmeta=next((x for x in days if x['date']!=TODAY),None)
@@ -231,17 +248,26 @@ data/2026-07-30.json
    u=collections.defaultdict(list)
    for lab,c in cards: u[c['url']].append(lab)
    multi={k:v for k,v in u.items() if len(v)>1}
-   print('總數',len(cards),'| 逾期',len(bad),bad[:5])
-   print('date/ts 不一致',len(mism),mism[:5],'| 與前一版重複',len(dup),dup[:5])
+   n=len(cards)
+   print('總數',n,'OK' if 80<=n<=95 else '★不在 80–95')
+   print('缺/壞 ts',len(nots),nots[:3])
+   print('逾期',len(bad),bad[:3],'| 未來 ts',len(fut),fut[:3])
+   print('date/ts 不一致',len(mism),mism[:3],'| 與前一版重複',len(dup),dup[:3])
+   print('src 不在清單',badsrc[:3] or '無')
+   print('疑似列表頁（需人工確認）',listy or '無')
    print('比對的前一版：',prevmeta['file'] if prevmeta else '無')
    for k,v in multi.items():
        ok = len(v)<=3 and len(set(v))==len(v)   # 至多 3 張、且不得兩張同組
-       print(('拆卡OK ' if ok else '違規  '),len(v),v,k[:70])
+       print(('拆卡OK ' if ok else '★違規 '),len(v),v,k[:70])
    for s in d['sections']:
-       for g in s['groups']: print(g['label'],len(g['cards']),'OK' if len(g['cards'])>=10 else '不足')
+       for g in s['groups']: print(g['label'],len(g['cards']),'OK' if len(g['cards'])>=10 else '★不足')
    ```
 
-   **逾期、`date`/`ts` 不一致、與前一版重複，這三項必須是 0，且不可出現任何「違規」的拆卡。**
+   **必須是 0 的五項**：缺/壞 `ts`、逾期、未來 `ts`、`date`/`ts` 不一致、與前一版重複。**另外不可出現任何「★違規」的拆卡，`src` 不在清單必須是「無」，八組都要 OK。**
+
+   **「疑似列表頁」是警告不是硬性失敗**——它用啟發式判斷（最後一段網址沒有連字號也沒有長數字 ID），TWSE 那幾個 `.html` 表單頁會被標出來但屬正常。看到就人工確認一次：是真的列表頁就把該卡的數據併進別張卡，是官方數據頁就放行。
+
+   **這支腳本刻意設計成「缺 `ts` 也不會中斷」。** 舊版直接寫 `c['ts']`，任何一張漏填就 `KeyError` 讓整支腳本掛掉——而執行者很可能因此跳過檢查直接發布。**檢查機制自己安靜失效，比沒有檢查更危險。**
 
    **彙整型文章的拆卡規則（2026/08/03 第 4 次修訂新增）**
 
@@ -280,7 +306,7 @@ data/2026-07-30.json
 - **GitHub**：`GunDamnBoy/advisory-knowledge-hub`，GitHub Pages（Source＝GitHub Actions），`.github/workflows/deploy.yml` 自動部署。
 - **推送認證**：fine-grained PAT `home-mac push`（只授權此 repo 與 podcast repo、Contents 讀寫），**存於 macOS 鑰匙圈**（`git config --global credential.helper osxkeychain`），**不內嵌於 remote URL、不以明碼存在任何檔案中**。換 token：產新 PAT → 在終端機手動 `git push` 一次、於提示輸入新 token（Username＝`GunDamnBoy`）→ 鑰匙圈自動覆蓋 → 撤舊。**任何情況下都不要把 token 寫進檔案或 remote URL。**
 - **背景推送腳本**：`~/.dashpush/auto-push.sh`（有變動就 commit、本機領先遠端就 push）；由 launchd agent `com.kenny.dashpush` 每 180 秒觸發。
-- **排程任務**：`advisory-dashboard-daily`，cron `30 7 * * *`（台北時間，一週七天）。另一個任務 `podcast-digest-daily` 排在 09:00，兩者刻意錯開。
+- **排程任務**：`advisory-dashboard-daily`，cron `30 7 * * *`（台北時間，一週七天）。另一個任務 `podcast-digest-daily` 的 cron 為 `0 3 * * *`（**03:00，2026/08/03 起由 09:00 改**），兩者刻意錯開以分散 token 用量。
 - **Chrome 連線（2026/08/03 確認）**：帳號上同時掛著兩個 Chrome 擴充功能實例，`list_connected_browsers` 會回傳 2 台，且**清單裡的 `name` 一律顯示為 Browser 1／Browser 2，不會反映使用者在擴充功能裡取的名字**，`isLocal` 兩台也都是 `true`，無法用來分辨。對應關係如下：
   - **`8f82131f-7af7-4a5d-a5d7-93677f4e3884` ＝ HOME（家中 MacBook Pro，發布機器，各家訂閱在此登入）→ 一律選這台。**
   - `120b7860-d389-4e1a-9c77-6b590e5a9881` ＝ WORK（辦公室那台，已停用為發布機器，勿使用）。
@@ -301,6 +327,18 @@ data/2026-07-30.json
 ## 8. 變更紀錄（CHANGELOG）
 
 **維護規則**：這份 brief 與排程任務 `advisory-dashboard-daily` 的 prompt 是**一組兩份**，改任一邊都必須同步另一邊，並在本節加一筆。詳見 `MAINTENANCE.md`。日期由新到舊。
+
+### 2026-08-03（第 6 次修訂 · 讓檢查腳本自己不會安靜失效）
+
+第 5 次修訂把 brief 與 prompt 的兩段程式碼對齊了，本次處理的是**腳本本身的健壯性與涵蓋範圍**，外加兩處過時的事實。
+
+- **檢查腳本改為缺 `ts` 也不中斷（最重要的一項）**。舊版直接寫 `dt.datetime.fromisoformat(c['ts'])`，任何一張卡漏填 `ts` 就 `KeyError`，整支腳本掛掉——而執行者極可能因此跳過檢查直接發布。**檢查機制自己安靜失效，比沒有檢查更危險**，這與 `auto-push.sh` 那起事故是同一種模式。改為 `T(c)` 包 try／except 回 `None`，並獨立統計「缺/壞 ts」的張數。**8/4 是 `ts` 第一次上線，正是最容易觸發舊版這個缺陷的一天。**
+- **把三項原本靠眼睛看的檢查寫進腳本**：`src` 白名單、`url` 是否為列表頁、全站總則數是否落在 80～95。8/3 那版就有一個列表頁 url（`bloomberg.com/markets/stocks`）被當成兩張卡的出處，而且同組——散文規則擋不住，腳本可以。
+- **新增「未來 `ts`」檢查**（晚於 `window.to`）。時區換算錯會產生未來時間戳，窗口比對照樣跑得過，只是收了不該收的。
+- **列表頁採啟發式判斷並標為警告而非硬性失敗**：最後一段網址沒有連字號、也沒有 4 位以上數字 ID 就標記。在 8/3 的 139 個真實網址上實測**零誤判**，只抓出那一個真正的列表頁；TWSE 的 `.html` 表單頁會被標出來屬預期，人工確認即可。
+- **修正 `podcast-digest-daily` 的排程時間**（第 0 節、第 6 節）。兩處都還寫 09:00，實際自 8/3 起已改為 **03:00**；且「避免兩個任務搶 Chrome」這個錯開理由也已不成立——那條線改用 podfetch＋Gemini API 之後不再使用 Chrome。現行理由是分散 token 用量。
+- **第 0 節補上指向 `MAINTENANCE.md` 第 6 節的電源設定交叉引用**。那台 Mac 需要從 00:55 連續醒著到中午，靠的是 `pmset -c sleep 0` 加排定喚醒，**這組設定不存在於任何設定檔中，重灌或換機不會遷移**——只讀 brief 的人原本完全看不到這件事。
+- **修正第 5 節 `1.5.` 的清單編號**，改為第 1 點下的子項，否則 Markdown 會把後面的有序清單從 1 重新起算。
 
 ### 2026-08-03（第 5 次修訂 · 修補第 4 次修訂當天留下的破綻）
 
