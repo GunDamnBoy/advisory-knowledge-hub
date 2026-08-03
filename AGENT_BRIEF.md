@@ -41,12 +41,14 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 **正確的判斷方式——用實際取到的內文量：**
 
 1. `navigate` 之後**先等 3–5 秒**讓 SPA 完成渲染，不要立刻讀。
-2. **主要讀法是 `javascript_tool`**，抓 `article p` 這類選擇器並過濾掉短句：
+2. **主要讀法是 `javascript_tool`**，**同一次呼叫就把內文與發布時間一起抓回來**（`ts` 是 24 小時窗口制的地基，漏抓等於這篇不能用）：
    ```js
    await new Promise(r=>setTimeout(r,4000));
+   const t=document.querySelector('meta[property="article:published_time"]')?.content
+     || document.querySelector('time[datetime]')?.getAttribute('datetime') || '';
    const paras=[...document.querySelectorAll('article p, main p, [class*="ArticleBody"] p, [class*="body-content"] p')]
      .map(p=>p.innerText.trim()).filter(x=>x.length>60);
-   JSON.stringify({n:paras.length, chars:paras.join(' ').length, text:paras.join('\n')});
+   JSON.stringify({published:t, n:paras.length, chars:paras.join(' ').length, text:paras.join('\n')});
    ```
 3. **判定標準**：段落數 ≥8 且內文字數 ≥1,500 → 視為完整取得，正常成卡。
    段落數 ≤3 或內文字數 <800，**且**頁面出現明確的攔截字串（Barron's 的 "Continue reading this article with a Barron's subscription"、WSJ 的訂閱牆元件）→ 才算真的被擋。
@@ -77,7 +79,19 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 - **終點＝本次寫入檔案的時刻**（實務上約當日 11:00～13:00）
 - 因此實際窗口長度約 **24～30 小時**，一律以起點為準判斷收不收。
 
-**為什麼起點壓在前一日 07:00，而不是「產出時刻往前推整 24 小時」**：本儀表板在台北上午產出，而**前一晚的美股收盤是當天最重要的素材**——美東前一日 16:00 收盤 ＝ 台北當日 04:00，相關報導多半掛前一日的日期。若用「日期＝今天」或「產出時刻往前推 24 小時」這種浮動起點，會把美股盤後報導整批切掉，那是本末倒置。固定起點也讓每天的窗口彼此接續、不重疊、不留縫。
+**為什麼起點壓在前一日 07:00，而不是「產出時刻往前推整 24 小時」**：本儀表板在台北上午產出，而**前一晚的美股收盤是當天最重要的素材**——美東前一日 16:00 收盤 ＝ 台北當日 04:00，相關報導多半掛前一日的日期。若用「日期＝今天」或「產出時刻往前推 24 小時」這種浮動起點，會把美股盤後報導整批切掉，那是本末倒置。
+
+**相鄰兩天的窗口會重疊約 4～5 小時，這是刻意的，不是 bug：**
+
+```
+今天的窗口：昨日 07:00 ──────────────→ 今日 11:30（寫入時刻）
+明天的窗口：        今日 07:00 ──────────────→ 明日 11:30
+                    └── 重疊 07:00–11:30 ──┘
+```
+
+重疊區間正好是**今天採集作業正在進行的那段時間**——這段時間發布的新聞很可能還沒出現、或出現了但還沒讀到，今天漏掉是常態。有了重疊，明天可以補收，**不會因為「昨天沒讀到」就永久掉單**。重複成卡的風險由「不得與前一版共用任何原文連結」這條跨版去重規則擋住，兩者是一組配套。
+
+**窗口之間不會有縫隙**：今天 11:30 到明天 07:00 之間（也就是今天下午到深夜）發布的新聞，全部落在明天的窗口內，不會漏。
 
 **這條規則只約束「單一天的版本內部」，不是刪除歷史。** 每天的版本都獨立存成 `data/YYYY-MM-DD.json` 永久保留，使用者可用頁面最上方的日期切換列回看任何一天。**絕對不要刪除或覆寫舊的日期檔。** 每天要做的是**新增一個檔案**，不是改寫昨天的檔案。
 
@@ -104,14 +118,16 @@ data/2026-07-30.json
 **`data/index.json`**：
 
 ```json
-{ "updated": "2026/08/02 18:40 (台北) · 週日盤前",
-  "count": 2,
-  "days": [ { "date": "2026-08-02", "weekday": "週日",
-              "stamp": "2026/08/02 18:40 (台北) · 週日盤前",
-              "headline": "當日心得標題", "cards": 131,
-              "keptDates": ["2026/07/31","2026/08/01","2026/08/02"],
-              "file": "data/2026-08-02.json" } ] }
+{ "updated": "2026/08/04 11:40 (台北) · 週二亞洲盤中",
+  "count": 4,
+  "days": [ { "date": "2026-08-04", "weekday": "週二",
+              "stamp": "2026/08/04 11:40 (台北) · 週二亞洲盤中",
+              "headline": "當日心得標題", "cards": 87,
+              "keptDates": ["2026/08/03","2026/08/04"],
+              "file": "data/2026-08-04.json" } ] }
 ```
+
+（`count` ＝ `days` 的長度，每天 +1。`cards` 在 24 小時窗口制下約 80～95。`keptDates` ＝ 窗口涵蓋到的日期，跨午夜所以通常兩個。）
 
 **`data/YYYY-MM-DD.json`** 的頂層鍵：`date`／`weekday`／`stamp`／`headline`／`window`／`keptDates`／`cards`／`overview`／`essay`／`sections`／`about`。
 
@@ -169,7 +185,7 @@ data/2026-07-30.json
    - B：FT ＋ NYT ＋ WaPo
    - C：Nikkei ＋ 華爾街見聞 ＋ CNBC ＋ MarketWatch（**並負責全套市場數據**）
    - D：**Reuters ＋ Tom's Hardware ＋ OGJ**
-   - E：Politico ＋ The Hill ＋ Barron's ＋ IBD（後兩家先做登入狀態測試，見第 1 節）
+   - E：Politico ＋ The Hill ＋ Barron's ＋ IBD（後兩家依第 1.1 節的**內文量標準**實測，**不要用導覽列有沒有 Sign In 判斷**）
    - F：**鉅亨網 ＋ MoneyDJ ＋ TWSE／公開資訊觀測站**（台股專組）
 
    **F 組有最低產出要求：至少 8 則可成卡的台灣本地素材**（鉅亨 ≥3、MoneyDJ ≥3，其餘不限），外加下一點列的台股官方數據。2026/08/03 那一輪 F 組回傳 0 則、當日「台股與亞太」子類別 18 則裡沒有一則來自台灣媒體——這正是當初擴充來源的動機，達不到就是白加。**F 組交不出東西時要在 `run` 欄具名寫出是哪一家、卡在哪一步**，不要靜靜地讓其他來源補位。
@@ -198,29 +214,34 @@ data/2026-07-30.json
 
    檢查腳本（直接跑，不要用眼睛掃）：
    ```python
-   import json,datetime as dt
+   import json,datetime as dt,collections
    TODAY='<今天 YYYY-MM-DD>'
    d=json.load(open('data/%s.json'%TODAY))
    frm=dt.datetime.fromisoformat(d['window']['from'])
-   cards=[c for s in d['sections'] for g in s['groups'] for c in g['cards']]
-   bad=[c['title'] for c in cards if dt.datetime.fromisoformat(c['ts'])<frm]
-   mism=[c['title'] for c in cards
+   cards=[(g['label'],c) for s in d['sections'] for g in s['groups'] for c in g['cards']]
+   bad=[c['title'] for _,c in cards if dt.datetime.fromisoformat(c['ts'])<frm]
+   mism=[c['title'] for _,c in cards
          if dt.datetime.fromisoformat(c['ts']).strftime('%Y/%m/%d')!=c['date']]
    # 前一版＝index.json 裡「日期不等於今天」的最新一筆，不可直接用 days[1]
    days=json.load(open('data/index.json'))['days']
    prevmeta=next((x for x in days if x['date']!=TODAY),None)
    prev=json.load(open(prevmeta['file'])) if prevmeta else {'sections':[]}
    prevurl={c['url'] for s in prev['sections'] for g in s['groups'] for c in g['cards']}
-   dup=[c['title'] for c in cards if c['url'] in prevurl]
-   selfdup=len(cards)-len({c['url'] for c in cards})
+   dup=[c['title'] for _,c in cards if c['url'] in prevurl]
+   u=collections.defaultdict(list)
+   for lab,c in cards: u[c['url']].append(lab)
+   multi={k:v for k,v in u.items() if len(v)>1}
    print('總數',len(cards),'| 逾期',len(bad),bad[:5])
-   print('date/ts 不一致',len(mism),mism[:5],'| 與前一版重複',len(dup),dup[:5],'| 本版內重複',selfdup)
+   print('date/ts 不一致',len(mism),mism[:5],'| 與前一版重複',len(dup),dup[:5])
    print('比對的前一版：',prevmeta['file'] if prevmeta else '無')
+   for k,v in multi.items():
+       ok = len(v)<=3 and len(set(v))==len(v)   # 至多 3 張、且不得兩張同組
+       print(('拆卡OK ' if ok else '違規  '),len(v),v,k[:70])
    for s in d['sections']:
        for g in s['groups']: print(g['label'],len(g['cards']),'OK' if len(g['cards'])>=10 else '不足')
    ```
 
-   **逾期、`date`/`ts` 不一致、與前一版重複，這三項必須是 0。** 本版內重複僅在符合下列拆卡規則時才允許。
+   **逾期、`date`/`ts` 不一致、與前一版重複，這三項必須是 0，且不可出現任何「違規」的拆卡。**
 
    **彙整型文章的拆卡規則（2026/08/03 第 4 次修訂新增）**
 
@@ -281,11 +302,21 @@ data/2026-07-30.json
 
 **維護規則**：這份 brief 與排程任務 `advisory-dashboard-daily` 的 prompt 是**一組兩份**，改任一邊都必須同步另一邊，並在本節加一筆。詳見 `MAINTENANCE.md`。日期由新到舊。
 
+### 2026-08-03（第 5 次修訂 · 修補第 4 次修訂當天留下的破綻）
+
+第 4 次修訂改動幅度大，當天就在 brief 與 prompt 之間留下三處新的不同步，另有一處事實寫錯。這幾項都是「照著跑會出事」等級，不是文字潤飾。
+
+- **第 1.1 節的 JS 片段補上抓發布時間**。第 4 次修訂把 `ts` 訂為必填欄位，卻只在排程 prompt 裡更新了讀法，brief 第 1.1 節的 JS 仍然只抓內文段落。**照 brief 執行會拿不到 `ts`，而 `ts` 是整個 24 小時窗口制的地基。**
+- **發布前檢查腳本同步為含拆卡判定的版本**。brief 留著舊版（只印本版內重複的總數），prompt 已是新版（逐一判定「至多 3 張、不得兩張同組」）。舊版看到數字大於 0 也不知道該不該放行。**檢查腳本是可執行的規格，它漂移的後果比散文漂移嚴重。**
+- **移除第 5 節 E 組的「先做登入狀態測試」**。這個說法在第 2 次修訂就被推翻了（付費牆不能用登入狀態判斷），殘留在分組說明裡會誘導執行者退回舊做法。改為明確指向第 1.1 節的內文量標準。
+- **修正「窗口不重疊」這個錯誤描述**（第 3 節、第 8 節）。原文寫「固定起點讓每天的窗口彼此接續、不重疊、不留縫」——**「不留縫」正確，「不重疊」是錯的**。相鄰兩天實際重疊約 4～5 小時（今日 07:00 至寫入時刻）。而且這個重疊有價值：重疊區間正是今天採集作業進行中的時段，那段時間發布的新聞今天很可能沒讀到，有重疊才能在明天補收，不會永久掉單；重複成卡由跨版去重擋住。寫成「不重疊」會讓人誤以為今早的新聞明天不該收，白白放棄補救。已補上時間軸圖示說明。
+- **更新第 3.5 節的 `index.json` 範例**，原範例仍是 `count: 2`、`cards: 131`、`keptDates` 三個日期、無 `window`，照抄會寫出舊制格式。
+
 ### 2026-08-03（第 4 次修訂 · 時效改為滾動 24 小時窗口）
 
 **動機**：自 8/02 改為封存制、歷史永久保留之後，「單日版本保留最近 3 個日期」這條規則就失去了原本的理由。它當初存在，是因為舊制只有一份會被覆寫的頁面，多留兩天是怕讀者錯過前天的重要新聞。現在讀者隨時能用日期切換列回看任何一天，再讓兩天前的舊卡佔住今天的版面，只會稀釋「今天」的資訊密度——8/3 那一版 139 則裡有 94 則是舊卡，佔 68%。
 
-- **核心規則改為滾動 24 小時窗口**（第 3 節）。窗口 `from` ＝ **前一日台北 07:00（固定）**，`to` ＝ 寫入時刻，實際長度 24～30 小時。**起點刻意不用「產出時刻往前推整 24 小時」**：本站在台北上午產出，而前一晚美股收盤（美東前一日 16:00 ＝ 台北當日 04:00）的報導多半掛前一日日期，浮動起點會把當天最重要的素材整批切掉。固定起點另有一個好處——每天的窗口彼此接續、不重疊也不留縫。
+- **核心規則改為滾動 24 小時窗口**（第 3 節）。窗口 `from` ＝ **前一日台北 07:00（固定）**，`to` ＝ 寫入時刻，實際長度 24～30 小時。**起點刻意不用「產出時刻往前推整 24 小時」**：本站在台北上午產出，而前一晚美股收盤（美東前一日 16:00 ＝ 台北當日 04:00）的報導多半掛前一日日期，浮動起點會把當天最重要的素材整批切掉。（**更正**：本條原寫「每天的窗口彼此接續、不重疊也不留縫」，其中「不重疊」有誤，相鄰兩天實際重疊約 4～5 小時，且該重疊是刻意保留的容錯設計；已於第 5 次修訂更正，詳見第 3 節。）
 - **卡片新增必填欄位 `ts`**（第 3.5 節），ISO 8601 含時區、**一律換算為台北時間**。沒有 `ts` 就無法程式化驗證窗口，只靠 `date` 欄（只有日期沒有時分）做不到 24 小時精度。`date` 欄保留且必須與 `ts` 的台北日期一致——**前端只讀 `date`，完全沒用到 `ts` 與 `keptDates`，所以這次 schema 變更不需要動 `index.html`，舊檔也完全相容。**
 - **頂層新增 `window` 欄**記錄本次窗口起訖；`keptDates` 語意變成「窗口涵蓋到的日期」（通常兩個），保留純為向下相容。
 - **「當日新卡佔全站 1/4～1/3」作廢**，改為全站卡片 100% 為當日新寫，目標 80～95 則。**明文禁止從前一版複製或改寫任何卡片。**
