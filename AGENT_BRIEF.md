@@ -34,7 +34,25 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 
 **內容優先序**：每個分區以付費來源卡片打底、排前面；免費來源只補付費沒涵蓋到的角度。**核可的免費來源僅限**上列八家＋官方／數據源／通訊社；**嚴禁**內容農場或小報（Motley Fool、ETtoday、Intellectia、內容聚合站等）。
 
-**Barron's 與 IBD 的特別規則**：這兩家長期出現未登入或部分擋牆的情形。**開場先各試 1 篇確認登入狀態**——若被擋（出現 "Continue reading this article with a Barron's subscription"、導覽列顯示 Sign In、或內文在第 1–2 段後截斷），**該家當日不再花時間逐篇嘗試**，只從首頁擷取公開可見的標題、導言與行事曆資訊，且**不單獨成卡**，並在 `run` 欄如實記錄。時間改配給 Reuters 與台灣三源。若登入正常，Barron's 讀 6–8 篇、IBD 讀 4–6 篇。
+### 1.1 讀取方法與付費牆判斷（2026/08/03 修訂，很重要）
+
+**不要用導覽列有沒有「Sign In」來判斷能不能讀。** 這是錯的判準，2026/08/03 那一輪就是因此誤判。實測：Bloomberg 與 Barron's 的導覽列**永遠**顯示 Sign In／Subscribe Now，但文章內文照樣完整載入。
+
+**正確的判斷方式——用實際取到的內文量：**
+
+1. `navigate` 之後**先等 3–5 秒**讓 SPA 完成渲染，不要立刻讀。
+2. **主要讀法是 `javascript_tool`**，抓 `article p` 這類選擇器並過濾掉短句：
+   ```js
+   await new Promise(r=>setTimeout(r,4000));
+   const paras=[...document.querySelectorAll('article p, main p, [class*="ArticleBody"] p, [class*="body-content"] p')]
+     .map(p=>p.innerText.trim()).filter(x=>x.length>60);
+   JSON.stringify({n:paras.length, chars:paras.join(' ').length, text:paras.join('\n')});
+   ```
+3. **判定標準**：段落數 ≥8 且內文字數 ≥1,500 → 視為完整取得，正常成卡。
+   段落數 ≤3 或內文字數 <800，**且**頁面出現明確的攔截字串（Barron's 的 "Continue reading this article with a Barron's subscription"、WSJ 的訂閱牆元件）→ 才算真的被擋。
+4. **`get_page_text` 在 Bloomberg、Barron's、MarketWatch 上會嚴重低估內文**（只回傳前 1–3 段或側欄）。它只適合當快速掃標題用，**不可以拿它的結果來斷定文章被付費牆擋住**。
+
+**Barron's 與 IBD 的規則**：依上述標準實測後再決定。**確認被擋才**停止逐篇嘗試、只取首頁公開資訊且不單獨成卡，並在 `run` 欄記錄。**可正常讀取時，Barron's 讀 6–8 篇、IBD 讀 4–6 篇**——這兩家的美股選股與週展望視角是其他來源沒有的，不要輕易放棄。
 
 ---
 
