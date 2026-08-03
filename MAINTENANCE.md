@@ -50,6 +50,8 @@
 - **驗證上線要帶 cache-buster**，否則會拿到 CDN 舊快取而誤判推送失敗。
 - **每一次大改動當天都會留下新的不同步，沒有例外。** 第 2 次修訂漏了 brief、第 4 次修訂漏了三處（JS 讀法、檢查腳本、E 組用語）。改完當下**一定要再比對一次同步清單**，不要等隔天體檢才發現。最容易漏的是**兩段程式碼**（發布前檢查腳本、`javascript_tool` 讀法），因為它們藏在文件中段、不像散文那樣一眼看得出差異。
 - **排程 prompt 是整份取代，不是局部編輯。** `update_scheduled_task` 送出的 `prompt` 會完全覆蓋舊的，漏帶的段落等於被刪除。改之前先 Read 一次現有全文。
+- **本 repo 與 `~/podcast-knowledge-digest` 有 7 個同名檔案**：`AGENT_BRIEF.md`、`MAINTENANCE.md`、`README.md`、`index.html`、`data/index.json`、`data/2026-07-30.json`、`data/2026-08-02.json`。**任何腳本一律用絕對路徑**（brief 第 5 節的檢查腳本已改用 `REPO` 常數）。
+- **維護作業若為了改另一條產線而連了 podcast 資料夾，做完要記得移除。** 排程任務的工作資料夾會保留這次連線——2026-08-03 就發生過：在排程執行的工作階段裡連了 podcast repo，結果 `advisory-dashboard-daily` 的 Working folders 多出一個它根本用不到、卻有寫入權的 Public repo。**目前沒有工具可以程式化移除，只能在 App 的 Working folders 面板手動拿掉。**
 
 ---
 
