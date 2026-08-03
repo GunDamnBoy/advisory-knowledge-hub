@@ -71,7 +71,9 @@
 - **`ts` 欄位的取得率是這套制度的死穴。** 沒有 `ts` 就無法驗證窗口。8/4 要看 `run` 欄記錄有多少篇因為抓不到發布時間而被放棄，若比例偏高，要針對個別來源補上抓時間戳的選擇器（brief 第 3.5 節目前只給了 `meta[property="article:published_time"]` 與 `time[datetime]` 兩種通用寫法）。
 - **19 家的時間預算尚未實測。** 15 家那一輪從 07:40 跑到 13:10。目標是 11:30 前完成，落後時的降級順序見 brief 第 5 節（Barron's／IBD 已自降級清單移除，只剩深度卡張數與閱讀篇數兩階）。
 - **候選的第二批來源**（時間撐得住再加）：TrendForce／集邦（目前 DRAM 價格都是二手轉引）、DIGITIMES（台廠訂單）、SemiAnalysis（HBM 與資料中心深度）、Punchbowl News（國會票數）。
-- **HOME 的 deviceId 若因重裝 Chrome 或換設定檔而改變**，brief 第 6 節寫死的那一行會失效，需要更新。
+- **HOME 的 deviceId 若因重裝 Chrome 或換設定檔而改變**，brief 第 6 節寫死的那一行會失效，需要更新。（2026-08-03 傍晚實測：`list_connected_browsers` 只剩 HOME 一台，WORK 已離線，選瀏覽器不會再卡住。）
+- **8/5 要移除排程 prompt 第 5 步結尾的一次性指示。** 目前那段要求執行者額外回報「8/4 是窗口制第一次實測」的完成時間、`ts` 放棄篇數等。8/4 跑完就沒有意義了，留著會讓之後每天都回報「這是第一次實測」。**移除時順便把當天的實測結果寫進本節，取代上面那幾條「尚未驗證」。**
+- **`notifyOnCompletion` 尚未開啟。** 2026-08-03 嘗試設定時被擋——排程執行中的工作階段不能替自己訂閱完成通知（回應：「Can't subscribe a scheduled-task run session to completion notifications」）。**必須從一般對話（非排程觸發的那種）設定**：叫 Claude 對 `advisory-dashboard-daily` 執行 `update_scheduled_task` 並帶 `notifyOnCompletion: true`。開了之後每天跑完會主動通知，不必自己去看網站。
 
 ---
 
