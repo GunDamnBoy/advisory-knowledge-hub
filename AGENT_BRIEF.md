@@ -183,6 +183,11 @@ data/2026-07-30.json
 - **推送認證**：fine-grained PAT `home-mac push`（只授權此 repo 與 podcast repo、Contents 讀寫），**存於 macOS 鑰匙圈**（`git config --global credential.helper osxkeychain`），**不內嵌於 remote URL、不以明碼存在任何檔案中**。換 token：產新 PAT → 在終端機手動 `git push` 一次、於提示輸入新 token（Username＝`GunDamnBoy`）→ 鑰匙圈自動覆蓋 → 撤舊。**任何情況下都不要把 token 寫進檔案或 remote URL。**
 - **背景推送腳本**：`~/.dashpush/auto-push.sh`（有變動就 commit、本機領先遠端就 push）；由 launchd agent `com.kenny.dashpush` 每 180 秒觸發。
 - **排程任務**：`advisory-dashboard-daily`，cron `30 7 * * *`（台北時間，一週七天）。另一個任務 `podcast-digest-daily` 排在 09:00，兩者刻意錯開。
+- **Chrome 連線（2026/08/03 確認）**：帳號上同時掛著兩個 Chrome 擴充功能實例，`list_connected_browsers` 會回傳 2 台，且**清單裡的 `name` 一律顯示為 Browser 1／Browser 2，不會反映使用者在擴充功能裡取的名字**，`isLocal` 兩台也都是 `true`，無法用來分辨。對應關係如下：
+  - **`8f82131f-7af7-4a5d-a5d7-93677f4e3884` ＝ HOME（家中 MacBook Pro，發布機器，各家訂閱在此登入）→ 一律選這台。**
+  - `120b7860-d389-4e1a-9c77-6b590e5a9881` ＝ WORK（辦公室那台，已停用為發布機器，勿使用）。
+  - 排程情境**不要呼叫 AskUserQuestion 詢問**，直接 `select_browser("8f82131f-7af7-4a5d-a5d7-93677f4e3884")`。若該 deviceId 不在清單中，才退而選 `connectedAt` 最大的那一台，並在 `run` 欄註明。
+  - 選定後務必做一次可用性測試（讀一篇付費來源文章、確認取得完整內文）再開始正式作業。
 - **容量**：每日 JSON 約 200KB，一年約 70MB，GitHub Pages 綽綽有餘，因此**歷史全部保留、不設汰除**。若未來單日檔案明顯變大，優先檢查是不是深度卡寫太多，而不是刪歷史。
 - **模式限制備忘**：互動階段能讀 Chrome、但雲端不能直接推 GitHub；背景/排程階段能推 GitHub、但讀不到 Chrome。故付費版必在互動階段產出、由本機背景程式負責推送。
 
