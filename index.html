@@ -94,6 +94,10 @@
   .b-ogj{background:#fefce8;color:#854d0e;border-color:#fde68a}
   .b-politico{background:#fdf2f8;color:#a21caf;border-color:#f5d0fe}
   .b-thehill{background:#f0f9ff;color:#0369a1;border-color:#bae6fd}
+  .b-reuters{background:#fff1eb;color:#9a3412;border-color:#fdba74}
+  .b-anue{background:#ecfeff;color:#0e7490;border-color:#a5f3fc}
+  .b-moneydj{background:#f5f3ff;color:#5b21b6;border-color:#ddd6fe}
+  .b-twse{background:#fff1f2;color:#9f1239;border-color:#fecdd3}
   .b-pub{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
   .brief{background:linear-gradient(135deg,#ffffff 0%,#f4f8ff 100%);border:1px solid var(--line2);border-radius:16px;padding:24px 26px;margin-bottom:20px;box-shadow:0 2px 10px rgba(16,32,46,.05)}
   .brief .bl{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
@@ -202,8 +206,9 @@
 <script>
 const BADGE={bbg:"Bloomberg",wsj:"WSJ",nyt:"NYT",ft:"FT",nikkei:"Nikkei",wapo:"WaPo",
   barrons:"Barron's",cnbc:"CNBC",ibd:"IBD",mw:"MarketWatch",toms:"Tom's HW",ogj:"OGJ",
-  politico:"Politico",thehill:"The Hill",wscn:"華爾街見聞",pub:"官方／通訊社"};
-const SRCBAR=["bbg","wsj","nyt","ft","nikkei","wapo","barrons","cnbc","ibd","mw","toms","ogj","politico","thehill","wscn"];
+  politico:"Politico",thehill:"The Hill",wscn:"華爾街見聞",reuters:"Reuters",anue:"鉅亨網",
+  moneydj:"MoneyDJ",twse:"TWSE／官方",pub:"官方／通訊社"};
+const SRCBAR=["bbg","wsj","nyt","ft","nikkei","wapo","barrons","cnbc","ibd","mw","toms","ogj","politico","thehill","wscn","reuters","anue","moneydj","twse"];
 const PILLS=7;               // 日期列直接顯示的天數，更早的收進下拉選單
 const cache={};              // date -> day json
 let idx=null, cur=null;
