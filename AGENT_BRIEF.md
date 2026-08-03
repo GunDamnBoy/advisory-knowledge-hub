@@ -15,23 +15,26 @@
 
 ---
 
-## 1. 主要來源（15 家，付費為主體、免費為輔）
+## 1. 主要來源（19 家，付費為主體、免費為輔）
 
 **付費訂閱**（使用者本人訂閱，於其已登入的 Chrome 讀）：
 Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)、FT (ft.com)、Nikkei Asia (asia.nikkei.com)、Washington Post (washingtonpost.com)、Barron's (barrons.com)、IBD (investors.com)、**Politico (politico.com)**、**The Hill (thehill.com)**
 
 **免費公開**：
-CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)
+**Reuters (reuters.com)**、CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)、**鉅亨網 Anue (news.cnyes.com)**、**MoneyDJ (moneydj.com)**
 
-**公開／官方補充**：Reuters 體系、CBS、AP、官方央行／交易所／公司 IR、政府與司法機構公告。
+**官方／數據源**：**TWSE 台灣證券交易所與公開資訊觀測站 (twse.com.tw / mops.twse.com.tw)**、Fed／BOJ／ECB／日本財務省、EIA、CME FedWatch、美國財政部、公司 IR、政府與司法機構公告；另有 AP、CBS 等通訊社。
 
 **Politico 與 The Hill 專供政經分頁**（地緣政治＋美國政治）的深度與時效——國會立法、國防／撥款、選舉、司法與 Fed 獨立性等。
 
-來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-pub`。
+來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-reuters`/`b-anue`/`b-moneydj`/`b-twse`/`b-pub`。
+（卡片 `src` 值＝去掉 `b-` 前綴：`bbg`、`wsj`、…、`reuters`、`anue`、`moneydj`、`twse`、`pub`。`pub` 保留給上列以外的通訊社與官方公告，**Reuters 一律用 `reuters` 而非 `pub`**。）
 
-各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲。
+各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲；**Reuters＝亞洲時區最快、官方聲明與 Kpler／LSEG 數據的一手轉述、無付費牆摩擦**；**鉅亨網＝台股盤勢與台灣本地財經**；**MoneyDJ＝台廠供應鏈與個股拆解**；**TWSE／公開資訊觀測站＝月營收、三大法人買賣超、融資餘額、法說會行事曆等官方數據**。
 
-**內容優先序**：每個分區以付費來源卡片打底、排前面；免費來源只補付費沒涵蓋到的角度。**核可的免費來源僅限**上列五家＋官方／通訊社；**嚴禁**內容農場或小報（Motley Fool、ETtoday、Intellectia、內容聚合站等）。
+**內容優先序**：每個分區以付費來源卡片打底、排前面；免費來源只補付費沒涵蓋到的角度。**核可的免費來源僅限**上列八家＋官方／數據源／通訊社；**嚴禁**內容農場或小報（Motley Fool、ETtoday、Intellectia、內容聚合站等）。
+
+**Barron's 與 IBD 的特別規則**：這兩家長期出現未登入或部分擋牆的情形。**開場先各試 1 篇確認登入狀態**——若被擋（出現 "Continue reading this article with a Barron's subscription"、導覽列顯示 Sign In、或內文在第 1–2 段後截斷），**該家當日不再花時間逐篇嘗試**，只從首頁擷取公開可見的標題、導言與行事曆資訊，且**不單獨成卡**，並在 `run` 欄如實記錄。時間改配給 Reuters 與台灣三源。若登入正常，Barron's 讀 6–8 篇、IBD 讀 4–6 篇。
 
 ---
 
@@ -111,7 +114,7 @@ data/2026-07-30.json
    - 四張焦點卡（`.focus`）：當日最重要的四條主軸。
    - 七大重點 takeaways（`.takeaways`）：濃縮當日跨版面重點。
    - 溫度條＋情緒註解、主要來源徽章列、本週盯盤時程（`.watch`）。
-2. **摘要與心得**：讀完當日 15 家後，寫一篇**約 1,000 字**的綜合彙整＋觀點（`.essay`）。要有一句 kick 破題、5～6 段分主題論述（如 AI 資本支出、財報冷熱、能源地緣、央行/債市、亞洲/台股），結尾給「投顧視角小結」與 2～3 個可驗證盯盤節點。非投資建議。
+2. **摘要與心得**：讀完當日 19 家後，寫一篇**約 1,000 字**的綜合彙整＋觀點（`.essay`）。要有一句 kick 破題、5～6 段分主題論述（如 AI 資本支出、財報冷熱、能源地緣、央行/債市、亞洲/台股），結尾給「投顧視角小結」與 2～3 個可驗證盯盤節點。非投資建議。
 3. **市場總經**：美股與財報／台股與亞太／全球央行與總經（各分組用 `.group-label`）。
 4. **產業與主題**：AI／科技／金融／生技／原物料。
 5. **政經**：地緣政治／美國政治。
@@ -124,12 +127,32 @@ data/2026-07-30.json
 ## 5. 產出與發布流程
 
 1. **先讀 `data/index.json`**，確認今天是否已產出（同日重跑就覆蓋當天的檔），並看昨天的 `keptDates` 以決定今天要汰換哪些日期。
-2. 用 Claude in Chrome 逐一讀 15 家當日重點（付費為主）。
-3. 依本文件與第 3.5 節的 schema 產生 `data/<今天>.json`，並把今天加進 `index.json` 的 `days`。
-4. **直接用檔案工具寫入** `/Users/kenny/advisory-knowledge-hub/data/`。`index.html` 是外殼，**除非要改版面，否則不需要動它**。
-5. 之後**不需手動 push**：使用者 Mac 上的 launchd 背景程式（`com.kenny.dashpush`，每 3 分鐘）會自動 `git add`＋`commit`＋`push`；GitHub Actions 自動部署到 `https://gundamnboy.github.io/advisory-knowledge-hub/`。
-6. **發布前自我檢查**（做不到就不要發）：日期直方圖只剩 3 個日期；當日新卡佔全站 1/4～1/3；每個子類別 ≥10 則；每張卡片都有真實可點的原文連結；JSON 可被 `json.load` 正常解析。
-7. 等 2–4 分鐘後抓 `https://gundamnboy.github.io/advisory-knowledge-hub/data/index.json` 驗證 `days[0].date` 是今天。若拿到舊內容可能是 CDN 快取，改用 Chrome 以 `cache:'no-store'` 重抓確認。
+2. 用 Claude in Chrome 逐一讀 19 家當日重點（付費為主）。建議開 **6 個 subagent 平行分組**，每個先自己開新分頁再作業：
+   - A：Bloomberg ＋ WSJ
+   - B：FT ＋ NYT ＋ WaPo
+   - C：Nikkei ＋ 華爾街見聞 ＋ CNBC ＋ MarketWatch（**並負責全套市場數據**）
+   - D：**Reuters ＋ Tom's Hardware ＋ OGJ**
+   - E：Politico ＋ The Hill ＋ Barron's ＋ IBD（後兩家先做登入狀態測試，見第 1 節）
+   - F：**鉅亨網 ＋ MoneyDJ ＋ TWSE／公開資訊觀測站**（台股專組）
+3. **每日必抓的官方數據**（F 組與 C 組分工）：
+   - 台股：加權指數與櫃買收盤、**三大法人買賣超**、**融資餘額**、當日重要月營收與法說會（TWSE／MOPS）
+   - 利率：**CME FedWatch 的下次會議升降息機率**（不要只引用媒體轉述的百分比）
+   - 能源：**EIA 週報庫存**（週三）、每季**美國財政部再融資公告（QRA）**的日期與規模
+   - 匯率：日本財務省的干預實績公布（月底）與 BOJ 貨幣市場初步數據
+4. 依本文件與第 3.5 節的 schema 產生 `data/<今天>.json`，並把今天加進 `index.json` 的 `days`。
+5. **直接用檔案工具寫入** `/Users/kenny/advisory-knowledge-hub/data/`。`index.html` 是外殼，**除非要改版面，否則不需要動它**。
+6. 之後**不需手動 push**：使用者 Mac 上的 launchd 背景程式（`com.kenny.dashpush`，每 3 分鐘）會自動 `git add`＋`commit`＋`push`；GitHub Actions 自動部署到 `https://gundamnboy.github.io/advisory-knowledge-hub/`。
+7. **發布前自我檢查**（做不到就不要發）：
+   - 日期直方圖只剩 3 個日期
+   - 當日新卡佔全站 1/4～1/3
+   - 每個子類別 ≥10 則
+   - 每張卡片都有真實可點的原文連結
+   - **當日新卡不得與既有卡片共用同一原文連結**（同一篇文章不重複成卡；程式化比對 `url` 即可）
+   - **每張卡片的 `src` 值必須在第 1 節的徽章清單內**，否則前端會渲染出沒有樣式的空徽章
+   - JSON 可被 `json.load` 正常解析、`index.json` 的 `days` 已含今天且由新到舊排序
+8. 等 2–4 分鐘後抓 `https://gundamnboy.github.io/advisory-knowledge-hub/data/index.json` 驗證 `days[0].date` 是今天。若拿到舊內容可能是 CDN 快取，改用 Chrome 以 `cache:'no-store'` 重抓確認。
+
+**時間預算**：19 家的目標是 **07:30 開始、11:30 前完成產出**。若進度落後，**依序砍以下項目**，不要砍到版面下限：(1) Barron's 與 IBD 的逐篇嘗試；(2) 深度卡由每子類別 2 張降為 1 張；(3) 每家的閱讀篇數各減三分之一。**不可砍的是**：市場數據、台股官方數據、每子類別 ≥10 則、當日新卡佔比，以及「關於與方法」的 `run` 欄如實記錄。
 
 **重要操作禁忌**：不要跑任何 `git` 指令（含 `git status`）。沙箱無網路、且不能刪檔，跑 git 會留下 `.git/index.lock` 鎖檔擋住背景推送。只用 `cat`/`ls`/`grep` 等唯讀指令檢查狀態即可。
 
