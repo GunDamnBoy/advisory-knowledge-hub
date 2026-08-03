@@ -197,14 +197,23 @@ data/2026-07-30.json
    檢查腳本（直接跑，不要用眼睛掃）：
    ```python
    import json,datetime as dt
-   d=json.load(open('data/<今天>.json'))
+   TODAY='<今天 YYYY-MM-DD>'
+   d=json.load(open('data/%s.json'%TODAY))
    frm=dt.datetime.fromisoformat(d['window']['from'])
    cards=[c for s in d['sections'] for g in s['groups'] for c in g['cards']]
    bad=[c['title'] for c in cards if dt.datetime.fromisoformat(c['ts'])<frm]
-   prev=json.load(open(json.load(open('data/index.json'))['days'][1]['file']))
+   mism=[c['title'] for c in cards
+         if dt.datetime.fromisoformat(c['ts']).strftime('%Y/%m/%d')!=c['date']]
+   # 前一版＝index.json 裡「日期不等於今天」的最新一筆，不可直接用 days[1]
+   days=json.load(open('data/index.json'))['days']
+   prevmeta=next((x for x in days if x['date']!=TODAY),None)
+   prev=json.load(open(prevmeta['file'])) if prevmeta else {'sections':[]}
    prevurl={c['url'] for s in prev['sections'] for g in s['groups'] for c in g['cards']}
    dup=[c['title'] for c in cards if c['url'] in prevurl]
-   print('總數',len(cards),'| 逾期',len(bad),bad[:5],'| 與前一版重複',len(dup),dup[:5])
+   selfdup=len(cards)-len({c['url'] for c in cards})
+   print('總數',len(cards),'| 逾期',len(bad),bad[:5])
+   print('date/ts 不一致',len(mism),mism[:5],'| 與前一版重複',len(dup),dup[:5],'| 本版內重複',selfdup)
+   print('比對的前一版：',prevmeta['file'] if prevmeta else '無')
    for s in d['sections']:
        for g in s['groups']: print(g['label'],len(g['cards']),'OK' if len(g['cards'])>=10 else '不足')
    ```
@@ -266,7 +275,7 @@ data/2026-07-30.json
 - **「當日新卡佔全站 1/4～1/3」作廢**，改為全站卡片 100% 為當日新寫，目標 80～95 則。**明文禁止從前一版複製或改寫任何卡片。**
 - **深度卡由每子類別 2 張降為 1 張、中長摘要由 300～400 字降為 250～350 字**（第 4 節）。這是為了讓 80～95 則的撰寫量能在 11:30 前完成而做的取捨——寧可 8 張紮實的深度卡，不要 16 張注水的。
 - **降級順序重寫**（第 5 節），並新增一條硬規定：某子類別湊不到 10 則時，先用「前瞻／最新一次」框架補，仍不足就**如實記錄在 `run` 欄並照實發布，絕不回頭撈舊卡湊數**。這是本次改版最容易被悄悄破壞的地方——撈舊卡沒有人會發現，但整條規則就此失效。
-- **發布前檢查改寫**：日期直方圖那條換成「所有 `ts` ≥ `window.from`」與「`date` 與 `ts` 日期一致」，去重比對範圍由「本版內部」擴大到「本版 ＋ 前一版」，並附上可直接執行的檢查腳本。
+- **發布前檢查改寫**：日期直方圖那條換成「所有 `ts` ≥ `window.from`」與「`date` 與 `ts` 日期一致」，去重比對範圍由「本版內部」擴大到「本版 ＋ 前一版」，並附上可直接執行的檢查腳本。腳本取前一版時**刻意不用 `days[1]`**，改為「`days` 裡日期不等於今天的最新一筆」——因為 `days[1]` 只在「`index.json` 已先更新」時才正確，順序一顛倒就會拿去跟前天比對，去重照樣跑得過但實際失效。
 - **已知風險**：這是本站上線以來最大的一次規則收緊，8/4 那一輪是第一次實測。要特別看兩件事——(1) 八個子類別是否真的都能在 24 小時窗口內湊到 10 則；(2) 產出是否還能在 11:30 前完成。任一項失守就要回頭調整，調整方向應該是**先降 `≥10 則` 的下限，而不是放寬窗口**。
 
 ### 2026-08-03（第 3 次修訂 · 修補 brief 與排程 prompt 的四處不同步）
