@@ -16,10 +16,10 @@
 
 ---
 
-## 1. 主要來源（19 家，付費為主體、免費為輔）
+## 1. 主要來源（20 家，付費為主體、免費為輔）
 
 **付費訂閱**（使用者本人訂閱，於其已登入的 Chrome 讀）：
-Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)、FT (ft.com)、Nikkei Asia (asia.nikkei.com)、Washington Post (washingtonpost.com)、Barron's (barrons.com)、IBD (investors.com)、**Politico (politico.com)**、**The Hill (thehill.com)**
+Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)、FT (ft.com)、Nikkei Asia (asia.nikkei.com)、Washington Post (washingtonpost.com)、Barron's (barrons.com)、IBD (investors.com)、**Politico (politico.com)**、**The Hill (thehill.com)**、**SemiAnalysis (newsletter.semianalysis.com)**
 
 **免費公開**：
 **Reuters (reuters.com)**、CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)、**鉅亨網 Anue (news.cnyes.com)**、**MoneyDJ (moneydj.com)**
@@ -28,10 +28,22 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 
 **Politico 與 The Hill 專供政經分頁**（地緣政治＋美國政治）的深度與時效——國會立法、國防／撥款、選舉、司法與 Fed 獨立性等。
 
-來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-reuters`/`b-anue`/`b-moneydj`/`b-twse`/`b-pub`。
-（卡片 `src` 值＝去掉 `b-` 前綴：`bbg`、`wsj`、…、`reuters`、`anue`、`moneydj`、`twse`、`pub`。`pub` 保留給上列以外的通訊社與官方公告，**Reuters 一律用 `reuters` 而非 `pub`**。）
+來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-reuters`/`b-anue`/`b-moneydj`/`b-twse`/`b-semi`/`b-pub`。
+（卡片 `src` 值＝去掉 `b-` 前綴：`bbg`、`wsj`、…、`reuters`、`anue`、`moneydj`、`twse`、`semi`、`pub`。`pub` 保留給上列以外的通訊社與官方公告，**Reuters 一律用 `reuters` 而非 `pub`**。）
 
-各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲；**Reuters＝亞洲時區最快、官方聲明與 Kpler／LSEG 數據的一手轉述、無付費牆摩擦**；**鉅亨網＝台股盤勢與台灣本地財經**；**MoneyDJ＝台廠供應鏈與個股拆解**；**TWSE／公開資訊觀測站＝月營收、三大法人買賣超、融資餘額、法說會行事曆等官方數據**。
+各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲；**Reuters＝亞洲時區最快、官方聲明與 Kpler／LSEG 數據的一手轉述、無付費牆摩擦**；**鉅亨網＝台股盤勢與台灣本地財經**；**MoneyDJ＝台廠供應鏈與個股拆解**；**TWSE／公開資訊觀測站＝月營收、三大法人買賣超、融資餘額、法說會行事曆等官方數據**；**SemiAnalysis＝AI 資料中心、加速器架構、記憶體與 CoWoS 供應鏈的第一手深度拆解，數字顆粒度是其他來源沒有的**。
+
+### 1.2 SemiAnalysis 的特殊處理（2026/08/04 新增）
+
+SemiAnalysis 是 Substack 電子報，性質與其他 19 家日更媒體不同，收錄方式要另外講清楚：
+
+- **入口**：`https://newsletter.semianalysis.com/`，文章永久連結格式為 `https://newsletter.semianalysis.com/p/<slug>`。首頁掃連結用 `a[href*="/p/"]`。
+- **`ts` 好取**：Substack 的首頁與文章頁都有 `<time datetime="...">`（UTC），文章頁另有 `meta[property="article:published_time"]`，直接換算成台北 +08:00 即可。
+- **內文讀法**：標準 JS 片段即可，選擇器建議加上 `.available-content p, [class*="markup"] p`。2026/08/04 實測單篇取得 107 段、25,441 字元，完整可讀。
+- **不要用「頁面出現 paid subscribers 字樣」判定被擋**——Substack 頁尾與側欄永遠掛著訂閱 CTA，正文照樣完整載入。**一律回歸第 1.1 節的內文量標準**（段落 ≥8 且 ≥1,500 字視為完整）。
+- **發文頻率約每週 1～2 篇，不是日更。**（2026/08/04 觀察：最近三篇為 8/03、7/29、7/25。）因此**大多數日子的 24 小時窗口內不會有新文章，這是正常狀態，不是採集失敗**，不必在 `run` 欄記為降級，也**絕對不要為了讓它出現而收錄窗口外的舊文**——窗口規則對所有來源一視同仁，沒有例外。
+- **有新文的那天，它通常值得直接寫成「AI 與半導體」那一組的深度卡**（`deep: true`），因為單篇資訊密度遠高於一般報導。一篇長文可視為彙整型文章，依第 5 節第 7 點的規則**最多拆成 3 張不同子類別的卡**（例如 AI 與半導體／台股與亞太／能源與原物料，資料中心電力議題常同時橫跨三者）。
+- 合規上與其他付費來源相同：只在使用者已登入的 Chrome 讀取，公開頁面只放原創摘要與原文連結，不轉載長篇原文或大段圖表數據。
 
 **內容優先序**：每個分區以付費來源卡片打底、排前面；免費來源只補付費沒涵蓋到的角度。**核可的免費來源僅限**上列八家＋官方／數據源／通訊社；**嚴禁**內容農場或小報（Motley Fool、ETtoday、Intellectia、內容聚合站等）。
 
@@ -165,7 +177,7 @@ data/2026-07-30.json
    - 四張焦點卡（`.focus`）：當日最重要的四條主軸。
    - 七大重點 takeaways（`.takeaways`）：濃縮當日跨版面重點。
    - 溫度條＋情緒註解、主要來源徽章列、本週盯盤時程（`.watch`）。
-2. **摘要與心得**：讀完當日 19 家後，寫一篇**約 1,000 字**的綜合彙整＋觀點（`.essay`）。要有一句 kick 破題、5～6 段分主題論述（如 AI 資本支出、財報冷熱、能源地緣、央行/債市、亞洲/台股），結尾給「投顧視角小結」與 2～3 個可驗證盯盤節點。非投資建議。
+2. **摘要與心得**：讀完當日 20 家後，寫一篇**約 1,000 字**的綜合彙整＋觀點（`.essay`）。要有一句 kick 破題、5～6 段分主題論述（如 AI 資本支出、財報冷熱、能源地緣、央行/債市、亞洲/台股），結尾給「投顧視角小結」與 2～3 個可驗證盯盤節點。非投資建議。
 3. **市場總經**（section id＝`macro`）：**美股與財報**／**央行、利率與匯率**／**台股與亞太**（各分組用 `.group-label`）。
 4. **產業與主題**（section id＝`industry`）：**AI 與半導體**／**金融、併購與企業**／**能源與原物料**。
 5. **政經**（section id＝`politics`）：**地緣政治（中東與戰事）**／**美國政治與政策**。
@@ -181,11 +193,11 @@ data/2026-07-30.json
 
 1. **先讀 `data/index.json`**，確認今天是否已產出（同日重跑就覆蓋當天的檔）。**不需要看昨天的內容來決定汰換什麼**——24 小時窗口制之下，今天的版本與昨天的版本完全獨立，唯一要跟昨天比對的是**原文連結去重**（見第 7 點）。
    - **1.5 算出本次窗口**：`from` ＝ 前一日台北 07:00，`to` ＝ 預計寫入時刻。用 `TZ=Asia/Taipei date` 取得，寫進 JSON 的 `window` 欄，並在讀新聞時就拿它當收錄門檻——**在採集階段就篩掉窗口外的文章，不要等到寫卡時才發現要丟掉**，那等於白讀。
-2. 用 Claude in Chrome 逐一讀 19 家當日重點（付費為主）。建議開 **6 個 subagent 平行分組**，每個先自己開新分頁再作業：
+2. 用 Claude in Chrome 逐一讀 20 家當日重點（付費為主）。建議開 **6 個 subagent 平行分組**，每個先自己開新分頁再作業：
    - A：Bloomberg ＋ WSJ
    - B：FT ＋ NYT ＋ WaPo
    - C：Nikkei ＋ 華爾街見聞 ＋ CNBC ＋ MarketWatch（**並負責全套市場數據**）
-   - D：**Reuters ＋ Tom's Hardware ＋ OGJ**
+   - D：**Reuters ＋ Tom's Hardware ＋ OGJ ＋ SemiAnalysis**（SemiAnalysis 依第 1.2 節，約每週 1～2 篇，窗口內沒有新文是常態）
    - E：Politico ＋ The Hill ＋ Barron's ＋ IBD（後兩家依第 1.1 節的**內文量標準**實測，**不要用導覽列有沒有 Sign In 判斷**）
    - F：**鉅亨網 ＋ MoneyDJ ＋ TWSE／公開資訊觀測站**（台股專組）
 
@@ -220,7 +232,7 @@ data/2026-07-30.json
    TODAY='<今天 YYYY-MM-DD>'
    REPO='/Users/kenny/advisory-knowledge-hub'   # 絕對路徑：避免掛載到其他 repo 時讀錯同名檔
    SRCOK={'bbg','wsj','nyt','ft','nikkei','wapo','barrons','cnbc','ibd','mw','toms',
-          'ogj','politico','thehill','wscn','reuters','anue','moneydj','twse','pub'}
+          'ogj','politico','thehill','wscn','reuters','anue','moneydj','twse','semi','pub'}
    d=json.load(open('%s/data/%s.json'%(REPO,TODAY)))
    w=d.get('window')
    assert w, '★致命：頂層缺 window 欄，補上再檢查'
