@@ -22,16 +22,30 @@
 Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)、FT (ft.com)、Nikkei Asia (asia.nikkei.com)、Washington Post (washingtonpost.com)、Barron's (barrons.com)、IBD (investors.com)、**Politico (politico.com)**、**The Hill (thehill.com)**、**SemiAnalysis (newsletter.semianalysis.com)**
 
 **免費公開**：
-**Reuters (reuters.com)**、CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)、**鉅亨網 Anue (news.cnyes.com)**、**MoneyDJ (moneydj.com)**
+**Reuters (reuters.com)**、CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)、**鉅亨網 Anue (news.cnyes.com)**、**MoneyDJ (moneydj.com)**、**Fierce Biotech (fiercebiotech.com)**、**STAT News (statnews.com)**、**KED Global (kedglobal.com)**、**Mint (livemint.com)**
 
-**官方／數據源**：**TWSE 台灣證券交易所與公開資訊觀測站 (twse.com.tw / mops.twse.com.tw)**、Fed／BOJ／ECB／日本財務省、EIA、CME FedWatch、美國財政部、公司 IR、政府與司法機構公告；另有 AP、CBS 等通訊社。
+**官方／數據源**：**TWSE 台灣證券交易所與公開資訊觀測站 (twse.com.tw / mops.twse.com.tw)**、Fed／BOJ／ECB／日本財務省、EIA、CME FedWatch、美國財政部、公司 IR、政府與司法機構公告；**FRED 的 ICE BofA 信用利差（OAS）系列**、**FDA 藥證與臨床公告**、**World Gold Council 黃金 ETF 流向與央行購金**；另有 AP、CBS 等通訊社。
+
+**2026/08/04 第 9 次修訂新增的四家**（動機見第 8 節）：**Fierce Biotech**（免費，新藥／臨床／藥業併購，生技健護組主力）、**STAT News**（醫療政策與生技深度，部分文章付費——依第 1.1 節的內文量標準實測，被擋就換一篇，不要卡住）、**KED Global**（韓國財經英文版，三星／SK 海力士／韓元政策的一手報導）、**Mint**（印度財經，印度央行、盧比與當地企業）。**東南亞不另設具名來源**：Nikkei Asia 的東南亞覆蓋已足夠，Reuters 補即時。
 
 **Politico 與 The Hill 專供政經分頁**（地緣政治＋美國政治）的深度與時效——國會立法、國防／撥款、選舉、司法與 Fed 獨立性等。
 
-來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-reuters`/`b-anue`/`b-moneydj`/`b-twse`/`b-semi`/`b-pub`。
-（卡片 `src` 值＝去掉 `b-` 前綴：`bbg`、`wsj`、…、`reuters`、`anue`、`moneydj`、`twse`、`semi`、`pub`。`pub` 保留給上列以外的通訊社與官方公告，**Reuters 一律用 `reuters` 而非 `pub`**。）
+來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-reuters`/`b-anue`/`b-moneydj`/`b-twse`/`b-semi`/`b-fierce`/`b-stat`/`b-ked`/`b-mint`/`b-pub`。
+（卡片 `src` 值＝去掉 `b-` 前綴：`bbg`、`wsj`、…、`twse`、`semi`、`fierce`、`stat`、`ked`、`mint`、`pub`。`pub` 保留給上列以外的通訊社與官方公告——**FRED、FDA、WGC 的數據卡都用 `pub`**。**Reuters 一律用 `reuters` 而非 `pub`**。）
 
-各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲；**Reuters＝亞洲時區最快、官方聲明與 Kpler／LSEG 數據的一手轉述、無付費牆摩擦**；**鉅亨網＝台股盤勢與台灣本地財經**；**MoneyDJ＝台廠供應鏈與個股拆解**；**TWSE／公開資訊觀測站＝月營收、三大法人買賣超、融資餘額、法說會行事曆等官方數據**；**SemiAnalysis＝AI 資料中心、加速器架構、記憶體與 CoWoS 供應鏈的第一手深度拆解，數字顆粒度是其他來源沒有的**。
+各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲；**Reuters＝亞洲時區最快、官方聲明與 Kpler／LSEG 數據的一手轉述、無付費牆摩擦**；**鉅亨網＝台股盤勢與台灣本地財經**；**MoneyDJ＝台廠供應鏈與個股拆解**；**TWSE／公開資訊觀測站＝月營收、三大法人買賣超、融資餘額、法說會行事曆等官方數據**；**SemiAnalysis＝AI 資料中心、加速器架構、記憶體與 CoWoS 供應鏈的第一手深度拆解，數字顆粒度是其他來源沒有的**；**Fierce Biotech／STAT＝新藥、臨床試驗、FDA 與藥價政策**；**KED Global＝韓國**；**Mint＝印度**。
+
+**新增子類別對應的主力來源**（2026/08/04 第 9 次修訂，這張對照表是為了避免「加了子類別卻沒人負責去餵它」）：
+
+| 子類別 | 主力來源 | 保底數據源 |
+|---|---|---|
+| 中國 | 華爾街見聞、FT、Reuters、Nikkei | — |
+| 日本 | Nikkei（最強）、Bloomberg、FT | BOJ、日本財務省 |
+| 亞太（韓／印／東南亞） | **KED Global**、**Mint**、Nikkei、Reuters | — |
+| 歐洲 | FT（最強）、Reuters、Bloomberg、WSJ | ECB |
+| 生技健護 | **Fierce Biotech**、**STAT**、WSJ、FT | FDA 公告 |
+| 信用債 | Bloomberg（credit 版面最強）、FT、Reuters | **FRED 的 ICE BofA OAS** |
+| 黃金 | Bloomberg、Reuters、MarketWatch | **World Gold Council** |
 
 **內容優先序**：每個分區以付費來源卡片打底、排前面；免費來源只補付費沒涵蓋到的角度。**核可的免費來源僅限**上列八家＋官方／數據源／通訊社；**嚴禁**內容農場或小報（Motley Fool、ETtoday、Intellectia、內容聚合站等）。
 
@@ -113,9 +127,9 @@ SemiAnalysis 是 Substack 電子報，性質與其他 19 家日更媒體不同�
 
 **這條規則只約束「單一天的版本內部」，不是刪除歷史。** 每天的版本都獨立存成 `data/YYYY-MM-DD.json` 永久保留，使用者可用頁面最上方的日期切換列回看任何一天。**絕對不要刪除或覆寫舊的日期檔。** 每天要做的是**新增一個檔案**，不是改寫昨天的檔案。
 
-- **全站卡片數 ＝ 當日新卡數**，目標 **80～95 則**（八個子類別各 ≥10 則）。「當日新卡佔全站 1/4～1/3」這條舊規則**自本次起作廢**——現在恆為 100%。
+- **全站卡片數 ＝ 當日新卡數**，目標 **95～115 則**（十五個子類別，分級下限見第 4.1 節，合計 91 則）。「當日新卡佔全站 1/4～1/3」這條舊規則已作廢——現在恆為 100%。
 - **不得從前一版複製任何卡片過來**，即使只差幾小時、即使改寫過。前一版的內容已永久封存在它自己的日期檔裡，讀者要看隨時可切回去。
-- **`≥10 則` 的下限不可為了時效讓步，時效也不可為了湊 10 則讓步。** 兩者衝突時的唯一解法是**多讀**，不是放寬窗口、更不是回頭撈舊卡。真的某個子類別當天素材不足，見下一條。
+- **份量下限不可為了時效讓步，時效也不可為了湊足下限而讓步。** 兩者衝突時的唯一解法是**多讀**，不是放寬窗口、更不是回頭撈舊卡。真的某個子類別當天素材不足，見下一條。
 - **素材真的不足時，用「前瞻／最新一次」框架補，而不是放舊聞。** CPI、非農、FOMC／ECB／BOJ 決議、OPEC+ 會議等低頻事件本來就不會每天發生；寫成「下次會議前瞻」或「最新一次決議＋至今的市場反應」，引用的是**窗口內的最新分析與市場反應**，`ts` 掛該篇分析的發布時間，不是掛那場會議的日期。這是唯一合法的補版面方式。
 - **每張卡片都要標 `ts`（發布時間）與 `date`（顯示用日期）**，發布前程式化檢查所有 `ts` 皆 ≥ 窗口起點。
 - 「關於與方法」分頁的時效性說明要寫出**本次窗口的起訖時刻**（例如「2026/08/03 07:00 – 08/04 11:40（台北）」），不再寫「保留的日期區間」。
@@ -171,11 +185,11 @@ data/2026-07-30.json
 
 沿用現有 `index.html` 的 **淺色系 CSS**、版面、分頁與互動邏輯、徽章 class；只更新資料與 `stamp`（台北時間）。**配色為淺色系**（`--bg:#eef2f7`、`--card:#fff`、深藍灰字），勿改回深色。頁面最上方為**日期切換列**（顯示最近 7 天，更早的收進下拉選單）。
 
-**定位＝新聞閱讀中心（reading hub），內容越充實越好。** 市場總經／產業與主題／政經三大分頁的**每個子類別至少 10 則**；採「分層摘要」：
-- **重點則（每子類別 1 則，素材夠份量才寫第 2 則）**：用 `.card.wide`（跨兩欄）＋ `.longread`（多段落、約 800～1,000 字的深度摘要）＋標 `.tag.deep`「深度」；深入說明事件來龍去脈與對市場的意義。
+**定位＝新聞閱讀中心（reading hub），內容越充實越好。** 各子類別的份量下限見第 4.1 節（分三級：≥10／≥6／≥3）；採「分層摘要」：
+- **深度卡**：用 `.card.wide`（跨兩欄）＋ `.longread`（多段落、約 800～1,000 字的深度摘要）＋標 `.tag.deep`「深度」；深入說明事件來龍去脈與對市場的意義。
 - **其餘則**：一般 `.card` ＋ `.lead`（約 **250～350 字**中長摘要）＋ 2～3 條重點 bullet。
 
-**深度卡張數與摘要長度是 2026/08/03 第 4 次修訂調降的**（原為每子類別 2 則、摘要 300～400 字）。原因是改採 24 小時窗口後，全站卡片全部要當天新寫，從每日 45 則增為 80～95 則；若維持原本的深度卡配額，單日撰寫量會膨脹到不可能在 11:30 前完成。**寧可 8 張紮實的深度卡配 80 則中長摘要，也不要 16 張注水的深度卡。**
+**深度卡總量固定 6～8 張，不是每組一張**（2026/08/04 第 9 次修訂）：四個核心組各 1 張為基本盤，再視當日四條主軸補 2～4 張（主軸落在哪組就寫哪組）。**次要組與衛星組原則上不寫深度卡**，除非當天那個主題就是全站最重要的事。子類別由 8 組擴為 15 組後，若還維持「每組 1 張」會變成 15 張深度卡、撰寫量直接翻倍，11:30 前絕對做不完。**寧可 8 張紮實的深度卡配 100 則中長摘要，也不要 15 張注水的。**
 
 1. **三分鐘總覽**：
    - 跨資產快照列（`.snap`）：S&P 500、那斯達克、布蘭特油、黃金、美元/日圓、30 年美債或銅等 6 格（漲綠 `.up`／跌紅 `.dn`／平 `.fl`）。
@@ -183,11 +197,37 @@ data/2026-07-30.json
    - 七大重點 takeaways（`.takeaways`）：濃縮當日跨版面重點。
    - 溫度條＋情緒註解、主要來源徽章列、本週盯盤時程（`.watch`）。
 2. **摘要與心得**：讀完當日 20 家後，寫一篇**約 1,000 字**的綜合彙整＋觀點（`.essay`）。要有一句 kick 破題、5～6 段分主題論述（如 AI 資本支出、財報冷熱、能源地緣、央行/債市、亞洲/台股），結尾給「投顧視角小結」與 2～3 個可驗證盯盤節點。非投資建議。
-3. **市場總經**（section id＝`macro`）：**美股與財報**／**央行、利率與匯率**／**台股與亞太**（各分組用 `.group-label`）。
-4. **產業與主題**（section id＝`industry`）：**AI 與半導體**／**金融、併購與企業**／**能源與原物料**。
-5. **政經**（section id＝`politics`）：**地緣政治（中東與戰事）**／**美國政治與政策**。
+3. **市場總經**（section id＝`macro`，7 組）：**美股與財報**／**央行、利率與匯率**／**台灣**／**中國**／**日本**／**亞太（韓國、印度、東南亞）**／**歐洲**（各分組用 `.group-label`）。
+4. **產業與主題**（section id＝`industry`，6 組）：**AI 與半導體**／**金融、併購與企業**／**能源與原物料**／**生技健護**／**信用債**／**黃金**。
+5. **政經**（section id＝`politics`，2 組）：**地緣政治（中東與戰事）**／**美國政治與政策**。
 
-**子類別固定為以上八組**，`≥10 則`的下限逐組計算。要增減子類別必須同時改本節、排程 prompt 與既有資料檔的分組結構，不可只在其中一處新增分組。生技與原物料不另立子類別：生技併入「金融、併購與企業」，原物料併入「能源與原物料」。
+**子類別固定為以上十五組。** 要增減必須同時改本節、排程 prompt 與檢查腳本的 `QUOTA` 表，不可只在其中一處新增分組。
+
+### 4.1 分級下限（2026/08/04 第 9 次修訂）
+
+**不是每一組都要 ≥10 則。** 十五組的素材密度差距極大，一律要求 10 則只會逼出注水內容——這正好違背「不為湊數放舊聞或編造」的底線。下限分三級：
+
+| 級別 | 子類別 | 下限 |
+|---|---|---|
+| **核心**（每天都有大量素材） | 美股與財報、AI 與半導體、央行利率與匯率、台灣 | **≥10** |
+| **次要** | 中國、日本、能源與原物料、金融併購與企業、地緣政治（中東與戰事）、美國政治與政策 | **≥6** |
+| **衛星**（低頻，重跨期累積） | 歐洲、亞太（韓印東南亞）、生技健護、信用債、黃金 | **≥3**，其中至少 1 則為保底數據卡 |
+
+下限合計 91 則，**全站目標 95～115 則**。
+
+**這個分級是拿 2026/08/04 的實際素材校準出來的，不是拍腦袋訂的。** 那天全站 91 則，掃過去只有：台灣本地 9 則、日本 7 則、中國 3 則、韓印東南亞 3 則、歐洲 3 則（且都只是順帶提及、不是歐洲主題）、生技健護 3 則、黃金 1 則、**信用債 0 則**。衛星組若訂 ≥10 甚至 ≥6，第一天就會有五組達不到。
+
+**衛星組的價值在於跨期累積，不在單日厚度。** 下游的主題匯流週報與每月 House View 要的是「這個主題連續幾週的軌跡」——黃金一個月累積 40～60 則就足夠寫一頁，不需要每天 10 則。所以**寧可每天穩定 3 則、天天都有，也不要今天 12 則、明天 0 則**。
+
+**保底數據卡**：信用債與黃金即使當天沒有像樣的新聞，也必須各有 1 則數據卡（信用債＝ICE BofA OAS 利差當日值與變動；黃金＝金價、ETF 流向或央行購金）。這不是湊數——**信用利差與 CSP 債務正是 House View 的核心論述之一**，每天記錄一個數字，累積起來就是一條可回溯的曲線。
+
+**歸類原則（拆組後最容易搞混的幾條）**：
+
+- **日圓匯率、BOJ 政策、日本財政 → 日本組**；Fed、ECB、全球利率結構、美元指數 → 央行組。**美日聯合干預這種橫跨兩者的，以「誰是主體」判斷**——日方出手、日本財務省發言就放日本組。（2026/08/04 那天光是日圓干預就有 5 則掛在央行組，拆組後這幾則要移到日本組，否則央行組會被抽空、日本組卻空著。）
+- **台股個股與盤勢 → 台灣組**；台灣半導體廠的技術與供應鏈角度 → 視主題可放 AI 與半導體組，不要兩邊都放。
+- **信用債組收的是「利差、評等、發債、償債能力」**；銀行股價、併購 → 金融組。
+- **黃金組只收黃金與貴金屬**；原油、銅、農產 → 能源與原物料組。
+- **生技健護組收新藥、臨床、FDA、藥價政策、醫療服務**；藥廠的純併購財務面可放金融組，但**不要同一件事兩邊各開一張卡**（違反本版內去重）。
 6. **關於與方法**：來源、時效、合規、限制（大致固定，日期需更新）。
 
 **每則卡片**：來源徽章＋主題標籤（`.tag`，可 hot/warn/pos）＋日期＋標題（`h3`）＋一段詳細闡述（`.lead`）＋2～3 條重點 bullet（`.card ul`）＋原文連結（真實可點）＋溫度色條（`t-green`/`t-yellow`/`t-orange`/`t-red`）。摘要要「詳細一點、多一些闡述」，不只列點。
@@ -198,15 +238,19 @@ data/2026-07-30.json
 
 1. **先讀 `data/index.json`**，確認今天是否已產出（同日重跑就覆蓋當天的檔）。**不需要看昨天的內容來決定汰換什麼**——24 小時窗口制之下，今天的版本與昨天的版本完全獨立，唯一要跟昨天比對的是**原文連結去重**（見第 7 點）。
    - **1.5 算出本次窗口**：`from` ＝ 前一日台北 07:00，`to` ＝ 預計寫入時刻。用 `TZ=Asia/Taipei date` 取得，寫進 JSON 的 `window` 欄，並在讀新聞時就拿它當收錄門檻——**在採集階段就篩掉窗口外的文章，不要等到寫卡時才發現要丟掉**，那等於白讀。
-2. 用 Claude in Chrome 逐一讀 20 家當日重點（付費為主）。建議開 **6 個 subagent 平行分組**，每個先自己開新分頁再作業：
-   - A：Bloomberg ＋ WSJ
-   - B：FT ＋ NYT ＋ WaPo
-   - C：Nikkei ＋ 華爾街見聞 ＋ CNBC ＋ MarketWatch（**並負責全套市場數據**）
-   - D：**Reuters ＋ Tom's Hardware ＋ OGJ ＋ SemiAnalysis**（SemiAnalysis 依第 1.2 節，約每週 1～2 篇，窗口內沒有新文是常態）
-   - E：Politico ＋ The Hill ＋ Barron's ＋ IBD（後兩家依第 1.1 節的**內文量標準**實測，**不要用導覽列有沒有 Sign In 判斷**）
-   - F：**鉅亨網 ＋ MoneyDJ ＋ TWSE／公開資訊觀測站**（台股專組）
+2. 用 Claude in Chrome 逐一讀 24 家當日重點（付費為主）。建議開 **7 個 subagent 平行分組**，每個先自己開新分頁再作業。**每組的括號內是它要負責餵飽的子類別**——分組的意義就是讓每個子類別都有人負責，沒被指派的組會空掉：
+   - A：Bloomberg ＋ WSJ（美股與財報、**信用債**）
+   - B：FT ＋ NYT ＋ WaPo（**歐洲**、美國政治與政策、金融併購與企業）
+   - C：Nikkei ＋ 華爾街見聞 ＋ CNBC ＋ MarketWatch（**日本**、**中國**、**並負責全套市場數據**）
+   - D：**Reuters ＋ Tom's Hardware ＋ OGJ ＋ SemiAnalysis**（能源與原物料、**黃金**、AI 與半導體；SemiAnalysis 依第 1.2 節，約每週 1～2 篇，窗口內沒有新文是常態）
+   - E：Politico ＋ The Hill ＋ Barron's ＋ IBD（地緣政治、美國政治與政策、美股選股；後兩家依第 1.1 節的**內文量標準**實測，**不要用導覽列有沒有 Sign In 判斷**）
+   - F：**鉅亨網 ＋ MoneyDJ ＋ TWSE／公開資訊觀測站**（**台灣**，台股專組）
+   - G：**Fierce Biotech ＋ STAT News ＋ KED Global ＋ Mint**（**生技健護**、**亞太（韓印東南亞）**）
 
-   **F 組有最低產出要求：至少 8 則可成卡的台灣本地素材**（鉅亨 ≥3、MoneyDJ ≥3，其餘不限），外加下一點列的台股官方數據。2026/08/03 那一輪 F 組回傳 0 則、當日「台股與亞太」子類別 18 則裡沒有一則來自台灣媒體——這正是當初擴充來源的動機，達不到就是白加。**F 組交不出東西時要在 `run` 欄具名寫出是哪一家、卡在哪一步**，不要靜靜地讓其他來源補位。
+   **F 組最低產出：至少 10 則可成卡的台灣本地素材**（鉅亨 ≥4、MoneyDJ ≥3，其餘不限），外加下一點列的台股官方數據。台灣是核心組（≥10），而 2026/08/04 那輪台灣本地來源合計只有 9 則——**剛好差一則，所以這個門檻要從 8 提高到 10**。
+   **G 組最低產出：生技健護 ≥3、亞太 ≥3。** 這是 2026/08/04 第 9 次修訂新增的組，**它負責的兩個子類別在此之前完全沒有專責來源**（8/04 生技 3 則全靠綜合媒體順帶、韓印東南亞 3 則同理）。
+   **A 組額外責任：信用債 ≥3。** Bloomberg 的 credit 版面是唯一有系統性信用市場報導的來源，8/04 全站信用債 **0 則**就是因為沒有人負責去找。
+   **交不出配額時要在 `run` 欄具名寫出是哪一組、哪一家、卡在哪一步**，不要靜靜地讓其他來源補位。
 3. **每日必抓的官方數據**（F 組與 C 組分工）：
    - 台股：加權指數與櫃買收盤、**三大法人買賣超**、**融資餘額**、當日重要月營收與法說會（TWSE／MOPS）。抓取路徑：
      - 三大法人買賣超日報 `https://www.twse.com.tw/zh/trading/foreign/bfi82u.html`（外資／投信／自營商，單位為元，換算成億元再寫卡）
@@ -216,6 +260,8 @@ data/2026-07-30.json
    - 利率：**CME FedWatch 的下次會議升降息機率**（不要只引用媒體轉述的百分比）
    - 能源：**EIA 週報庫存**（週三）、每季**美國財政部再融資公告（QRA）**的日期與規模
    - 匯率：日本財務省的干預實績公布（月底）與 BOJ 貨幣市場初步數據
+   - **信用債（第 9 次修訂新增，衛星組保底卡）**：FRED 的 ICE BofA 美國投等債 OAS `https://fred.stlouisfed.org/series/BAMLC0A0CM` 與高收益債 OAS `https://fred.stlouisfed.org/series/BAMLH0A0HYM2`——記錄當日值與較前一日、前一週的變動 bps。**即使當天沒有任何信用市場新聞，這張數據卡也要出。** 累積起來就是 House View 講 CSP 債務與利差時的那條曲線。
+   - **黃金（第 9 次修訂新增，衛星組保底卡）**：金價（現貨與 COMEX 近月**要分開標**）、World Gold Council 的 ETF 流向與央行購金 `https://www.gold.org/goldhub/data`。**同樣是每天必出的保底卡。**
 4. 依本文件與第 3.5 節的 schema 產生 `data/<今天>.json`，並把今天加進 `index.json` 的 `days`。
 5. **直接用檔案工具寫入** `/Users/kenny/advisory-knowledge-hub/data/`。`index.html` 是外殼，**除非要改版面，否則不需要動它**。
 6. 之後**不需手動 push**：使用者 Mac 上的 launchd 背景程式（`com.kenny.dashpush`，每 3 分鐘）會自動 `git add`＋`commit`＋`push`；GitHub Actions 自動部署到 `https://gundamnboy.github.io/advisory-knowledge-hub/`。
@@ -237,7 +283,13 @@ data/2026-07-30.json
    TODAY='<今天 YYYY-MM-DD>'
    REPO='/Users/kenny/advisory-knowledge-hub'   # 絕對路徑：避免掛載到其他 repo 時讀錯同名檔
    SRCOK={'bbg','wsj','nyt','ft','nikkei','wapo','barrons','cnbc','ibd','mw','toms',
-          'ogj','politico','thehill','wscn','reuters','anue','moneydj','twse','semi','pub'}
+          'ogj','politico','thehill','wscn','reuters','anue','moneydj','twse','semi',
+          'fierce','stat','ked','mint','pub'}
+   QUOTA={'美股與財報':10,'AI 與半導體':10,'央行、利率與匯率':10,'台灣':10,
+          '中國':6,'日本':6,'能源與原物料':6,'金融、併購與企業':6,
+          '地緣政治（中東與戰事）':6,'美國政治與政策':6,
+          '歐洲':3,'亞太（韓國、印度、東南亞）':3,'生技健護':3,'信用債':3,'黃金':3}
+   # 分組名必須與 QUOTA 的鍵完全一致（含全形括號與空格），否則會被判為「不在 QUOTA 表」
    d=json.load(open('%s/data/%s.json'%(REPO,TODAY)))
    w=d.get('window')
    assert w, '★致命：頂層缺 window 欄，補上再檢查'
@@ -267,7 +319,7 @@ data/2026-07-30.json
    for lab,c in cards: u[c['url']].append(lab)
    multi={k:v for k,v in u.items() if len(v)>1}
    n=len(cards)
-   print('總數',n,'OK' if 80<=n<=95 else '★不在 80–95')
+   print('總數',n,'OK' if 95<=n<=115 else '★不在 95–115')
    print('缺/壞 ts',len(nots),nots[:3])
    print('逾期',len(bad),bad[:3],'| 未來 ts',len(fut),fut[:3])
    print('date/ts 不一致',len(mism),mism[:3],'| 與前一版重複',len(dup),dup[:3])
@@ -277,11 +329,19 @@ data/2026-07-30.json
    for k,v in multi.items():
        ok = len(v)<=3 and len(set(v))==len(v)   # 至多 3 張、且不得兩張同組
        print(('拆卡OK ' if ok else '★違規 '),len(v),v,k[:70])
+   seen=set()
    for s in d['sections']:
-       for g in s['groups']: print(g['label'],len(g['cards']),'OK' if len(g['cards'])>=10 else '★不足')
+       for g in s['groups']:
+           lab=g['label']; seen.add(lab); q=QUOTA.get(lab)
+           if q is None: print('★分組名不在 QUOTA 表：',lab); continue
+           print('%-22s %2d / 需 %d %s'%(lab,len(g['cards']),q,'OK' if len(g['cards'])>=q else '★不足'))
+   missing=set(QUOTA)-seen
+   print('★缺少的分組：',missing or '無')
    ```
 
-   **必須是 0 的五項**：缺/壞 `ts`、逾期、未來 `ts`、`date`/`ts` 不一致、與前一版重複。**另外不可出現任何「★違規」的拆卡，`src` 不在清單必須是「無」，八組都要 OK。**
+   **必須是 0 的五項**：缺/壞 `ts`、逾期、未來 `ts`、`date`/`ts` 不一致、與前一版重複。**另外不可出現任何「★違規」的拆卡，`src` 不在清單必須是「無」，十五組都要 OK 且「缺少的分組」必須是「無」。**
+
+   **`QUOTA` 表是分級下限的唯一權威副本**（第 4.1 節是它的散文版）。改分組名稱或下限時**兩邊都要改**，而且分組名必須逐字相符——`亞太（韓國、印度、東南亞）` 的全形括號與頓號寫錯一個字，腳本就會報「分組名不在 QUOTA 表」。`missing` 那一行是防止整組漏掉：只檢查「有出現的組夠不夠」會漏掉「這組根本沒建」的情況，而那正是新增子類別後最常見的失敗。
 
    **「疑似列表頁」是警告不是硬性失敗**——它用啟發式判斷（最後一段網址沒有連字號也沒有長數字 ID），TWSE 那幾個 `.html` 表單頁會被標出來但屬正常。看到就人工確認一次：是真的列表頁就把該卡的數據併進別張卡，是官方數據頁就放行。
 
