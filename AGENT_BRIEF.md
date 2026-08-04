@@ -78,7 +78,7 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 
 ### 1.2 SemiAnalysis 的特殊處理（2026/08/04 新增）
 
-SemiAnalysis 是 Substack 電子報，性質與其他 19 家日更媒體不同，收錄方式要另外講清楚：
+SemiAnalysis 是 Substack 電子報，性質與其他日更媒體不同，收錄方式要另外講清楚：
 
 - **入口**：`https://newsletter.semianalysis.com/`，文章永久連結格式為 `https://newsletter.semianalysis.com/p/<slug>`。首頁掃連結用 `a[href*="/p/"]`。
 - **`ts` 好取**：Substack 的首頁與文章頁都有 `<time datetime="...">`（UTC），文章頁另有 `meta[property="article:published_time"]`，直接換算成台北 +08:00 即可。
@@ -268,7 +268,7 @@ data/2026-07-30.json
 7. **發布前自我檢查**（做不到就不要發）：
    - **每張卡片都有 `ts`，且 `ts` ≥ `window.from`**（程式化比對，不是抽查）
    - **每張卡片的 `date` 與其 `ts` 的台北日期一致**
-   - 每個子類別 ≥10 則，全站 80～95 則
+   - 每個子類別達到第 4.1 節的分級下限（≥10／≥6／≥3），且十五組一個都不能少，全站 95～115 則
    - 每張卡片都有真實可點的原文連結
    - **不得與前一版共用任何原文連結**（跨版去重，無例外）
    - **本版內部原則上一個 `url` 只成一張卡**，例外見下方「彙整型文章的拆卡規則」
