@@ -87,7 +87,10 @@
 - **HOME 的 deviceId 若因重裝 Chrome 或換設定檔而改變**，brief 第 6 節寫死的那一行會失效，需要更新。（2026-08-04 實測：`list_connected_browsers` 只剩 HOME 一台；另注意回傳的 `name` 在同一場對話中曾先後顯示為 Browser 1 與 Browser 2，**`name` 完全不可作為判斷依據，只認 deviceId**。）
 - **subagent 偶發「Multiple Chrome browsers are connected」並流失分頁。** 8/4 的 C 組因此中斷、只交回 1 則新聞（市場數據已完成）；重新 `select_browser` 後派 C2 組補齊 22 則，最終無影響。排程 prompt 第 1.5 步已加入「subagent 自行重選瀏覽器後重試、不要中止也不要問使用者」的指示。
 - **WebFetch 抓 GitHub Pages 會拿到 CDN 快取的舊內容。** 8/4 發布後 5 分鐘用 WebFetch 仍回傳前一天的 `index.json`，改用 Chrome `fetch(..., {cache:'no-store'})` 並加 cache-buster 立即拿到新版。排程 prompt 第 4 步已寫入。
-- **`notifyOnCompletion` 尚未開啟。** 2026-08-03 嘗試設定時被擋——排程執行中的工作階段不能替自己訂閱完成通知（回應：「Can't subscribe a scheduled-task run session to completion notifications」）。**必須從一般對話（非排程觸發的那種）設定**：叫 Claude 對 `advisory-dashboard-daily` 執行 `update_scheduled_task` 並帶 `notifyOnCompletion: true`。開了之後每天跑完會主動通知，不必自己去看網站。
+- **`notifyOnCompletion` 尚未開啟，而且踩到的坑比原本以為的更細。** 2026-08-03 與 2026-08-04 兩次嘗試都被擋，回應相同：「Can't subscribe a scheduled-task run session to completion notifications — it ends when the run does.」
+  - **關鍵在於「工作階段的身分是開場時決定的，不會因為使用者中途加入而改變。」** 8/4 那次是使用者在排程跑完後、直接在同一個對話裡接著交代事情，感覺上已經是一般對話，但系統仍把它認定為 scheduled-task run session，所以照樣被擋。訂閱動作是綁在「當前工作階段」上的，而這個工作階段會隨著排程執行結束而消失。
+  - **正確做法：另外開一個全新的對話**（不要在排程產出的那串後面接），對 Claude 說「幫我把 `advisory-dashboard-daily` 的 `notifyOnCompletion` 打開」，它會呼叫 `update_scheduled_task` 帶 `notifyOnCompletion: true`。
+  - 開了之後每天跑完會主動通知，不必自己去看網站。另兩條線（`podcast-digest-daily`、`convergence-weekly`）同理，要開就一起開。
 
 ---
 
