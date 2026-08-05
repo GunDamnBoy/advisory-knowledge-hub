@@ -22,7 +22,7 @@
 Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)、FT (ft.com)、Nikkei Asia (asia.nikkei.com)、Washington Post (washingtonpost.com)、Barron's (barrons.com)、IBD (investors.com)、**Politico (politico.com)**、**The Hill (thehill.com)**、**SemiAnalysis (newsletter.semianalysis.com)**
 
 **免費公開**：
-**Reuters (reuters.com)**、CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)、**鉅亨網 Anue (news.cnyes.com)**、**MoneyDJ (moneydj.com)**、**Fierce Biotech (fiercebiotech.com)**、**STAT News (statnews.com)**、**KED Global (kedglobal.com)**、**Mint (livemint.com)**
+**Reuters (reuters.com)**、CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)、**鉅亨網 Anue (news.cnyes.com)**、**MoneyDJ (moneydj.com)**、**Fierce Biotech (fiercebiotech.com)**、**STAT News (statnews.com)**、**Korea Herald (koreaherald.com)**、**Mint (livemint.com)**
 
 **官方／數據源**：**TWSE 台灣證券交易所與公開資訊觀測站 (twse.com.tw / mops.twse.com.tw)**、Fed／BOJ／ECB／日本財務省、EIA、CME FedWatch、美國財政部、公司 IR、政府與司法機構公告；**FRED 的 ICE BofA 信用利差（OAS）系列**、**FDA 藥證與臨床公告**、**World Gold Council 黃金 ETF 流向與央行購金**；另有 AP、CBS 等通訊社。
 
@@ -61,15 +61,33 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
    await new Promise(r=>setTimeout(r,4000));
    const t=document.querySelector('meta[property="article:published_time"]')?.content
      || document.querySelector('time[datetime]')?.getAttribute('datetime') || '';
-   const paras=[...document.querySelectorAll('article p, main p, [class*="ArticleBody"] p, [class*="body-content"] p')]
+   const paras=[...document.querySelectorAll(
+     'article p, main p, [class*="ArticleBody"] p, [class*="body-content"] p,'
+     +' p[class*="Paragraph"], .available-content p, [class*="markup"] p')]
      .map(p=>p.innerText.trim()).filter(x=>x.length>60);
    JSON.stringify({published:t, n:paras.length, chars:paras.join(' ').length, text:paras.join('\n')});
    ```
+   **選擇器清單的最後三段各有由來，不要為了「精簡」把它們拿掉：**
+   - `p[class*="Paragraph"]` ← **Barron's 專用（2026/08/05 補，重要）**。Barron's 的內文段落 class 是 emotion 動態雜湊、**不在 `article` 或 `main` 底下**，只用前四段選擇器會抓到 2 段／419 字，**看起來就像被付費牆擋住**；加上這一段可取得 22 段／4,444 字。8/03 已經因為讀取方法誤判整家 Barron's 一次，這是同一個坑的第二種形式。
+   - `.available-content p, [class*="markup"] p` ← Substack（SemiAnalysis）專用。
+
 3. **判定標準**：段落數 ≥8 且內文字數 ≥1,500 → 視為完整取得，正常成卡。
    段落數 ≤3 或內文字數 <800，**且**頁面出現明確的攔截字串（Barron's 的 "Continue reading this article with a Barron's subscription"、WSJ 的訂閱牆元件）→ 才算真的被擋。
+   **段落數少的時候，先懷疑選擇器沒對上，再懷疑被擋。** 判定被擋之前，至少換一組選擇器（`p[class*="Paragraph"]`、`[class*="content"] p`、`div[data-testid] p`）重試一次。
+
+3.5 **`fetch()` 取 HTML 再解析 ≠ 實際開頁（2026/08/05 補）**。IBD 實測：用 `fetch()` 拿 HTML 只會得到付費牆前的導段（7 段／987 字），**必須真的 `navigate` 過去、在頁面上執行 JS 才拿得到完整內文**（27 段／5,939 字）。許多站的正文由前端在登入狀態下才注入，靜態 HTML 裡根本沒有。**掃列表可以用 `fetch`，讀正文一律 `navigate`。**
 4. **`get_page_text` 在 Bloomberg、Barron's、MarketWatch 上會嚴重低估內文**（只回傳前 1–3 段或側欄）。它只適合當快速掃標題用，**不可以拿它的結果來斷定文章被付費牆擋住**。
 
-**Barron's 與 IBD 的規則**：依上述標準實測後再決定。**確認被擋才**停止逐篇嘗試、只取首頁公開資訊且不單獨成卡，並在 `run` 欄記錄。**可正常讀取時，Barron's 讀 6–8 篇、IBD 讀 4–6 篇**——這兩家的美股選股與週展望視角是其他來源沒有的，不要輕易放棄。
+**Barron's 與 IBD 的規則**：依上述標準實測後再決定。**確認被擋才**停止逐篇嘗試、只取首頁公開資訊且不單獨成卡，並在 `run` 欄記錄。**可正常讀取時，Barron's 讀 6–8 篇、IBD 讀 4–6 篇**——這兩家的美股選股與週展望視角是其他來源沒有的，不要輕易放棄。（2026/08/05 實測：**兩家全部可讀、0 篇被擋**，Barron's 8 篇 11–22 段／2,382–4,439 字，IBD 5 篇 21–80 段／3,400–15,324 字。前提是用對選擇器與 `navigate`。）
+
+**NYT 的診斷梯度（2026/08/05 新增）**：8/05 那輪 11 篇實測 `document.body.innerText.length` **全為 0**、`document.title` 停在 `"nytimes.com"`——**這不是付費牆截斷，是頁面完全沒渲染**。使用者同日以同一台機器手動開啟則完全正常，所以**不是帳號或訂閱問題**。判定為硬阻擋之前，依序試完這四步並把結果寫進 `run` 欄：
+
+1. **等久一點**：把等待由 4 秒拉到 8–10 秒再讀（NYT 前端較重，4 秒可能不夠）。
+2. **先開首頁再點進去**：直接 `navigate` 到文章 URL 有時會卡在反機器人的前置檢查；改成先開 `nytimes.com/international`、確認渲染成功後再從列表點連結。
+3. **換一個分頁**：關掉當前分頁、開新分頁重試（8/04 有過分頁狀態卡住的前例）。
+4. **確認不是整站**：試 `nytimes.com` 首頁本身，`innerText.length` 若也是 0，代表整站層級的阻擋，才記為當日不可用。
+
+**四步都失敗才算硬阻擋**，當次放棄、`run` 欄如實記錄，**不得使用任何鏡像站或快取**。B 組少了 NYT 時，把「美國政治與政策」的缺口交給 E 組（Politico＋The Hill）吸收，「歐洲」與「金融併購」則由 FT 加倍補位。
 
 **Reuters 的 DataDome 攔截屬間歇性，不要寫成「這家不能讀」**（2026/08/04 補）：8/04 早上該站對所有分類頁與文章頁回傳 DataDome CAPTCHA 挑戰頁（`geo.captcha-delivery.com`），約 10 次重試皆失敗，該日整版沒有任何 Reuters 卡片；**同日稍晚以同一台瀏覽器重測即完全恢復正常**（列表頁 51 條連結、單篇 17 段／3,329 字、`article:published_time` 正常）。所以：
 - 遇到 CAPTCHA 就是**當次放棄該來源**，`run` 欄如實記錄，**不得嘗試任何繞過手段**（這條在第 2 節是紅線）。
@@ -239,17 +257,26 @@ data/2026-07-30.json
 1. **先讀 `data/index.json`**，確認今天是否已產出（同日重跑就覆蓋當天的檔）。**不需要看昨天的內容來決定汰換什麼**——24 小時窗口制之下，今天的版本與昨天的版本完全獨立，唯一要跟昨天比對的是**原文連結去重**（見第 7 點）。
    - **1.5 算出本次窗口**：`from` ＝ 前一日台北 07:00，`to` ＝ 預計寫入時刻。用 `TZ=Asia/Taipei date` 取得，寫進 JSON 的 `window` 欄，並在讀新聞時就拿它當收錄門檻——**在採集階段就篩掉窗口外的文章，不要等到寫卡時才發現要丟掉**，那等於白讀。
 2. 用 Claude in Chrome 逐一讀 24 家當日重點（付費為主）。建議開 **7 個 subagent 平行分組**，每個先自己開新分頁再作業。**每組的括號內是它要負責餵飽的子類別**——分組的意義就是讓每個子類別都有人負責，沒被指派的組會空掉：
-   - A：Bloomberg ＋ WSJ（美股與財報、**信用債**）
+   - A：Bloomberg ＋ WSJ（美股與財報、**信用債**、**央行利率與匯率的政策面 ≥6**）
    - B：FT ＋ NYT ＋ WaPo（**歐洲**、美國政治與政策、金融併購與企業）
-   - C：Nikkei ＋ 華爾街見聞 ＋ CNBC ＋ MarketWatch（**日本**、**中國**、**並負責全套市場數據**）
-   - D：**Reuters ＋ Tom's Hardware ＋ OGJ ＋ SemiAnalysis**（能源與原物料、**黃金**、AI 與半導體；SemiAnalysis 依第 1.2 節，約每週 1～2 篇，窗口內沒有新文是常態）
+   - C：Nikkei ＋ 華爾街見聞 ＋ CNBC ＋ MarketWatch（**日本**、**中國**、**央行利率與匯率的市場數據面 ≥4**、**並負責全套市場數據**）
+   - D：**Reuters ＋ Tom's Hardware ＋ OGJ ＋ SemiAnalysis**（能源與原物料、**黃金 ≥3**、AI 與半導體；SemiAnalysis 依第 1.2 節，約每週 1～2 篇，窗口內沒有新文是常態）
    - E：Politico ＋ The Hill ＋ Barron's ＋ IBD（地緣政治、美國政治與政策、美股選股；後兩家依第 1.1 節的**內文量標準**實測，**不要用導覽列有沒有 Sign In 判斷**）
    - F：**鉅亨網 ＋ MoneyDJ ＋ TWSE／公開資訊觀測站**（**台灣**，台股專組）
-   - G：**Fierce Biotech ＋ STAT News ＋ KED Global ＋ Mint**（**生技健護**、**亞太（韓印東南亞）**）
+   - G：**Fierce Biotech ＋ STAT News ＋ Korea Herald ＋ Mint**（**生技健護**、**亞太（韓印東南亞）**）
 
-   **F 組最低產出：至少 10 則可成卡的台灣本地素材**（鉅亨 ≥4、MoneyDJ ≥3，其餘不限），外加下一點列的台股官方數據。台灣是核心組（≥10），而 2026/08/04 那輪台灣本地來源合計只有 9 則——**剛好差一則，所以這個門檻要從 8 提高到 10**。
-   **G 組最低產出：生技健護 ≥3、亞太 ≥3。** 這是 2026/08/04 第 9 次修訂新增的組，**它負責的兩個子類別在此之前完全沒有專責來源**（8/04 生技 3 則全靠綜合媒體順帶、韓印東南亞 3 則同理）。
-   **A 組額外責任：信用債 ≥3。** Bloomberg 的 credit 版面是唯一有系統性信用市場報導的來源，8/04 全站信用債 **0 則**就是因為沒有人負責去找。
+   **⚠ 分派表必須涵蓋全部十五組，一組都不能漏。** 這條是拿教訓換來的：第 9 次修訂把日圓／BOJ 從央行組移到日本組，卻**忘了指派誰負責「央行、利率與匯率」**——分派表裡它一次都沒出現。結果 2026/08/05 那輪七組回報後央行組只湊到 4 則（下限 10），必須加開一輪補位採集才補到 11 則。**素材從來不缺，缺的是有人負責。** 同一天黃金組也只到 5 則、同樣靠補位，因為 D 組同時扛能源、AI 與黃金三個主題。
+
+   **央行組刻意由兩組分工**，因為它的素材天然分成兩種：
+   - **A 組（Bloomberg＋WSJ）＝政策面**：Fed 官員發言、FOMC 前瞻與紀要、政策路徑辯論、其他央行的決策。與信用債同源——利差、殖利率曲線、Fed 路徑本來就是一組論述，交給同一組能省重複閱讀。
+   - **C 組（CNBC＋MarketWatch＋華爾街見聞）＝市場數據面**：殖利率曲線變動、美元指數、CME FedWatch 機率、匯率。C 組本來就負責全套市場數據，這是自然延伸。
+
+   **開始撰寫之前先核對一次分派表**：把十五組逐一對照，確認每一組都有至少一個 subagent 負責。少了誰，當場加派或自己補讀，不要等到寫卡時才發現缺額。
+
+   **F 組最低產出：至少 10 則可成卡的台灣本地素材**（鉅亨 ≥4、MoneyDJ ≥3，其餘不限），外加下一點列的台股官方數據。（2026/08/05 實測交出 14 則，門檻合理。）
+   **G 組最低產出：生技健護 ≥3、亞太 ≥3。**（8/05 實測交出生技 8 則、亞太 9 則，遠超下限。**生技的支柱是 Fierce Biotech**——7 篇全數完整取得；**STAT News 免費新聞太少**，窗口內 8 篇有 5 篇是 STAT Plus，**每天能收到 1～2 則就算正常，不要為了湊它而卡住**。）
+   **A 組額外責任：信用債 ≥3、央行政策面 ≥6。** 8/04 全站信用債 0 則就是因為沒人負責；指派給 A 組後 8/05 立刻交出 8 則。
+   **B 組額外責任：歐洲 ≥3。** 同理，8/04 只有 3 則順帶提及，指派後 8/05 交出 9 則以歐洲為主體的報導。
    **交不出配額時要在 `run` 欄具名寫出是哪一組、哪一家、卡在哪一步**，不要靜靜地讓其他來源補位。
 3. **每日必抓的官方數據**（F 組與 C 組分工）：
    - 台股：加權指數與櫃買收盤、**三大法人買賣超**、**融資餘額**、當日重要月營收與法說會（TWSE／MOPS）。抓取路徑：
