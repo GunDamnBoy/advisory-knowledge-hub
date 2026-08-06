@@ -63,11 +63,21 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 
 **正確的判斷方式——用實際取到的內文量：**
 
-1. `navigate` 之後**先等 3–5 秒**讓 SPA 完成渲染，不要立刻讀。
+1. `navigate` 之後**不要用固定秒數等待，改用輪詢**——見下方片段。固定 4 秒在 2026/08/06 被證實不夠：Barron's 那篇 AMD 報導等 4 秒只有 2 段／318 字（**看起來就像被擋**），補等 5 秒後變 10 段／2,563 字。**Barron's 已經連續三次以不同形式製造誤判**（8/03 用 Sign In 判斷、8/05 選擇器沒對上、8/06 等待不足），固定秒數治不了根本。
 2. **主要讀法是 `javascript_tool`**，**同一次呼叫就把內文與發布時間一起抓回來**（`ts` 是 24 小時窗口制的地基，漏抓等於這篇不能用）：
    ```js
-   await new Promise(r=>setTimeout(r,4000));
+   const SEL='article p, main p, [class*="ArticleBody"] p, [class*="body-content"] p,'
+     +' p[class*="Paragraph"], .available-content p, [class*="markup"] p';
+   const count=()=>[...document.querySelectorAll(SEL)].filter(p=>p.innerText.trim().length>60).length;
+   // 輪詢到段落數連續兩次不變（或最多 12 秒），再開始讀
+   let prev=-1, stable=0;
+   for(let i=0;i<12;i++){
+     await new Promise(r=>setTimeout(r,1000));
+     const n=count();
+     if(n===prev && n>0){ if(++stable>=2) break; } else { stable=0; prev=n; }
+   }
    const t=document.querySelector('meta[property="article:published_time"]')?.content
+     || document.querySelector('meta[name="article.published"]')?.content   // Barron's 用這個
      || document.querySelector('time[datetime]')?.getAttribute('datetime') || '';
    const paras=[...document.querySelectorAll(
      'article p, main p, [class*="ArticleBody"] p, [class*="body-content"] p,'
