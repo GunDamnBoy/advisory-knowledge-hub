@@ -16,13 +16,13 @@
 
 ---
 
-## 1. 主要來源（24 家，付費為主體、免費為輔）
+## 1. 主要來源（26 家，付費為主體、免費為輔）
 
 **付費訂閱**（使用者本人訂閱，於其已登入的 Chrome 讀）：
-Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)、FT (ft.com)、Nikkei Asia (asia.nikkei.com)、Washington Post (washingtonpost.com)、Barron's (barrons.com)、IBD (investors.com)、**Politico (politico.com)**、**The Hill (thehill.com)**、**SemiAnalysis (newsletter.semianalysis.com)**
+Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)、FT (ft.com)、Nikkei Asia (asia.nikkei.com)、Washington Post (washingtonpost.com)、Barron's (barrons.com)、IBD (investors.com)、**Politico (politico.com)**、**The Hill (thehill.com)**、**SemiAnalysis (newsletter.semianalysis.com)**、**The Economist (economist.com)**
 
 **免費公開**：
-**Reuters (reuters.com)**、CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)、**鉅亨網 Anue (news.cnyes.com)**、**MoneyDJ (moneydj.com)**、**Fierce Biotech (fiercebiotech.com)**、**STAT News (statnews.com)**、**Korea Herald (koreaherald.com)**、**Mint (livemint.com)**
+**Reuters (reuters.com)**、CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)、**鉅亨網 Anue (news.cnyes.com)**、**MoneyDJ (moneydj.com)**、**Fierce Biotech (fiercebiotech.com)**、**STAT News (statnews.com)**、**Korea Herald (koreaherald.com)**、**Mint (livemint.com)**、**TrendForce 集邦 (trendforce.com.tw / trendforce.com)**
 
 **官方／數據源**：**TWSE 台灣證券交易所與公開資訊觀測站 (twse.com.tw / mops.twse.com.tw)**、Fed／BOJ／ECB／日本財務省、EIA、CME FedWatch、美國財政部、公司 IR、政府與司法機構公告；**FRED 的 ICE BofA 信用利差（OAS）系列**、**FDA 藥證與臨床公告**、**World Gold Council 黃金 ETF 流向與央行購金**；另有 AP、CBS 等通訊社。
 
@@ -38,10 +38,16 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 
 **Politico 與 The Hill 專供政經分頁**（地緣政治＋美國政治）的深度與時效——國會立法、國防／撥款、選舉、司法與 Fed 獨立性等。
 
-來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-reuters`/`b-anue`/`b-moneydj`/`b-twse`/`b-semi`/`b-fierce`/`b-stat`/`b-kh`/`b-mint`/`b-pub`（另有已停用但保留的 `b-ked`）。
-（卡片 `src` 值＝去掉 `b-` 前綴：`bbg`、`wsj`、…、`twse`、`semi`、`fierce`、`stat`、`ked`、`mint`、`pub`。`pub` 保留給上列以外的通訊社與官方公告——**FRED、FDA、WGC 的數據卡都用 `pub`**。**Reuters 一律用 `reuters` 而非 `pub`**。）
+**2026/08/06 第 12 次修訂新增的兩家**：
 
-各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲；**Reuters＝亞洲時區最快、官方聲明與 Kpler／LSEG 數據的一手轉述、無付費牆摩擦**；**鉅亨網＝台股盤勢與台灣本地財經**；**MoneyDJ＝台廠供應鏈與個股拆解**；**TWSE／公開資訊觀測站＝月營收、三大法人買賣超、融資餘額、法說會行事曆等官方數據**；**SemiAnalysis＝AI 資料中心、加速器架構、記憶體與 CoWoS 供應鏈的第一手深度拆解，數字顆粒度是其他來源沒有的**；**Fierce Biotech／STAT＝新藥、臨床試驗、FDA 與藥價政策**；**Korea Herald＝韓國**；**Mint＝印度**。
+- **TrendForce 集邦（`tf`）＝記憶體、面板、功率半導體的一手報價與產能追蹤。** 動機是 **DRAM／NAND 價格至今全部靠二手轉引**——媒體引用的數字往往落後一至兩週、且經常沒寫清楚是合約價還是現貨價。TrendForce 是這些報價的原始發布方。**中文站 `trendforce.com.tw` 免費且更新較勤，英文站 `trendforce.com` 內容較少**，以中文站為主。歸 **D 組**，主要餵「AI 與半導體」（核心組 ≥10，8/05 曾剛好卡在 10 則零緩衝），次要餵「能源與原物料」（功率半導體、太陽能供應鏈）。
+  **報價卡的口徑一定要標清楚**：合約價 vs 現貨價、DDR4 vs DDR5、顆粒 vs 模組、月度 vs 週度——這正是二手轉引最常搞混的地方，也是收這家的意義所在。
+- **The Economist（`econ`）＝全球宏觀與政治經濟的框架性分析。** 它提供的不是速報而是**解釋框架**，對每月 House View 的歐洲、地緣政治、央行三節價值最高。歸 **B 組**。**週刊節奏的特殊處理見第 1.3 節。**
+
+來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-reuters`/`b-anue`/`b-moneydj`/`b-twse`/`b-semi`/`b-fierce`/`b-stat`/`b-kh`/`b-mint`/`b-tf`/`b-econ`/`b-pub`（另有已停用但保留的 `b-ked`）。
+（卡片 `src` 值＝去掉 `b-` 前綴：`bbg`、`wsj`、…、`twse`、`semi`、`fierce`、`stat`、`kh`、`mint`、**`tf`**、**`econ`**、`pub`。`pub` 保留給上列以外的通訊社與官方公告——**FRED、FDA、WGC 的數據卡都用 `pub`**。**Reuters 一律用 `reuters` 而非 `pub`**。）
+
+各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲；**Reuters＝亞洲時區最快、官方聲明與 Kpler／LSEG 數據的一手轉述、無付費牆摩擦**；**鉅亨網＝台股盤勢與台灣本地財經**；**MoneyDJ＝台廠供應鏈與個股拆解**；**TWSE／公開資訊觀測站＝月營收、三大法人買賣超、融資餘額、法說會行事曆等官方數據**；**SemiAnalysis＝AI 資料中心、加速器架構、記憶體與 CoWoS 供應鏈的第一手深度拆解，數字顆粒度是其他來源沒有的**；**Fierce Biotech／STAT＝新藥、臨床試驗、FDA 與藥價政策**；**Korea Herald＝韓國**；**Mint＝印度**；**TrendForce 集邦＝記憶體／面板／功率半導體的一手報價與產能追蹤**；**The Economist＝全球宏觀與政治經濟的框架性分析，週刊節奏見第 1.3 節**。
 
 **新增子類別對應的主力來源**（2026/08/04 第 9 次修訂，這張對照表是為了避免「加了子類別卻沒人負責去餵它」）：
 
@@ -50,8 +56,9 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 | 中國 | 華爾街見聞、FT、Reuters、Nikkei | — |
 | 日本 | Nikkei（最強）、Bloomberg、FT | BOJ、日本財務省 |
 | 亞太（韓／印／東南亞） | **Korea Herald**、**Mint**、Nikkei、Reuters | — |
-| 歐洲 | FT（最強）、Reuters、Bloomberg、WSJ | ECB |
+| 歐洲 | FT（最強）、**The Economist**、Reuters、Bloomberg、WSJ | ECB |
 | 生技健護 | **Fierce Biotech**、**STAT**、WSJ、FT | FDA 公告 |
+| AI 與半導體 | Tom's Hardware、SemiAnalysis、**TrendForce**、Bloomberg、FT | — |
 | 信用債 | Bloomberg（credit 版面最強）、FT、Reuters | **FRED 的 ICE BofA OAS** |
 | 黃金 | Bloomberg、Reuters、MarketWatch | **World Gold Council** |
 
@@ -135,6 +142,22 @@ SemiAnalysis 是 Substack 電子報，性質與其他日更媒體不同，收錄
 - **發文頻率約每週 1～2 篇，不是日更。**（2026/08/04 觀察：最近三篇為 8/03、7/29、7/25。）因此**大多數日子的 24 小時窗口內不會有新文章，這是正常狀態，不是採集失敗**，不必在 `run` 欄記為降級，也**絕對不要為了讓它出現而收錄窗口外的舊文**——窗口規則對所有來源一視同仁，沒有例外。
 - **有新文的那天，它通常值得直接寫成「AI 與半導體」那一組的深度卡**（`deep: true`），因為單篇資訊密度遠高於一般報導。一篇長文可視為彙整型文章，依第 5 節第 7 點的規則**最多拆成 3 張不同子類別的卡**（例如 AI 與半導體／台股與亞太／能源與原物料，資料中心電力議題常同時橫跨三者）。
 - 合規上與其他付費來源相同：只在使用者已登入的 Chrome 讀取，公開頁面只放原創摘要與原文連結，不轉載長篇原文或大段圖表數據。
+
+### 1.3 The Economist 的特殊處理（2026/08/06 新增）
+
+The Economist 是**週刊**，但與 SemiAnalysis 的「純週更」不同，它的線上內容分三種節奏，收錄方式要分開看：
+
+| 類型 | 節奏 | 收錄方式 |
+|---|---|---|
+| **週刊正文**（Leaders、Finance & economics、Briefing 等各版） | **每週四晚間至週五凌晨（台北時間）整批上線** | 這是主菜。出刊當天的窗口通常會一次出現十幾篇，挑 2～4 篇最相關的成卡 |
+| **線上專文**（Graphic detail、By Invitation、即時評論） | 平日不定期，一天 0～3 篇 | 有就收，沒有不強求 |
+| **The World in Brief**（每日早報彙整） | 每日 | **不要單獨成卡**——它是各家新聞的彙整摘要，不是原創報導，與本站定位重複 |
+
+- **出刊日的窗口會特別豐盛，其他日子可能一篇都沒有，兩種都是正常狀態。** 比照 SemiAnalysis：**窗口內沒有新文不記為降級，也絕對不要收錄窗口外的舊文**——即使那篇上週的封面故事看起來很適合。窗口規則對所有來源一視同仁。
+- **`ts` 取得**：文章頁有 `meta[property="article:published_time"]`，格式標準。**注意它的時間是 UTC**，換算台北要加 8 小時。
+- **內文讀法**：標準片段即可。**它的付費牆是硬牆**（未訂閱只給前一兩段），依第 1.1 節的內文量標準判定即可，不必特別處理。
+- **不要把它當速報用。** 它的價值是**解釋框架**而非時效——同一則新聞 Bloomberg 早二十小時就報了。**收它是為了拿觀點與框架，所以優先挑「分析」而非「消息」**：Leaders（社論）、Finance & economics、Briefing 這幾版優先，Business 版的公司報導反而可以略過（其他來源已經覆蓋）。
+- **出刊日值得寫深度卡**：週刊的 Briefing 或封面故事通常是全站當天最有框架感的素材，適合放在「歐洲」「地緣政治（中東與戰事）」或「央行、利率與匯率」組。
 
 ---
 
@@ -304,9 +327,9 @@ data/2026-07-30.json
    - **1.5 算出本次窗口**：`from` ＝ 前一日台北 07:00，`to` ＝ 預計寫入時刻。用 `TZ=Asia/Taipei date` 取得，寫進 JSON 的 `window` 欄，並在讀新聞時就拿它當收錄門檻——**在採集階段就篩掉窗口外的文章，不要等到寫卡時才發現要丟掉**，那等於白讀。
 2. 用 Claude in Chrome 逐一讀 24 家當日重點（付費為主）。建議開 **7 個 subagent 平行分組**，每個先自己開新分頁再作業。**每組的括號內是它要負責餵飽的子類別**——分組的意義就是讓每個子類別都有人負責，沒被指派的組會空掉：
    - A：Bloomberg ＋ WSJ（美股與財報、**信用債**、**央行利率與匯率的政策面 ≥5**）
-   - B：FT ＋ NYT ＋ WaPo（**歐洲**、美國政治與政策、金融併購與企業）
+   - B：FT ＋ NYT ＋ WaPo ＋ **The Economist**（**歐洲**、美國政治與政策、金融併購與企業；The Economist 依第 1.3 節，週四晚至週五凌晨整批出刊、平日 0～3 篇，窗口內沒有新文是常態）
    - C：Nikkei ＋ 華爾街見聞 ＋ CNBC ＋ MarketWatch（**日本**、**中國**、**央行利率與匯率的市場數據面 ≥3**、**並負責全套市場數據**）
-   - D：**Reuters ＋ Tom's Hardware ＋ OGJ ＋ SemiAnalysis**（能源與原物料、**黃金 ≥3**、AI 與半導體；SemiAnalysis 依第 1.2 節，約每週 1～2 篇，窗口內沒有新文是常態）
+   - D：**Reuters ＋ Tom's Hardware ＋ OGJ ＋ SemiAnalysis ＋ TrendForce**（能源與原物料、**黃金 ≥3**、AI 與半導體；SemiAnalysis 依第 1.2 節，約每週 1～2 篇，窗口內沒有新文是常態。**TrendForce 中文站 `trendforce.com.tw` 為主**，報價卡務必標明合約價／現貨價、DDR4／DDR5、顆粒／模組、月度／週度）
    - E：Politico ＋ The Hill ＋ Barron's ＋ IBD（地緣政治、美國政治與政策、美股選股；後兩家依第 1.1 節的**內文量標準**實測，**不要用導覽列有沒有 Sign In 判斷**）
    - F：**鉅亨網 ＋ MoneyDJ ＋ TWSE／公開資訊觀測站**（**台灣**，台股專組）
    - G：**Fierce Biotech ＋ STAT News ＋ Korea Herald ＋ Mint**（**生技健護**、**亞太（韓印東南亞）**）
@@ -379,7 +402,7 @@ data/2026-07-30.json
    REPO='/Users/kenny/advisory-knowledge-hub'   # 絕對路徑：避免掛載到其他 repo 時讀錯同名檔
    SRCOK={'bbg','wsj','nyt','ft','nikkei','wapo','barrons','cnbc','ibd','mw','toms',
           'ogj','politico','thehill','wscn','reuters','anue','moneydj','twse','semi',
-          'fierce','stat','ked','kh','mint','pub'}   # ked 已停用，保留供舊檔重跑檢查
+          'fierce','stat','ked','kh','mint','tf','econ','pub'}   # ked 已停用，保留供舊檔重跑檢查
    QUOTA={'美股與財報':10,'AI 與半導體':10,'央行、利率與匯率':8,'台灣':10,
           '中國':6,'日本':6,'能源與原物料':6,'金融、併購與企業':6,
           '地緣政治（中東與戰事）':6,'美國政治與政策':6,
@@ -508,6 +531,17 @@ data/2026-07-30.json
 ## 8. 變更紀錄（CHANGELOG）
 
 **維護規則**：這份 brief 與排程任務 `advisory-dashboard-daily` 的 prompt 是**一組兩份**，改任一邊都必須同步另一邊，並在本節加一筆。詳見 `MAINTENANCE.md`。日期由新到舊。
+
+### 2026-08-06（第 12 次修訂 · 新增 TrendForce 與 The Economist）
+
+**動機**：這次原本是要移除 Barron's，檢視後決定先留。**Barron's 並不是讀不到**——8/06 實測 8 篇中 7 篇完整取得，六天累計貢獻 27 則、在 8/06 那天的 23 個來源裡排第 7。它的問題是**連續三次以不同形式製造「看起來像被擋」的誤判**（8/03 用導覽列 Sign In 判斷、8/05 選擇器沒對上、8/06 等待 4 秒不足），而這三個坑已於第 11 次修訂全部補上（輪詢讀法、`p[class*="Paragraph"]`、`meta[name="article.published"]`）。**先觀察一週新讀法是否穩定，再決定去留。**
+
+改為新增兩家補當前的實際弱點：
+
+- **TrendForce 集邦（`tf`，免費，歸 D 組）**。動機是 **DRAM／NAND 價格至今全部靠二手轉引**——媒體引用的數字往往落後一至兩週，而且經常沒寫清楚是合約價還是現貨價。TrendForce 是這些報價的原始發布方。主要餵「AI 與半導體」（核心組 ≥10，8/05 曾剛好卡在 10 則零緩衝，是目前最脆弱的核心組），次要餵「能源與原物料」（功率半導體、太陽能供應鏈）。**以中文站 `trendforce.com.tw` 為主，英文站內容較少。** 已在 brief 寫明報價卡必須標清楚合約價／現貨價、DDR4／DDR5、顆粒／模組、月度／週度——**那正是二手轉引最常搞混的地方，也是收這家的全部意義**。
+- **The Economist（`econ`，付費訂閱，歸 B 組）**。它提供的不是速報而是**解釋框架**，對每月 House View 的歐洲、地緣政治、央行三節價值最高。**新增第 1.3 節處理它的週刊節奏**：週刊正文於台北時間週四晚至週五凌晨整批上線（出刊當天窗口內會一次出現十幾篇，挑 2～4 篇成卡，適合寫深度卡）、線上專文平日 0～3 篇、**The World in Brief 每日早報不得單獨成卡**（它是各家新聞的彙整，不是原創報導，與本站定位重複）。比照 SemiAnalysis：**窗口內沒有新文不記為降級，也絕對不要收窗口外的舊文。** 另註明它的 `ts` 是 UTC、換算台北要加 8 小時，且**優先挑 Leaders／Finance & economics／Briefing 這幾版的分析，Business 版的公司報導可略過**（其他來源已覆蓋）。
+- **來源由 24 家增為 26 家**；`index.html` 補上 `.b-tf`／`.b-econ` 的 CSS、`BADGE` 與 `SRCBAR`，檢查腳本 `SRCOK` 白名單同步加入 `tf`／`econ`。
+- **子類別來源對照表新增「AI 與半導體」一列**（Tom's Hardware、SemiAnalysis、TrendForce、Bloomberg、FT），歐洲那一列補上 The Economist。
 
 ### 2026-08-06（第 11 次修訂 · 台股官方源改走 API、讀取改輪詢、央行組特調）
 

@@ -103,6 +103,8 @@
   .b-stat{background:#f0fdfa;color:#0f766e;border-color:#99f6e4}
   .b-ked{background:#f5f3ff;color:#6d28d9;border-color:#d8caff}  /* 已停用，保留供 2026-08-05 封存檔渲染 */
   .b-kh{background:#eef4ff;color:#3b3a8f;border-color:#c6ccf7}
+  .b-tf{background:#ecfeff;color:#155e75;border-color:#67e8f9}
+  .b-econ{background:#fee2e2;color:#991b1b;border-color:#fca5a5}
   .b-mint{background:#fffbeb;color:#92400e;border-color:#fcd9a0}
   .b-pub{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
   .brief{background:linear-gradient(135deg,#ffffff 0%,#f4f8ff 100%);border:1px solid var(--line2);border-radius:16px;padding:24px 26px;margin-bottom:20px;box-shadow:0 2px 10px rgba(16,32,46,.05)}
@@ -214,10 +216,11 @@ const BADGE={bbg:"Bloomberg",wsj:"WSJ",nyt:"NYT",ft:"FT",nikkei:"Nikkei",wapo:"W
   barrons:"Barron's",cnbc:"CNBC",ibd:"IBD",mw:"MarketWatch",toms:"Tom's HW",ogj:"OGJ",
   politico:"Politico",thehill:"The Hill",wscn:"華爾街見聞",reuters:"Reuters",anue:"鉅亨網",
   moneydj:"MoneyDJ",twse:"TWSE／官方",semi:"SemiAnalysis",fierce:"Fierce Biotech",
-  stat:"STAT News",ked:"KED Global",kh:"Korea Herald",mint:"Mint",pub:"官方／通訊社"};
+  stat:"STAT News",ked:"KED Global",kh:"Korea Herald",mint:"Mint",
+  tf:"TrendForce",econ:"The Economist",pub:"官方／通訊社"};
 // SRCBAR＝頁面上的「主要來源」徽章列，只放現役來源；ked 已停用故不列，但 BADGE 與 CSS 必須保留，
 // 否則 2026-08-05 那一版的 3 則 KED 卡片會渲染出沒有樣式的空徽章。歷史封存不回頭修改。
-const SRCBAR=["bbg","wsj","nyt","ft","nikkei","wapo","barrons","cnbc","ibd","mw","toms","ogj","politico","thehill","wscn","reuters","anue","moneydj","twse","semi","fierce","stat","kh","mint"];
+const SRCBAR=["bbg","wsj","nyt","ft","nikkei","wapo","barrons","cnbc","ibd","mw","toms","ogj","politico","thehill","wscn","reuters","anue","moneydj","twse","semi","fierce","stat","kh","mint","tf","econ"];
 const PILLS=7;               // 日期列直接顯示的天數，更早的收進下拉選單
 const cache={};              // date -> day json
 let idx=null, cur=null;
