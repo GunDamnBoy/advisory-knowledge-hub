@@ -130,7 +130,8 @@
 
 - **Reuters 的 DataDome 攔截是間歇性的，不要誤判為永久失效。** 8/4 早上整站回傳 CAPTCHA 挑戰頁（`geo.captcha-delivery.com`）、約 10 次重試皆失敗，導致當日整版沒有任何 Reuters 卡片；**同日稍晚以同一台瀏覽器重測即完全恢復正常**（列表頁 51 條連結、單篇 17 段／3,329 字、`article:published_time` 正常）。brief 第 1.1 節已補上處置規則與 D 組的補位辦法。若未來連續多日被擋，才需要重新評估這家的定位。
 - **TPEx 櫃買指數尚無可靠抓取路徑。** 官方頁逾時、媒體端當日盤後彙整也未必寫出收盤點位。目前是「有就寫、沒有就略過」，尚未影響到任何硬性檢查項。
-- **候選的第三批來源**（時間撐得住再加）：TrendForce／集邦（目前 DRAM 價格都是二手轉引）、DIGITIMES（台廠訂單）、Punchbowl News（國會票數）。**已納入而不再列為候選的**：SemiAnalysis（第 8 次修訂，`semi`，D 組）；Fierce Biotech、STAT News、KED Global、Mint（第 9 次修訂，`fierce`／`stat`／`ked`／`mint`，G 組）。
+- **候選來源**（時間撐得住再加）：DIGITIMES（台廠訂單，但深度內容需訂閱）、Punchbowl News（國會票數）。**已納入而不再列為候選的**：SemiAnalysis（第 8 次修訂，`semi`，D 組）；Fierce Biotech、STAT News、KED Global、Mint（第 9 次修訂，G 組，其中 KED 已於第 10 次修訂由 Korea Herald `kh` 取代）；**TrendForce 集邦（`tf`，D 組）與 The Economist（`econ`，B 組）（第 12 次修訂）**。
+- **Barron's 處於留任觀察期（2026-08-06 起）。** 使用者原本要移除它，檢視後決定先留——**它並不是讀不到**（8/06 實測 8 篇中 7 篇完整，六天累計 27 則、在 8/06 的 23 個來源裡排第 7），問題是**連續三次以不同形式製造「看起來像被擋」的誤判**：8/03 用導覽列 Sign In 判斷、8/05 選擇器沒對上（2 段／419 字）、8/06 等待 4 秒不足（2 段／318 字，補等 5 秒變 10 段／2,563 字）。三個坑都已於第 11 次修訂補上（輪詢讀法、`p[class*="Paragraph"]`、`meta[name="article.published"]`）。**觀察判準寫在排程 prompt 第 5 步：新讀法下是否還會出現「看起來像被擋」的情況。** 若一週內不再發生就正式留任，若仍反覆就移除——**移除時 `barrons` 徽章的 CSS、`BADGE`、`SRCOK` 都要保留**（27 則歷史卡片要渲染），只從 `SRCBAR` 拿掉，作法同 `ked`。
 - **本知識庫是下游兩份報告的上游資料庫**：每週日 21:30 的 `convergence-weekly`（主題匯流訊號報）與每月的 House View。**第 9 次修訂的十五組結構是對照台新投顧全策組 House View 的章節訂出來的**（能源／利率／美股／科技／信用／歐日中／黃金＋策略頁區域展望）。日後若 House View 的章節調整，知識庫的子類別要跟著校準——**反過來說，不要為了知識庫版面好看而新增下游用不到的子類別。**
 - **SemiAnalysis 是每週 1～2 篇、不是日更**，brief 第 1.2 節已寫死「窗口內沒有新文是正常狀態、不記為降級、不得收錄窗口外舊文」。**這是本次擴充最容易被後續執行者破壞的地方**——某天為了湊「AI 與半導體」而回頭撈它上週的長文，檢查腳本的「逾期」那一項會抓到，但前提是執行者真的跑了腳本。
 - **HOME 的 deviceId 若因重裝 Chrome 或換設定檔而改變**，brief 第 6 節寫死的那一行會失效，需要更新。（2026-08-04 實測：`list_connected_browsers` 只剩 HOME 一台；另注意回傳的 `name` 在同一場對話中曾先後顯示為 Browser 1 與 Browser 2，**`name` 完全不可作為判斷依據，只認 deviceId**。）
