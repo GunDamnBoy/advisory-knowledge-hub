@@ -11,7 +11,7 @@
   "2026/08/05",
   "2026/08/06"
  ],
- "cards": 123,
+ "cards": 122,
  "overview": {
   "snap": [
    {
@@ -934,23 +934,6 @@
        ],
        "url": "https://asia.nikkei.com/business/markets/currencies/yen-stuck-at-157-as-markets-weigh-limits-of-us-japan-intervention",
        "tone": "t-orange"
-      },
-      {
-       "src": "nikkei",
-       "tag": "專訪",
-       "tagcls": "hot",
-       "date": "2026/08/05",
-       "ts": "2026-08-05T07:04+08:00",
-       "title": "貝森特專訪：美方出手是為防止日圓弱勢外溢成亞洲貨幣危機，「現在是高市經濟學的時候」",
-       "deep": false,
-       "body": "美國財政部長貝森特接受日經專訪表示，美方加入對日聯合干預，是為避免日圓弱勢擴散、造成亞洲貨幣不穩，並引 1990 年代亞洲金融危機為鑑——1998 年日圓一年內對美元貶值 30 日圓，加劇了當時的危機。這是近 28 年來首見的同類型日圓買進干預。貝森特說：「目前許多亞洲貨幣跟隨日圓，韓元弱是因為日圓弱；許多人認為人民幣被嚴重低估，而中方也不願僅因日圓弱勢就讓貨幣過度升值。」一名不具名資深官員指出日本高度依賴進口，弱勢日圓正在推升通膨。貝森特讚揚安倍時期改革「認真推動再通膨」，帶來企業改革與資本報酬率提升，「將出現長期以來第一次的基礎財政盈餘」，並稱「安倍經濟學那一段已經過去，現在是高市經濟學的時候」。他對 BOJ 總裁植田和男表達高度信任，並稱各方應把此事視為日本現行政策將帶來更強日圓的訊號。",
-       "bullets": [
-        "近 28 年來首見的同類日圓買進干預，美方以亞洲金融危機為鑑",
-        "貝森特：韓元弱因日圓弱，人民幣亦受制於日圓弱勢",
-        "稱「安倍經濟學已過去，現在是高市經濟學」，市場已在定價 BOJ 提前升息"
-       ],
-       "url": "https://asia.nikkei.com/editor-s-picks/interview/us-intervened-to-contain-asia-currency-risks-bessent-says",
-       "tone": "t-yellow"
       },
       {
        "src": "nikkei",
@@ -1940,7 +1923,7 @@
         "高收債 OAS 273bps，日變動 -5bps、週變動 -11bps（7/29 高點 287bps）",
         "7 月底隨 AI 股回檔走闊後 8 月全數回吐，利差仍在歷史極緊區間"
        ],
-       "url": "https://fred.stlouisfed.org/series/BAMLC0A0CM",
+       "url": "https://fred.stlouisfed.org/series/BAMLC0A0CM?cosd=2026-07-06&coed=2026-08-06",
        "tone": "t-green"
       },
       {
@@ -2037,7 +2020,7 @@
         "前一日現貨收 4,245.39 美元、單日 +4.11%，為 2 月初以來最大單日漲幅",
         "CME 黃金 CVOL 隱含波動率指數 24.8362，單日跳升 1.8807"
        ],
-       "url": "https://www.gold.org/goldhub/data",
+       "url": "https://www.cmegroup.com/markets/metals/precious/gold.quotes.html",
        "tone": "t-green"
       },
       {
@@ -2371,7 +2354,7 @@
    "本站為新聞摘要與觀察框架整理，<b>非投資建議</b>，不構成任何買賣要約。個股與 ETF 提及僅為說明市場動態之用。"
   ],
   "access": "執行於家中 MacBook Pro（HOME），透過 Claude in Chrome 讀取使用者已登入的付費訂閱。本輪直接指定 HOME 的 deviceId（8f82131f…）並先以 Bloomberg 單篇文章做可用性測試，取得 18 段／3,783 字元後才開始正式作業，未走 fallback、未降級。採集分 7 個 subagent 平行進行（A：Bloomberg＋WSJ／B：FT＋NYT＋WaPo／C：Nikkei＋華爾街見聞＋CNBC＋MarketWatch／D：Reuters＋Tom's Hardware＋OGJ＋SemiAnalysis／E：Politico＋The Hill＋Barron's＋IBD／F：鉅亨＋MoneyDJ＋TWSE／G：Fierce Biotech＋STAT＋Korea Herald＋Mint），十五個子類別於派工前逐一核對責任歸屬，本輪未加開補位採集。",
-  "run": "本輪共 123 則、七組平行採集約 47 分鐘，撰寫與檢查約 40 分鐘，10:40 完成。<b>發布前檢查五項歸零指標全為 0</b>（缺／壞 ts 0、逾期 0、未來 ts 0、date/ts 不一致 0、與前一版共用連結 0），十五個子類別全數達到分級下限，無違規拆卡，src 全數在徽章清單內。<b>本輪唯一確認被擋的來源是 Reuters</b>：採集初期 business/energy 列表頁正常取得 24 則標題，其後 markets/commodities、technology 兩個列表頁與第 1 篇正文全部回傳 DataDome 攔截頁特徵（title=\"reuters.com\"、bodylen=0、iframes=1），間隔約 40 分鐘的兩次複查結果一致，屬<b>階段性攔截</b>，已依紅線當次放棄、未嘗試任何繞過；D 組已改以 Tom's Hardware 與 OGJ 補位。連帶影響是<b>黃金組 4 則全部為官方數據卡（WGC、CME）</b>，缺少金價走勢與礦業股的媒體報導，這是本日最主要的品質降級點。<b>NYT 本輪完全正常</b>：依四步診斷梯度，第 1 步（等待拉長至 8–10 秒）即成功，/international 列表頁 innerText.length=8780、title 正確，5 篇文章頁 innerText.length 介於 6,756–11,167、article:published_time 皆正常，第 3、4 步未執行，8/05 的 length 全為 0 應為當次暫時性渲染失敗。Barron's 與 IBD 依內文量標準實測：Barron's 讀 8 篇、7 篇完整取得（8–36 段／1,689–10,329 字）、1 篇確認被擋（1 段／247 字且出現訂閱牆字串）；<b>IBD 讀 5 篇、5 篇全數完整取得（18–46 段／2,998–6,199 字）、0 篇被擋</b>。<b>Barron's 本輪新發現：4 秒等待不足</b>，AMD 那篇等 4 秒僅 2 段／318 字（看起來就像被擋），補等 5 秒後變成 10 段／2,563 字，建議改為輪詢至段落數穩定；其時間戳需用 meta[name=\"article.published\"]。<b>Korea Herald 啟用第二天可讀性良好</b>：8 篇全數完整取得、零攔截零登入牆（17–41 段／1,889–6,143 字），article:published_time 穩定為 +09:00，但列表頁須用 /Business 而非 /section/business。Fierce Biotech 窗口內 6 篇全數完整取得；STAT News 讀 4 篇、完整 2 篇、2 篇 STAT+ 被擋，符合「每天 1～2 則就算正常」的定位。<b>SemiAnalysis 窗口內無新文</b>（最新三篇為 8/03、7/29、7/25），屬常態、未收錄窗口外舊文。F 組交出 16 則台灣素材（鉅亨 10、MoneyDJ 6），達 ≥12 門檻。全站 15 組實際則數：美股 13、央行 10、台灣 14、中國 7、日本 8、亞太 7、歐洲 6、AI 12、金融 8、能源 8、生技 7、信用債 5、黃金 4、地緣 7、美政 7。<b>央行組 10 則剛好達標、零緩衝</b>，原因是本輪多家媒體對同一事件（Cook 談話、財政部再融資）重複報導，依「一件事不開兩張卡」原則合併後可用素材減少；明日應提高 A、C 兩組在該組的閱讀篇數。",
+  "run": "本輪共 122 則、七組平行採集約 47 分鐘，撰寫與檢查約 40 分鐘，10:40 完成。<b>發布前檢查五項歸零指標全為 0</b>（缺／壞 ts 0、逾期 0、未來 ts 0、date/ts 不一致 0、與前一版共用連結 0），十五個子類別全數達到分級下限，無違規拆卡，src 全數在徽章清單內。<b>本輪唯一確認被擋的來源是 Reuters</b>：採集初期 business/energy 列表頁正常取得 24 則標題，其後 markets/commodities、technology 兩個列表頁與第 1 篇正文全部回傳 DataDome 攔截頁特徵（title=\"reuters.com\"、bodylen=0、iframes=1），間隔約 40 分鐘的兩次複查結果一致，屬<b>階段性攔截</b>，已依紅線當次放棄、未嘗試任何繞過；D 組已改以 Tom's Hardware 與 OGJ 補位。連帶影響是<b>黃金組 4 則全部為官方數據卡（WGC、CME）</b>，缺少金價走勢與礦業股的媒體報導，這是本日最主要的品質降級點。<b>NYT 本輪完全正常</b>：依四步診斷梯度，第 1 步（等待拉長至 8–10 秒）即成功，/international 列表頁 innerText.length=8780、title 正確，5 篇文章頁 innerText.length 介於 6,756–11,167、article:published_time 皆正常，第 3、4 步未執行，8/05 的 length 全為 0 應為當次暫時性渲染失敗。Barron's 與 IBD 依內文量標準實測：Barron's 讀 8 篇、7 篇完整取得（8–36 段／1,689–10,329 字）、1 篇確認被擋（1 段／247 字且出現訂閱牆字串）；<b>IBD 讀 5 篇、5 篇全數完整取得（18–46 段／2,998–6,199 字）、0 篇被擋</b>。<b>Barron's 本輪新發現：4 秒等待不足</b>，AMD 那篇等 4 秒僅 2 段／318 字（看起來就像被擋），補等 5 秒後變成 10 段／2,563 字，建議改為輪詢至段落數穩定；其時間戳需用 meta[name=\"article.published\"]。<b>Korea Herald 啟用第二天可讀性良好</b>：8 篇全數完整取得、零攔截零登入牆（17–41 段／1,889–6,143 字），article:published_time 穩定為 +09:00，但列表頁須用 /Business 而非 /section/business。Fierce Biotech 窗口內 6 篇全數完整取得；STAT News 讀 4 篇、完整 2 篇、2 篇 STAT+ 被擋，符合「每天 1～2 則就算正常」的定位。<b>SemiAnalysis 窗口內無新文</b>（最新三篇為 8/03、7/29、7/25），屬常態、未收錄窗口外舊文。F 組交出 16 則台灣素材（鉅亨 10、MoneyDJ 6），達 ≥12 門檻。全站 15 組實際則數：美股 13、央行 10、台灣 14、中國 7、日本 7、亞太 7、歐洲 6、AI 12、金融 8、能源 8、生技 7、信用債 5、黃金 4、地緣 7、美政 7。<b>央行組 10 則剛好達標、零緩衝</b>，原因是本輪多家媒體對同一事件（Cook 談話、財政部再融資）重複報導，依「一件事不開兩張卡」原則合併後可用素材減少；明日應提高 A、C 兩組在該組的閱讀篇數。<b>跨版去重攔下 3 張卡</b>：(1) Nikkei 的貝森特專訪（發布於 8/5 07:04，落在昨日窗口重疊區、昨版已收），已整張移除，其內容已併入日本組的日圓深度卡，日本組因此為 7 則（仍達 ≥6）；(2) FRED 投等債 OAS 與 (3) WGC goldhub 兩張保底數據卡的網址與昨版相同，已依 brief「能帶日期參數就帶」原則，分別改用帶 cosd/coed 日期區間的 FRED 永久連結與 CME 官方黃金報價頁。這三張都是重疊窗口與每日重複官方數據頁的預期情況，非採集錯誤。",
   "limits": "本站為每日新聞閱讀中心，內容以原創摘要與觀點整理為主，不轉載原文；所有判斷僅供研究參考，非投資建議。市場數據來自各交易所、CME Group、FRED、EIA、World Gold Council 與證交所官方頁面，或媒體的當日盤後彙整，已於卡片內標註來源與時點；盤中報價與收盤價的口徑差異請以卡片標示為準。窗口外發布的重要事件（例如 EIA 週報之後的政策反應、週五非農）不在本版收錄範圍，將於次日版本補上。"
  }
 }
