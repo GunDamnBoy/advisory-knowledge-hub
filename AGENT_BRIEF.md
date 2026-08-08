@@ -16,13 +16,13 @@
 
 ---
 
-## 1. 主要來源（26 家，付費為主體、免費為輔）
+## 1. 主要來源（25 家，付費為主體、免費為輔）
 
 **付費訂閱**（使用者本人訂閱，於其已登入的 Chrome 讀）：
 Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)、FT (ft.com)、Nikkei Asia (asia.nikkei.com)、Washington Post (washingtonpost.com)、Barron's (barrons.com)、IBD (investors.com)、**Politico (politico.com)**、**The Hill (thehill.com)**、**SemiAnalysis (newsletter.semianalysis.com)**、**The Economist (economist.com)**
 
 **免費公開**：
-**Reuters (reuters.com)**、CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)、**鉅亨網 Anue (news.cnyes.com)**、**MoneyDJ (moneydj.com)**、**Fierce Biotech (fiercebiotech.com)**、**STAT News (statnews.com)**、**Korea Herald (koreaherald.com)**、**Mint (livemint.com)**、**TrendForce 集邦 (trendforce.com.tw / trendforce.com)**
+CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshardware.com)、Oil & Gas Journal (ogj.com)、華爾街見聞 (wallstreetcn.com)、**鉅亨網 Anue (news.cnyes.com)**、**MoneyDJ (moneydj.com)**、**Fierce Biotech (fiercebiotech.com)**、**STAT News (statnews.com)**、**Korea Herald (koreaherald.com)**、**Mint (livemint.com)**、**TrendForce 集邦 (trendforce.com.tw / trendforce.com)**
 
 **官方／數據源**：**TWSE 台灣證券交易所與公開資訊觀測站 (twse.com.tw / mops.twse.com.tw)**、Fed／BOJ／ECB／日本財務省、EIA、CME FedWatch、美國財政部、公司 IR、政府與司法機構公告；**FRED 的 ICE BofA 信用利差（OAS）系列**、**FDA 藥證與臨床公告**、**World Gold Council 黃金 ETF 流向與央行購金**；另有 AP、CBS 等通訊社。
 
@@ -32,7 +32,7 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 - **STAT News＝輔助，不是支柱**。免費新聞篇數偏少（8/05 窗口內 8 篇有 5 篇是 STAT Plus），**每天收到 1～2 則就算正常**。注意它的付費文在 DOM 上仍有 16 段／2,181 字，但扣掉記者簡介與訂閱區塊後實際內文只剩約 3 段／600 字——**依第 1.1 節判定為被擋就換篇，不要硬讀**。
 - **Korea Herald＝韓國主力**（2026/08/05 起取代 KED Global）。**KED Global 對未登入讀者只提供導言**：`section.news-body` 一律只有 255～360 字元、`<p>` 標籤 0 個，而且頁面上**沒有任何攔截字串**——這種「安靜的截斷」最危險，內文量標準會判定為被擋，但執行者若只看有沒有訂閱提示就會誤以為讀到了。Korea Herald 為全文免費，改用它當韓國的主力來源。
 - **Mint＝印度主力**，8/05 實測完整可讀，印度題材可獨立達標。
-- **東南亞不另設具名來源**：Nikkei Asia 的東南亞覆蓋已足夠，Reuters 補即時。
+- **東南亞不另設具名來源**：Nikkei Asia 的東南亞覆蓋已足夠。
 
 **`ked` 這個徽章代碼保留但不再使用。** 2026/08/05 那一版有 3 則 KED 卡片，代碼從 `index.html` 的 `BADGE` 與 CSS 移除會讓那天的封存檔渲染出沒有樣式的空徽章。**歷史封存不可回頭修改，所以舊代碼一律只從 `SRCBAR`（頁面上的來源列）移除、CSS 與 `BADGE` 永久保留。** 檢查腳本的 `SRCOK` 白名單同理保留 `ked`，否則拿舊檔重跑檢查會誤報。
 
@@ -44,7 +44,7 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
   **報價卡的口徑一定要標清楚**：合約價 vs 現貨價、DDR4 vs DDR5、顆粒 vs 模組、月度 vs 週度——這正是二手轉引最常搞混的地方，也是收這家的意義所在。
 - **The Economist（`econ`）＝全球宏觀與政治經濟的框架性分析。** 它提供的不是速報而是**解釋框架**，對每月 House View 的歐洲、地緣政治、央行三節價值最高。歸 **B 組**。**週刊節奏的特殊處理見第 1.3 節。**
 
-來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-reuters`/`b-anue`/`b-moneydj`/`b-twse`/`b-semi`/`b-fierce`/`b-stat`/`b-kh`/`b-mint`/`b-tf`/`b-econ`/`b-pub`（另有已停用但保留的 `b-ked`）。
+來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-anue`/`b-moneydj`/`b-twse`/`b-semi`/`b-fierce`/`b-stat`/`b-kh`/`b-mint`/`b-tf`/`b-econ`/`b-pub`（另有已停用但保留的 `b-ked`）。
 （卡片 `src` 值＝去掉 `b-` 前綴：`bbg`、`wsj`、…、`twse`、`semi`、`fierce`、`stat`、`kh`、`mint`、**`tf`**、**`econ`**、`pub`。`pub` 保留給上列以外的通訊社與官方公告——**FRED、FDA、WGC 的數據卡都用 `pub`**。**Reuters 一律用 `reuters` 而非 `pub`**。）
 
 各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲；**Reuters＝亞洲時區最快、官方聲明與 Kpler／LSEG 數據的一手轉述、無付費牆摩擦**；**鉅亨網＝台股盤勢與台灣本地財經**；**MoneyDJ＝台廠供應鏈與個股拆解**；**TWSE／公開資訊觀測站＝月營收、三大法人買賣超、融資餘額、法說會行事曆等官方數據**；**SemiAnalysis＝AI 資料中心、加速器架構、記憶體與 CoWoS 供應鏈的第一手深度拆解，數字顆粒度是其他來源沒有的**；**Fierce Biotech／STAT＝新藥、臨床試驗、FDA 與藥價政策**；**Korea Herald＝韓國**；**Mint＝印度**；**TrendForce 集邦＝記憶體／面板／功率半導體的一手報價與產能追蹤**；**The Economist＝全球宏觀與政治經濟的框架性分析，週刊節奏見第 1.3 節**。
@@ -53,14 +53,14 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 
 | 子類別 | 主力來源 | 保底數據源 |
 |---|---|---|
-| 中國 | 華爾街見聞、FT、Reuters、Nikkei | — |
+| 中國 | 華爾街見聞、FT、Nikkei、Bloomberg | — |
 | 日本 | Nikkei（最強）、Bloomberg、FT | BOJ、日本財務省 |
-| 亞太（韓／印／東南亞） | **Korea Herald**、**Mint**、Nikkei、Reuters | — |
-| 歐洲 | FT（最強）、**The Economist**、Reuters、Bloomberg、WSJ | ECB |
+| 亞太（韓／印／東南亞） | **Korea Herald**、**Mint**、Nikkei | — |
+| 歐洲 | FT（最強）、**The Economist**、Bloomberg、WSJ | ECB |
 | 生技健護 | **Fierce Biotech**、**STAT**、WSJ、FT | FDA 公告 |
 | AI 與半導體 | Tom's Hardware、SemiAnalysis、**TrendForce**、Bloomberg、FT | — |
-| 信用債 | Bloomberg（credit 版面最強）、FT、Reuters | **FRED 的 ICE BofA OAS** |
-| 黃金 | Bloomberg、Reuters、MarketWatch | **World Gold Council** |
+| 信用債 | Bloomberg（credit 版面最強）、FT、WSJ | **FRED 的 ICE BofA OAS** |
+| 黃金 | Bloomberg、MarketWatch、Barron's | **SPDR GLD 持倉＋COMEX 庫存** |
 
 **內容優先序**：每個分區以付費來源卡片打底、排前面；免費來源只補付費沒涵蓋到的角度。**核可的免費來源僅限**上列八家＋官方／數據源／通訊社；**嚴禁**內容農場或小報（Motley Fool、ETtoday、Intellectia、內容聚合站等）。
 
@@ -74,7 +74,7 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 2. **主要讀法是 `javascript_tool`**，**同一次呼叫就把內文與發布時間一起抓回來**（`ts` 是 24 小時窗口制的地基，漏抓等於這篇不能用）：
    ```js
    const SEL='article p, main p, [class*="ArticleBody"] p, [class*="body-content"] p,'
-     +' p[class*="Paragraph"], .available-content p, [class*="markup"] p';
+     +' p[class*="Paragraph"], div[class*="paragraph"], .available-content p, [class*="markup"] p';
    const count=()=>[...document.querySelectorAll(SEL)].filter(p=>p.innerText.trim().length>60).length;
    // 輪詢到段落數連續兩次不變（或最多 12 秒），再開始讀
    let prev=-1, stable=0;
@@ -84,7 +84,7 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
      if(n===prev && n>0){ if(++stable>=2) break; } else { stable=0; prev=n; }
    }
    const t=document.querySelector('meta[property="article:published_time"]')?.content
-     || document.querySelector('meta[name="article.published"]')?.content   // Barron's 用這個
+     || document.querySelector('meta[name="article.published"]')?.content   // Barron's 備援（實測多數走標準欄位）
      || document.querySelector('time[datetime]')?.getAttribute('datetime') || '';
    let paras=[...document.querySelectorAll(SEL)].map(p=>p.innerText.trim()).filter(x=>x.length>60);
    if(paras.length<8){   // 選擇器沒對上時的最後手段：抓全頁 p（Mint 需要這樣）
@@ -101,7 +101,7 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 
    | 來源 | 眉角 |
    |---|---|
-   | Barron's | 時間戳在 `meta[name="article.published"]`，不是標準的 `article:published_time`；渲染慢，務必用輪詢 |
+   | Barron's | **有兩種版型**：標準新聞版靠 `p[class*="Paragraph"]`（8/08 實測 8 篇全部一次到位、8–22 段）；**Investor Circle／Technical Analysis 版要靠 `div[class*="paragraph"]`**（8/08 那篇 Palantir 用標準選擇器只抓到 3 段／265 字、看起來就像被擋，換了之後拿到 20 段／4,629 字）。兩者都已併入標準片段。渲染慢，務必用輪詢。時間戳**實測多數走標準 `article:published_time`**，`meta[name="article.published"]` 留作備援 |
    | Mint | 段落要用全頁 `p` 才抓得到 |
    | Korea Herald | **列表頁必須用 `/Business`，`/section/business` 是殘頁**；`article:published_time` 穩定但時區是 **+09:00**，換算台北要減 1 小時 |
    | IBD | 只能 `navigate`，用 `fetch()` 取 HTML 只會拿到付費牆前導段 |
@@ -125,11 +125,13 @@ Bloomberg (bloomberg.com/asia)、WSJ (wsj.com)、NYT (nytimes.com/international)
 
 **四步都失敗才算硬阻擋**，當次放棄、`run` 欄如實記錄，**不得使用任何鏡像站或快取**。B 組少了 NYT 時，把「美國政治與政策」的缺口交給 E 組（Politico＋The Hill）吸收，「歐洲」與「金融併購」則由 FT 加倍補位。
 
-**Reuters 的 DataDome 攔截屬間歇性，不要寫成「這家不能讀」**（2026/08/04 補）：8/04 早上該站對所有分類頁與文章頁回傳 DataDome CAPTCHA 挑戰頁（`geo.captcha-delivery.com`），約 10 次重試皆失敗，該日整版沒有任何 Reuters 卡片；**同日稍晚以同一台瀏覽器重測即完全恢復正常**（列表頁 51 條連結、單篇 17 段／3,329 字、`article:published_time` 正常）。所以：
-- 遇到 CAPTCHA 就是**當次放棄該來源**，`run` 欄如實記錄，**不得嘗試任何繞過手段**（這條在第 2 節是紅線）。
-- 但**不要因此把 Reuters 移出來源清單或降低其配額**——它是間歇性風控，隔天甚至隔幾小時就會恢復。
-- 若 D 組在採集初期就確認 Reuters 被擋，**改以 Tom's Hardware 與 OGJ 加倍補位**（各多讀 3～5 篇），並把「地緣政治」的缺口交由 B、E 兩組吸收，不要讓整組空手而回。
-- **Reuters 被擋時要特別顧黃金組**（2026/08/06 教訓）：那輪黃金 4 則**全部是官方數據卡**（WGC、CME）、完全沒有媒體端的金價與礦業股報導，是當日最主要的品質降級點。Reuters 是黃金題材的主力，被擋時**改由 MarketWatch 的貴金屬版面與 Bloomberg 的商品版面補位**，不要讓該組只剩數據卡。
+**Reuters 已於 2026/08/08（第 13 次修訂）移出來源清單，不要再嘗試讀取。** 原因是 DataDome 反自動化風控在實際排程中幾乎全時生效——**八個版本裡只有 8/05 那天拿到 6 則，其餘七天全部零產出**（07/30、08/02、08/03、08/04、08/06、08/07、08/08）。
+
+**這段紀錄留著是因為它示範了一個容易重犯的判斷錯誤。** 8/04 那天曾寫下「屬間歇性、不要誤判為永久失效」，依據是「同日稍晚以同一台瀏覽器重測即完全恢復正常」——但**那次重測是在維護對話裡手動做的，不是在排程的採集流程中**。手動重測會成功、自動採集會被擋，這本身就是反自動化風控的預期行為。**用手動測試的結果去推論自動流程的可用性，是錯的**；要判斷一個來源值不值得留，看的應該是它在**實際排程中的產出紀錄**。
+
+- `reuters` 的徽章 CSS、`BADGE` 與檢查腳本的 `SRCOK` 白名單**永久保留**——8/05 那版有 6 則 Reuters 卡片要渲染，且拿舊檔重跑檢查不能誤報。**只從 `SRCBAR`（頁面上的來源列）與來源清單移除**，作法同 `ked`。
+- **不要因為「今天說不定會通」而回頭試。** 若未來想重新評估，正確做法是在維護對話裡連續觀察數日的實際排程紀錄，而不是在採集當下臨時起意。
+- **原本由 Reuters 負責的缺口已由補位機制實際承擔**（這也是判斷它可移除的依據）：能源與原物料交給 Tom's Hardware、OGJ、TrendForce；地緣政治交給 B、E 兩組；**黃金組交給 MarketWatch 貴金屬版面與 Bloomberg 商品版面**——8/08 實測黃金組已有 2 則媒體端報導，不再是「全數據卡零媒體」。
 
 ### 1.2 SemiAnalysis 的特殊處理（2026/08/04 新增）
 
@@ -329,7 +331,7 @@ data/2026-07-30.json
    - A：Bloomberg ＋ WSJ（美股與財報、**信用債**、**央行利率與匯率的政策面 ≥5**）
    - B：FT ＋ NYT ＋ WaPo ＋ **The Economist**（**歐洲**、美國政治與政策、金融併購與企業；The Economist 依第 1.3 節，週四晚至週五凌晨整批出刊、平日 0～3 篇，窗口內沒有新文是常態）
    - C：Nikkei ＋ 華爾街見聞 ＋ CNBC ＋ MarketWatch（**日本**、**中國**、**央行利率與匯率的市場數據面 ≥3**、**並負責全套市場數據**）
-   - D：**Reuters ＋ Tom's Hardware ＋ OGJ ＋ SemiAnalysis ＋ TrendForce**（能源與原物料、**黃金 ≥3**、AI 與半導體；SemiAnalysis 依第 1.2 節，約每週 1～2 篇，窗口內沒有新文是常態。**TrendForce 中文站 `trendforce.com.tw` 為主**，報價卡務必標明合約價／現貨價、DDR4／DDR5、顆粒／模組、月度／週度）
+   - D：**Tom's Hardware ＋ OGJ ＋ SemiAnalysis ＋ TrendForce**（能源與原物料、**黃金 ≥3**、AI 與半導體；SemiAnalysis 依第 1.2 節，約每週 1～2 篇，窗口內沒有新文是常態。**TrendForce 中文站 `trendforce.com.tw` 為主**，報價卡務必標明合約價／現貨價、DDR4／DDR5、顆粒／模組、月度／週度）
    - E：Politico ＋ The Hill ＋ Barron's ＋ IBD（地緣政治、美國政治與政策、美股選股；後兩家依第 1.1 節的**內文量標準**實測，**不要用導覽列有沒有 Sign In 判斷**）
    - F：**鉅亨網 ＋ MoneyDJ ＋ TWSE／公開資訊觀測站**（**台灣**，台股專組）
    - G：**Fierce Biotech ＋ STAT News ＋ Korea Herald ＋ Mint**（**生技健護**、**亞太（韓印東南亞）**）
@@ -379,7 +381,10 @@ data/2026-07-30.json
    - 能源：**EIA 週報庫存**（週三）、每季**美國財政部再融資公告（QRA）**的日期與規模
    - 匯率：日本財務省的干預實績公布（月底）與 BOJ 貨幣市場初步數據
    - **信用債（第 9 次修訂新增，衛星組保底卡）**：FRED 的 ICE BofA 美國投等債 OAS `https://fred.stlouisfed.org/series/BAMLC0A0CM` 與高收益債 OAS `https://fred.stlouisfed.org/series/BAMLH0A0HYM2`——記錄當日值與較前一日、前一週的變動 bps。**即使當天沒有任何信用市場新聞，這張數據卡也要出。** 累積起來就是 House View 講 CSP 債務與利差時的那條曲線。
-   - **黃金（第 9 次修訂新增，衛星組保底卡）**：金價（現貨與 COMEX 近月**要分開標**）、World Gold Council 的 ETF 流向與央行購金 `https://www.gold.org/goldhub/data`。**同樣是每天必出的保底卡。**
+   - **黃金（衛星組保底卡，2026/08/08 換源）**：金價（現貨與 COMEX 近月**要分開標**）＋下列兩個**免登入**數據源：
+     - **SPDR Gold Shares（GLD）每日持倉** `https://www.spdrgoldshares.com/usa/`——全球最大黃金 ETF，持倉噸數的日變化是**資金流向**的標準代理指標。
+     - **COMEX 黃金庫存**（CME 官網）——**實體交割**面向，與 ETF 流向意涵不同，兩個角度互補。
+     **不要再用 World Gold Council 的 `goldhub/data` 當保底來源**：它的 ETF 流向數字**要求登入才能看**，2026/08/08 那輪執行者依合規紅線未建帳號、未取得（處置正確）。WGC 的公開頁面仍可作為背景引用，但**保底卡的意義就是「每天一定拿得到」，靠一個需要登入的來源等於沒有保底**。**同樣是每天必出的保底卡。**
 4. 依本文件與第 3.5 節的 schema 產生 `data/<今天>.json`，並把今天加進 `index.json` 的 `days`。
 5. **直接用檔案工具寫入** `/Users/kenny/advisory-knowledge-hub/data/`。`index.html` 是外殼，**除非要改版面，否則不需要動它**。
 6. 之後**不需手動 push**：使用者 Mac 上的 launchd 背景程式（`com.kenny.dashpush`，每 3 分鐘）會自動 `git add`＋`commit`＋`push`；GitHub Actions 自動部署到 `https://gundamnboy.github.io/advisory-knowledge-hub/`。
@@ -388,7 +393,7 @@ data/2026-07-30.json
    - **每張卡片的 `date` 與其 `ts` 的台北日期一致**
    - 每個子類別達到第 4.1 節的分級下限（≥10／≥6／≥3），且十五組一個都不能少，全站 95～125 則
    - 每張卡片都有真實可點的原文連結
-   - **不得與前一版共用任何原文連結**（跨版去重，無例外）
+   - **不得與前一版共用任何原文連結**（跨版去重）。**唯一豁免：每日更新但網址固定的官方數據頁**（TrendForce 報價、FRED、SPDR GLD、CME、TWSE／TPEx、MOPS）——這些頁面**內容每天都變、只有 URL 相同**，去重規則的本意是「同一篇報導不要連兩天成卡」，對它們並不適用。豁免清單寫在檢查腳本的 `DEDUP_EXEMPT`
    - **本版內部原則上一個 `url` 只成一張卡**，例外見下方「彙整型文章的拆卡規則」
    - **`url` 必須是單篇文章的永久連結**，不得使用列表頁、指數頁、首頁或分類頁
    - **每張卡片的 `src` 值必須在第 1 節的徽章清單內**，否則前端會渲染出沒有樣式的空徽章
@@ -408,6 +413,10 @@ data/2026-07-30.json
           '地緣政治（中東與戰事）':6,'美國政治與政策':6,
           '歐洲':3,'亞太（韓國、印度、東南亞）':3,'生技健護':3,'信用債':3,'黃金':3}
    # 分組名必須與 QUOTA 的鍵完全一致（含全形括號與空格），否則會被判為「不在 QUOTA 表」
+   # 每日更新但網址固定的官方數據頁，豁免跨版去重（內容每天都變，只有 URL 相同）
+   DEDUP_EXEMPT=('trendforce.com','fred.stlouisfed.org','spdrgoldshares.com',
+                 'cmegroup.com','gold.org','twse.com.tw','tpex.org.tw','mopsfin.twse.com.tw')
+   exempt=lambda u: any(h in u for h in DEDUP_EXEMPT)
    d=json.load(open('%s/data/%s.json'%(REPO,TODAY)))
    w=d.get('window')
    assert w, '★致命：頂層缺 window 欄，補上再檢查'
@@ -432,10 +441,10 @@ data/2026-07-30.json
    prevmeta=next((x for x in days if x['date']!=TODAY),None)
    prev=json.load(open('%s/%s'%(REPO,prevmeta['file']))) if prevmeta else {'sections':[]}
    prevurl={c['url'] for s in prev['sections'] for g in s['groups'] for c in g['cards']}
-   dup=[c['title'] for _,c in cards if c['url'] in prevurl]
+   dup=[c['title'] for _,c in cards if c['url'] in prevurl and not exempt(c['url'])]
    u=collections.defaultdict(list)
    for lab,c in cards: u[c['url']].append(lab)
-   multi={k:v for k,v in u.items() if len(v)>1}
+   multi={k:v for k,v in u.items() if len(v)>1 and not exempt(k)}
    n=len(cards)
    print('總數',n,'OK' if 95<=n<=125 else '★不在 95–125')
    print('缺/壞 ts',len(nots),nots[:3])
