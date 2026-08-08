@@ -71,42 +71,7 @@ CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshard
 **正確的判斷方式——用實際取到的內文量：**
 
 1. `navigate` 之後**不要用固定秒數等待，改用輪詢**——見下方片段。固定 4 秒在 2026/08/06 被證實不夠：Barron's 那篇 AMD 報導等 4 秒只有 2 段／318 字（**看起來就像被擋**），補等 5 秒後變 10 段／2,563 字。**Barron's 已經連續三次以不同形式製造誤判**（8/03 用 Sign In 判斷、8/05 選擇器沒對上、8/06 等待不足），固定秒數治不了根本。
-2. **主要讀法是 `javascript_tool`**，**同一次呼叫就把內文與發布時間一起抓回來**（`ts` 是 24 小時窗口制的地基，漏抓等於這篇不能用）：
-   ```js
-   const SEL='article p, main p, [class*="ArticleBody"] p, [class*="body-content"] p,'
-     +' p[class*="Paragraph"], div[class*="paragraph"], .available-content p, [class*="markup"] p';
-   const count=()=>[...document.querySelectorAll(SEL)].filter(p=>p.innerText.trim().length>60).length;
-   // 輪詢到段落數連續兩次不變（或最多 12 秒），再開始讀
-   let prev=-1, stable=0;
-   for(let i=0;i<12;i++){
-     await new Promise(r=>setTimeout(r,1000));
-     const n=count();
-     if(n===prev && n>0){ if(++stable>=2) break; } else { stable=0; prev=n; }
-   }
-   const t=document.querySelector('meta[property="article:published_time"]')?.content
-     || document.querySelector('meta[name="article.published"]')?.content   // Barron's 備援（實測多數走標準欄位）
-     || document.querySelector('time[datetime]')?.getAttribute('datetime') || '';
-   let paras=[...document.querySelectorAll(SEL)].map(p=>p.innerText.trim()).filter(x=>x.length>60);
-   if(paras.length<8){   // 選擇器沒對上時的最後手段：抓全頁 p（Mint 需要這樣）
-     paras=[...document.querySelectorAll('p')].map(p=>p.innerText.trim()).filter(x=>x.length>60);
-   }
-   JSON.stringify({published:t, n:paras.length, chars:paras.join(' ').length, text:paras.join('\n')});
-   ```
-   **選擇器清單的最後三段各有由來，不要為了「精簡」把它們拿掉：**
-   - `p[class*="Paragraph"]` ← **Barron's 專用（2026/08/05 補，重要）**。Barron's 的內文段落 class 是 emotion 動態雜湊、**不在 `article` 或 `main` 底下**，只用前四段選擇器會抓到 2 段／419 字，**看起來就像被付費牆擋住**；加上這一段可取得 22 段／4,444 字。8/03 已經因為讀取方法誤判整家 Barron's 一次，這是同一個坑的第二種形式。
-   - `.available-content p, [class*="markup"] p` ← Substack（SemiAnalysis）專用。
-   - **`paras.length<8` 時退回全頁 `p`** ← **Mint 專用（2026/08/06 補）**，它的內文不在上述任何容器內。這一段同時也是所有未知站台的保險絲。
-
-   **個別來源的已知眉角（實測，不要重新踩）：**
-
-   | 來源 | 眉角 |
-   |---|---|
-   | Barron's | **有兩種版型**：標準新聞版靠 `p[class*="Paragraph"]`（8/08 實測 8 篇全部一次到位、8–22 段）；**Investor Circle／Technical Analysis 版要靠 `div[class*="paragraph"]`**（8/08 那篇 Palantir 用標準選擇器只抓到 3 段／265 字、看起來就像被擋，換了之後拿到 20 段／4,629 字）。兩者都已併入標準片段。渲染慢，務必用輪詢。時間戳**實測多數走標準 `article:published_time`**，`meta[name="article.published"]` 留作備援 |
-   | Mint | 段落要用全頁 `p` 才抓得到 |
-   | Korea Herald | **列表頁必須用 `/Business`，`/section/business` 是殘頁**；`article:published_time` 穩定但時區是 **+09:00**，換算台北要減 1 小時 |
-   | IBD | 只能 `navigate`，用 `fetch()` 取 HTML 只會拿到付費牆前導段 |
-   | STAT News | 付費文 DOM 上仍有 16 段／2,181 字，但扣掉記者簡介與訂閱區塊後實際只剩約 3 段／600 字 |
-
+2. **主要讀法是 `javascript_tool`，程式碼已外部化為 `scripts/read_article.js`（唯一權威版本）**——同一次呼叫抓內文＋發布時間（`ts` 是窗口制的地基，漏抓等於這篇不能用）。**主 agent 每天用 Read 讀該檔一次，逐字放進每個 subagent 的提示**；改選擇器只改該檔（各段選擇器的由來見檔內註解）。
 3. **判定標準**：段落數 ≥8 且內文字數 ≥1,500 → 視為完整取得，正常成卡。
    段落數 ≤3 或內文字數 <800，**且**頁面出現明確的攔截字串（Barron's 的 "Continue reading this article with a Barron's subscription"、WSJ 的訂閱牆元件）→ 才算真的被擋。
    **段落數少的時候，先懷疑選擇器沒對上，再懷疑被擋。** 判定被擋之前，至少換一組選擇器（`p[class*="Paragraph"]`、`[class*="content"] p`、`div[data-testid] p`）重試一次。
@@ -400,71 +365,11 @@ data/2026-07-30.json
    - **沒有「未來的 `ts`」**（晚於 `window.to`）——出現通常代表時區換算錯了，而且錯得很安靜
    - JSON 可被 `json.load` 正常解析、`index.json` 的 `days` 已含今天且由新到舊排序
 
-   檢查腳本（直接跑，不要用眼睛掃）：
-   ```python
-   import json,datetime as dt,collections,re
-   TODAY='<今天 YYYY-MM-DD>'
-   REPO='/Users/kenny/advisory-knowledge-hub'   # 絕對路徑：避免掛載到其他 repo 時讀錯同名檔
-   SRCOK={'bbg','wsj','nyt','ft','nikkei','wapo','barrons','cnbc','ibd','mw','toms',
-          'ogj','politico','thehill','wscn','reuters','anue','moneydj','twse','semi',
-          'fierce','stat','ked','kh','mint','tf','econ','pub'}   # ked 已停用，保留供舊檔重跑檢查
-   QUOTA={'美股與財報':10,'AI 與半導體':10,'央行、利率與匯率':8,'台灣':10,
-          '中國':6,'日本':6,'能源與原物料':6,'金融、併購與企業':6,
-          '地緣政治（中東與戰事）':6,'美國政治與政策':6,
-          '歐洲':3,'亞太（韓國、印度、東南亞）':3,'生技健護':3,'信用債':3,'黃金':3}
-   # 分組名必須與 QUOTA 的鍵完全一致（含全形括號與空格），否則會被判為「不在 QUOTA 表」
-   # 每日更新但網址固定的官方數據頁，豁免跨版去重（內容每天都變，只有 URL 相同）
-   DEDUP_EXEMPT=('trendforce.com','fred.stlouisfed.org','spdrgoldshares.com',
-                 'cmegroup.com','gold.org','twse.com.tw','tpex.org.tw','mopsfin.twse.com.tw')
-   exempt=lambda u: any(h in u for h in DEDUP_EXEMPT)
-   d=json.load(open('%s/data/%s.json'%(REPO,TODAY)))
-   w=d.get('window')
-   assert w, '★致命：頂層缺 window 欄，補上再檢查'
-   frm=dt.datetime.fromisoformat(w['from']); to=dt.datetime.fromisoformat(w['to'])
-   cards=[(g['label'],c) for s in d['sections'] for g in s['groups'] for c in g['cards']]
-   def T(c):                      # 缺 ts 或格式錯時回 None，不要讓整支腳本中斷
-       try: return dt.datetime.fromisoformat(c['ts'])
-       except Exception: return None
-   def islist(u):                 # 單篇文章的最後一段通常有連字號或長數字 ID
-       p=re.sub(r'^https?://[^/]+','',u).split('?')[0].strip('/')
-       if not p: return True
-       last=p.split('/')[-1]
-       return '-' not in last and not re.search(r'\d{4,}',last)
-   nots=[c['title'] for _,c in cards if T(c) is None]
-   bad =[c['title'] for _,c in cards if T(c) and T(c)<frm]
-   fut =[c['title'] for _,c in cards if T(c) and T(c)>to]
-   mism=[c['title'] for _,c in cards if T(c) and T(c).strftime('%Y/%m/%d')!=c['date']]
-   badsrc=[(c.get('src'),c['title'][:30]) for _,c in cards if c.get('src') not in SRCOK]
-   listy=sorted({c['url'] for _,c in cards if islist(c['url'])})
-   # 前一版＝index.json 裡「日期不等於今天」的最新一筆，不可直接用 days[1]
-   days=json.load(open('%s/data/index.json'%REPO))['days']
-   prevmeta=next((x for x in days if x['date']!=TODAY),None)
-   prev=json.load(open('%s/%s'%(REPO,prevmeta['file']))) if prevmeta else {'sections':[]}
-   prevurl={c['url'] for s in prev['sections'] for g in s['groups'] for c in g['cards']}
-   dup=[c['title'] for _,c in cards if c['url'] in prevurl and not exempt(c['url'])]
-   u=collections.defaultdict(list)
-   for lab,c in cards: u[c['url']].append(lab)
-   multi={k:v for k,v in u.items() if len(v)>1 and not exempt(k)}
-   n=len(cards)
-   print('總數',n,'OK' if 95<=n<=125 else '★不在 95–125')
-   print('缺/壞 ts',len(nots),nots[:3])
-   print('逾期',len(bad),bad[:3],'| 未來 ts',len(fut),fut[:3])
-   print('date/ts 不一致',len(mism),mism[:3],'| 與前一版重複',len(dup),dup[:3])
-   print('src 不在清單',badsrc[:3] or '無')
-   print('疑似列表頁（需人工確認）',listy or '無')
-   print('比對的前一版：',prevmeta['file'] if prevmeta else '無')
-   for k,v in multi.items():
-       ok = len(v)<=3 and len(set(v))==len(v)   # 至多 3 張、且不得兩張同組
-       print(('拆卡OK ' if ok else '★違規 '),len(v),v,k[:70])
-   seen=set()
-   for s in d['sections']:
-       for g in s['groups']:
-           lab=g['label']; seen.add(lab); q=QUOTA.get(lab)
-           if q is None: print('★分組名不在 QUOTA 表：',lab); continue
-           print('%-22s %2d / 需 %d %s'%(lab,len(g['cards']),q,'OK' if len(g['cards'])>=q else '★不足'))
-   missing=set(QUOTA)-seen
-   print('★缺少的分組：',missing or '無')
+   **檢查腳本已外部化為 `scripts/check.py`（唯一權威版本），直接跑、不要用眼睛掃：**
    ```
+   python3 /Users/kenny/advisory-knowledge-hub/scripts/check.py <今天 YYYY-MM-DD>
+   ```
+   出口碼 0＝通過、1＝有硬性失敗。`QUOTA`、`SRCOK`、`DEDUP_EXEMPT` 三張表都在腳本裡，**改分組、下限、來源代碼或去重豁免時只改該檔**，並同步第 4.1 節的散文版。腳本刻意設計成「缺 `ts` 也不會中斷」——檢查機制自己安靜失效，比沒有檢查更危險。
 
    **必須是 0 的五項**：缺/壞 `ts`、逾期、未來 `ts`、`date`/`ts` 不一致、與前一版重複。**另外不可出現任何「★違規」的拆卡，`src` 不在清單必須是「無」，十五組都要 OK 且「缺少的分組」必須是「無」。**
 
