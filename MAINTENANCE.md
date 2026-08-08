@@ -11,10 +11,14 @@
 
 | # | 檔案／位置 | 角色 | 誰會讀它 |
 |---|---|---|---|
-| 1 | `~/advisory-knowledge-hub/AGENT_BRIEF.md` | **完整規格**：來源清單、讀取方法、時效原則、JSON schema、版面結構、合規紅線 | 每日排程在第 0 步完整讀過 |
-| 2 | 排程任務 `advisory-dashboard-daily` 的 prompt | **執行手冊**：當天的步驟、分組、檢查清單。內容是 brief 的濃縮版 | 排程觸發時直接執行 |
-| 3 | `~/advisory-knowledge-hub/index.html` | 前端外殼：CSS、渲染邏輯、日期切換列、來源徽章 | 瀏覽器 |
-| 4 | `~/advisory-knowledge-hub/data/*.json` | 每日內容，永久封存 | `index.html` |
+| 1 | `AGENT_BRIEF.md` | **執行規格**（1～7 節） | 每日排程第 0 步完整讀 |
+| 2 | `CHANGELOG.md` | 變更紀錄（2026/08/08 自 brief 第 8 節拆出，佔原 brief 31%） | **每日排程不讀**，維護時讀 |
+| 3 | `scripts/check.py` | **發布前檢查的唯一權威版本**（QUOTA／SRCOK／DEDUP_EXEMPT 三張表都在這） | 每日排程第 5 步執行；維護體檢也用它 |
+| 4 | `scripts/read_article.js` | **標準文章讀法的唯一權威版本** | 主 agent 每天讀一次、轉發給 subagent |
+| 5 | 排程任務 `advisory-dashboard-daily` 的 prompt | **精簡工作流**：步驟順序＋brief 節次指標，**不再重複規格內容** | 排程觸發時直接執行 |
+| 6 | `index.html` ＋ `data/*.json` | 前端外殼＋每日封存 | 瀏覽器 |
+
+**單一來源原則（2026/08/08 第 14 次修訂確立）**：程式碼只存在於 `scripts/`，規格只存在於 brief，prompt 只描述流程。改程式碼不必動 brief 與 prompt；改規格不必動 prompt（除非流程本身變了）。這消滅了歷史上最常見的「兩份程式碼不同步」故障模式，也把每日固定 token 開銷降了約四成。
 
 **最重要的一條規則：第 1 項與第 2 項是一組兩份，改任一邊都必須同步另一邊。**
 兩者不同步時，排程會拿到互相矛盾的指示，而且不會報錯——它會安靜地照其中一份做。
@@ -51,6 +55,8 @@
 - **每一次大改動當天都會留下新的不同步，沒有例外。** 第 2 次修訂漏了 brief、第 4 次修訂漏了三處（JS 讀法、檢查腳本、E 組用語）。改完當下**一定要再比對一次同步清單**，不要等隔天體檢才發現。最容易漏的是**兩段程式碼**（發布前檢查腳本、`javascript_tool` 讀法），因為它們藏在文件中段、不像散文那樣一眼看得出差異。
 - **排程 prompt 是整份取代，不是局部編輯。** `update_scheduled_task` 送出的 `prompt` 會完全覆蓋舊的，漏帶的段落等於被刪除。改之前先 Read 一次現有全文。
 - **本 repo 與 `~/podcast-knowledge-digest` 有 7 個同名檔案**：`AGENT_BRIEF.md`、`MAINTENANCE.md`、`README.md`、`index.html`、`data/index.json`、`data/2026-07-30.json`、`data/2026-08-02.json`。**任何腳本一律用絕對路徑**（brief 第 5 節的檢查腳本已改用 `REPO` 常數）。
+- **批次改文件不要用帶 `re.S` 的貪婪正則。** 2026-08-08 一支 `(   - .*\n)+` 配上 `re.S` 把 35k 字元的 brief 吃到剩 5.7k。防範三件套：替換前先量測 match 長度是否在預期範圍、用精確頭尾錨點而非萬用字元、改完立刻驗證檔案總長。
+- **誤刪檔案內容時，可用 Python + zlib 直接讀 `.git/objects` 救回**（純讀取、不產生 index.lock，不違反「不跑 git 指令」的規則）。8/08 就是靠解析 HEAD → tree → blob 從最近一次 dashpush 自動 commit 救回 brief。**dashpush 每 180 秒 commit 一次，也就是說任何檔案的災難性錯誤有最多 3 分鐘的空窗會被推上去**——出事時第一件事是確認壞版本有沒有已被 commit。
 - **維護作業若為了改另一條產線而連了 podcast 資料夾，做完要記得移除。** 排程任務的工作資料夾會保留這次連線——2026-08-03 就發生過：在排程執行的工作階段裡連了 podcast repo，結果 `advisory-dashboard-daily` 的 Working folders 多出一個它根本用不到、卻有寫入權的 Public repo。**目前沒有工具可以程式化移除，只能在 App 的 Working folders 面板手動拿掉。**
 
 ---
