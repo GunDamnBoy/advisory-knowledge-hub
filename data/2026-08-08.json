@@ -126,7 +126,7 @@
    "財務數字以官方或多來源交叉為原則，數字照原文不四捨五入；不確定者於卡片內標註。"
   ],
   "access": "本次來源構成——付費訂閱 12 家：Bloomberg、WSJ、NYT、FT、Nikkei Asia、Washington Post、Barron's、IBD、Politico、The Hill、SemiAnalysis、The Economist。免費公開 13 家：Reuters（本次全程遭 DataDome 攔截，零產出）、CNBC、MarketWatch、Tom's Hardware、Oil & Gas Journal、華爾街見聞、鉅亨網、MoneyDJ、Fierce Biotech、STAT News、Korea Herald、Mint、TrendForce 集邦。官方／數據源：TWSE 與 TPEx（三大法人、融資融券、櫃買指數、上市與上櫃月營收、重大訊息第 12 款法說會）、World Gold Council、CME FedWatch（本次轉引 investing.com Fed Rate Monitor）、EIA、FDA。合計 26 家。",
-  "run": "<b>瀏覽器</b>：`list_connected_browsers` 本次只回傳一台，即 HOME（8f82131f…3884），WORK 不在清單上，走正常路徑、非 fallback。可用性測試以 Bloomberg 非農報導取得 18 段／4,998 字通過。<br><b>本日為當日第二次執行</b>：首次執行（07:35 起）的 A–D 組 subagent 全數因帳號週用量上限被中斷、E/F/G 未啟動，當時未寫入任何檔案；使用者升級方案後於 09:42 重跑，七組全數完成。<br><b>Reuters：全程 CAPTCHA、零產出。</b> D 組首次請求 `/markets/commodities/` 即被 DataDome 攔截（body 文字長度 0、僅存 geo.captcha-delivery.com iframe），改試 `/business/energy/` 同樣結果，屬開場即擋而非階段性。未做任何繞過。已依規由 Tom's Hardware、OGJ、TrendForce 補位，黃金組改由 MarketWatch 補。<br><b>黃金組品質：較 8/06 改善但未完全達標。</b>4 則中 2 則為 MarketWatch 媒體端報導（美元與金價專欄、B2Gold 馬利礦權）、1 則為金礦股相對表現、1 則為現貨與 COMEX 分開標示的數據卡。8/06 那輪是「4 則全數據卡、零媒體」，本次已有媒體端素材。D 組具名記錄卡關處：MarketWatch 窗口內貴金屬報導量不足，已試 `/markets/commodities`（404）、`/column/metals-stocks`（最新一則為 6/08）、以及 gold／silver／precious metals／comex gold 五組站內搜尋（後三組 0 筆）；`gold-prices-are-breaking-higher` 一文為台北 8/7 04:57，差 2 小時落在窗口外未採。<br><b>WGC ETF 流向數字未取得</b>：goldhub 的兩張流向圖表要求登入，依合規紅線不建立帳號、不繞過登入牆，故僅記錄資料集更新日期（ETF 流向 8/6、央行準備 8/4，後者快照口徑為 Q1 2026 且 IMF IFS 延遲兩個月），未寫入卡片。<br><b>Barron's 留任觀察：輪詢讀法有效，但出現第四種形式的誤判。</b>標準新聞版型 8 篇全部一次到位（8–22 段／1,753–5,705 字），攔截字串全為 false。唯一例外是 Investor Circle／Technical Analysis 版型的 Palantir Chart of the Week：規定選擇器只抓到 3 段／265 字、看起來就像被擋，改用 `p, div[class*=\"paragraph\"]` 重抓後得到 20 段／4,629 字，證實是選擇器沒對上、不是付費牆。該篇最終仍未採用，因三種 meta 與 `time[datetime]` 都取不到時間戳、無法確認落在窗口內。<b>建議把 `p, div[class*=\"paragraph\"]` 併入標準選擇器。</b>另外 Barron's 本次全部命中標準 `article:published_time`，`meta[name=\"article.published\"]` 一次都沒用到。<br><b>擴充套件注入：偵測到 2 處，均已具名棄用。</b>(1) G 組於 `statnews.com/2026/08/07/nih-k99-pathways-independence-awards-scientists-on-visas-barred/` 偵測到 `inj=true`，依規判為被擋並換篇——這是 statnews 連續第二次出現（8/06 曾偵測到同類注入）。(2) B 組於 FT Big Read「Is the EU serious…」(f8fc56ba) 偵測到 `inj=true` 且段落數 0，已棄用。其餘所有成卡文章 `inj` 皆為 false。另 D 組 Tom's Hardware「RAM pricing 2007 levels」一文 `inj=true` 成因是 XenForo 留言區含一則 archive.ph 連結、非注入，仍依規視同被擋剔除。<br><b>TrendForce（啟用第 3 天）：中文站可讀，且拿到窗口內一手報價。</b>`/presscenter/news` 正常但最新稿為 8/05、窗口內無新聞稿；`/news/` 與 `/news` 為空殼（318 字元）。真正價值在 `/price/*`：DRAM 現貨顆粒頁 8/07 18:10 日更是唯一窗口內的一手報價。同時查出六種報價更新頻率差距極大——<b>公開合約價停在 2H Jun（6/30 更新）、模組現貨與 NAND 現貨停在 7/27</b>，這正是二手轉引失真的根源，已在卡片中逐一標明真實日期。<br><b>The Economist：僅收 1 篇，且非出刊批次。</b>本週批次實測 `article:published_time` 為 2026-08-06T08:55Z 與 09:41Z（台北 8/6 下午），全數落在窗口外，依規不收窗口外舊文。Leaders／Finance & economics／Briefing／Europe 四版掃描均無 8/7 新文。窗口內唯一原創為 By Invitation 的美沙核協議（台北 8/7 17:06）。<b>未誤碰 The World in Brief</b>（首頁掃出 2 條該系列連結，已排除）。<br><b>NYT：四步診斷梯度未動用</b>，第 1 步即正常渲染（`/international` innerText 6,090 字元、46 條連結），文章 19–58 段。8/05 那次應確為暫時性渲染失敗。<br><b>台股官方 API 六端點全數取得、無降級</b>：三大法人 BFI82U ✅、融資融券 MI_MARGN ✅、櫃買 tradingIndex ✅（384.19 點、-1.83%）、上市月營收 t187ap05_L ✅、上櫃 CSV t187ap05_O ✅、法說會 t187ap04_L ✅（第 12 款 6 筆）。<b>兩項口徑提醒</b>：(1) 月營收兩個端點在 8/8 讀取時仍為 11506（2026 年 6 月）快照、出表日期 115/07/17，7 月批次未上線（申報截止日為 8/10），卡片已明確標示為 6 月數據；(2) 月營收與法說會端點直接 navigate 會觸發下載導致分頁跳回 newtab，改以 navigate 到 openapi 首頁後同源 fetch 取得。另記錄一處差異：媒體端盤後稿的「三大法人合計賣超 442.44 億」與官方 BFI82U 的 428.86 億不同（差在投信 25.60 億 vs 12.02 億），外資 407.16 億兩邊一致，本站以官方端點為準、媒體數字另卡標示。<br><b>FDA 官方數據卡交不出</b>：fda.gov 最近的藥證公告為 8/06 15:56 ET（台北 8/07 03:56），早於窗口起點；8/07 當日僅有獸用藥 EUA，投資關聯過低。該則核准內容已改由 STAT 收錄。<br><b>SemiAnalysis 窗口內有兩篇新文</b>（非空窗）：SpaceX 10GW（8/07 20:08Z、36 段 12,482 字）與 Gemini／GCP（8/07 02:32Z、37 段 9,710 字），皆完整取得，Substack 訂閱 CTA 未誤判為攔截。",
+  "run": "<b>瀏覽器</b>：`list_connected_browsers` 本次只回傳一台，即 HOME（8f82131f…3884），WORK 不在清單上，走正常路徑、非 fallback。可用性測試以 Bloomberg 非農報導取得 18 段／4,998 字通過。<br><b>本日為當日第二次執行</b>：首次執行（07:35 起）的 A–D 組 subagent 全數因帳號週用量上限被中斷、E/F/G 未啟動，當時未寫入任何檔案；使用者升級方案後於 09:42 重跑，七組全數完成。<br><b>Reuters：全程 CAPTCHA、零產出。</b> D 組首次請求 `/markets/commodities/` 即被 DataDome 攔截（body 文字長度 0、僅存 geo.captcha-delivery.com iframe），改試 `/business/energy/` 同樣結果，屬開場即擋而非階段性。未做任何繞過。已依規由 Tom's Hardware、OGJ、TrendForce 補位，黃金組改由 MarketWatch 補。<br><b>黃金組品質：較 8/06 改善但未完全達標。</b>4 則中 2 則為 MarketWatch 媒體端報導（美元與金價專欄、B2Gold 馬利礦權）、1 則為金礦股相對表現、1 則為現貨與 COMEX 分開標示的數據卡。8/06 那輪是「4 則全數據卡、零媒體」，本次已有媒體端素材。D 組具名記錄卡關處：MarketWatch 窗口內貴金屬報導量不足，已試 `/markets/commodities`（404）、`/column/metals-stocks`（最新一則為 6/08）、以及 gold／silver／precious metals／comex gold 五組站內搜尋（後三組 0 筆）；`gold-prices-are-breaking-higher` 一文為台北 8/7 04:57，差 2 小時落在窗口外未採。<br><b>WGC ETF 流向數字未取得</b>：goldhub 的兩張流向圖表要求登入，依合規紅線不建立帳號、不繞過登入牆，故僅記錄資料集更新日期（ETF 流向 8/6、央行準備 8/4，後者快照口徑為 Q1 2026 且 IMF IFS 延遲兩個月），未寫入卡片。<br><b>Barron's 留任觀察：輪詢讀法有效，但出現第四種形式的誤判。</b>標準新聞版型 8 篇全部一次到位（8–22 段／1,753–5,705 字），攔截字串全為 false。唯一例外是 Investor Circle／Technical Analysis 版型的 Palantir Chart of the Week：規定選擇器只抓到 3 段／265 字、看起來就像被擋，改用 `p, div[class*=\"paragraph\"]` 重抓後得到 20 段／4,629 字，證實是選擇器沒對上、不是付費牆。該篇最終仍未採用，因三種 meta 與 `time[datetime]` 都取不到時間戳、無法確認落在窗口內。<b>建議把 `p, div[class*=\"paragraph\"]` 併入標準選擇器。</b>另外 Barron's 本次全部命中標準 `article:published_time`，`meta[name=\"article.published\"]` 一次都沒用到。<br><b>擴充套件注入：偵測到 2 處，均已具名棄用。</b>(1) G 組於 `statnews.com/2026/08/07/nih-k99-pathways-independence-awards-scientists-on-visas-barred/` 偵測到 `inj=true`，依規判為被擋並換篇——這是 statnews 連續第二次出現（8/06 曾偵測到同類注入）。(2) B 組於 FT Big Read「Is the EU serious…」(f8fc56ba) 偵測到 `inj=true` 且段落數 0，已棄用。其餘所有成卡文章 `inj` 皆為 false。另 D 組 Tom's Hardware「RAM pricing 2007 levels」一文 `inj=true` 成因是 XenForo 留言區含一則 archive.ph 連結、非注入，仍依規視同被擋剔除。<br><b>TrendForce（啟用第 3 天）：中文站可讀，且拿到窗口內一手報價。</b>`/presscenter/news` 正常但最新稿為 8/05、窗口內無新聞稿；`/news/` 與 `/news` 為空殼（318 字元）。真正價值在 `/price/*`：DRAM 現貨顆粒頁 8/07 18:10 日更是唯一窗口內的一手報價。同時查出六種報價更新頻率差距極大——<b>公開合約價停在 2H Jun（6/30 更新）、模組現貨與 NAND 現貨停在 7/27</b>，這正是二手轉引失真的根源，已在卡片中逐一標明真實日期。<br><b>The Economist：僅收 1 篇，且非出刊批次。</b>本週批次實測 `article:published_time` 為 2026-08-06T08:55Z 與 09:41Z（台北 8/6 下午），全數落在窗口外，依規不收窗口外舊文。Leaders／Finance & economics／Briefing／Europe 四版掃描均無 8/7 新文。窗口內唯一原創為 By Invitation 的美沙核協議（台北 8/7 17:06）。<b>未誤碰 The World in Brief</b>（首頁掃出 2 條該系列連結，已排除）。<br><b>NYT：四步診斷梯度未動用</b>，第 1 步即正常渲染（`/international` innerText 6,090 字元、46 條連結），文章 19–58 段。8/05 那次應確為暫時性渲染失敗。<br><b>台股官方 API 六端點全數取得、無降級</b>：三大法人 BFI82U ✅、融資融券 MI_MARGN ✅、櫃買 tradingIndex ✅（384.19 點、-1.83%）、上市月營收 t187ap05_L ✅、上櫃 CSV t187ap05_O ✅、法說會 t187ap04_L ✅（第 12 款 6 筆）。<b>兩項口徑提醒</b>：(1) 月營收兩個端點在 8/8 讀取時仍為 11506（2026 年 6 月）快照、出表日期 115/07/17，7 月批次未上線（申報截止日為 8/10），卡片已明確標示為 6 月數據；(2) 月營收與法說會端點直接 navigate 會觸發下載導致分頁跳回 newtab，改以 navigate 到 openapi 首頁後同源 fetch 取得。另記錄一處差異：媒體端盤後稿的「三大法人合計賣超 442.44 億」與官方 BFI82U 的 428.86 億不同（差在投信 25.60 億 vs 12.02 億），外資 407.16 億兩邊一致，本站以官方端點為準、媒體數字另卡標示。<br><b>FDA 官方數據卡交不出</b>：fda.gov 最近的藥證公告為 8/06 15:56 ET（台北 8/07 03:56），早於窗口起點；8/07 當日僅有獸用藥 EUA，投資關聯過低。該則核准內容已改由 STAT 收錄。<br><b>SemiAnalysis 窗口內有兩篇新文</b>（非空窗）：SpaceX 10GW（8/07 20:08Z、36 段 12,482 字）與 Gemini／GCP（8/07 02:32Z、37 段 9,710 字），皆完整取得，Substack 訂閱 CTA 未誤判為攔截。<br><b>跨版去重的兩處修正（發布前檢查抓到）</b>：(1) TrendForce 的 DRAM 現貨報價頁網址每天不變，與前一版撞連結，已把 8/7 的現貨數字併入使用 `dram_contract` 網址的口徑卡，成為單一張「報價＋口徑」卡；<b>這是該站的結構性問題，往後每天都會發生，建議固定採「一張卡、用 contract 頁網址、內文含當日現貨數字」的作法。</b>(2) Politico「伊朗戰事讓共和黨選情承壓」一文（8/7 07:25 台北，落在窗口重疊區）已於前一版收錄，依規移除，地緣政治組因此為 6 則、仍達下限。",
   "limits": "本站為投顧從業人員的內部閱讀與研究資料庫，所有內容為原創重點摘要＋原文連結，非投資建議，亦不構成任何買賣要約。單日窗口內的素材密度會隨市況起伏，衛星組（歐洲、亞太、生技健護、信用債、黃金）的價值在跨期累積而非單日厚度。數字以原文為準，跨來源出現差異時以官方數據優先並於卡片內標註。"
  },
  "sections": [
@@ -1436,34 +1436,17 @@
       },
       {
        "src": "tf",
-       "tag": "一手報價",
-       "tagcls": "hot",
-       "date": "2026/08/07",
-       "ts": "2026-08-07T18:10+08:00",
-       "title": "集邦 8/7 DRAM 現貨報價　DDR4 高低價差近 2.8 倍",
-       "deep": false,
-       "body": "<b>口徑（重要）：DRAM Spot Price，現貨、顆粒（chip）、未稅、日更，頁面標示 Last Update 2026-08-07 18:10 (GMT+8)，晚盤 17:50 公佈。</b>DDR5 16Gb (2Gx8) 4800/5600：盤平均 51.60，盤高 68.00、盤低 33.00，漲跌幅 ▲0.19%。DDR4 16Gb (2Gx8) 3200：盤平均 86.268，盤高 113.00、盤低 40.60，▼-0.48%；DDR4 8Gb (1Gx8) 3200 盤平均 42.45，▲0.50%。DDR3 4Gb 512Mx8 1600/1866 盤平均 13.976，▲0.20%。GDDR 現貨：GDDR5 8Gb 11.636（0.00%）、GDDR6 8Gb 11.637（▲0.21%）。eTT（未測試顆粒）另立一檔且全日持平：DDR5 16Gb eTT 23.64、DDR4 16Gb eTT 11.40、DDR4 8Gb eTT 4.208。最該記住的一個事實是分層程度——<b>DDR4 主流顆粒的盤高 113.00 對盤低 40.60，相差近 2.8 倍</b>，代表現貨市場成交已極度分散。這正是媒體引用「DDR4 現貨價」時最危險的地方：不標明是盤平均、日高、日低還是 eTT，同一天的數字可以差三倍以上。",
-       "bullets": [
-        "DDR5 16Gb 盤平均 51.60（▲0.19%）；DDR4 16Gb 盤平均 86.268（▼-0.48%）",
-        "DDR4 16Gb 盤高 113.00 對盤低 40.60，價差近 2.8 倍，市場嚴重分層",
-        "eTT（未測試顆粒）為獨立報價且全日持平，與測試顆粒不可混用"
-       ],
-       "url": "https://www.trendforce.com.tw/price/dram/dram_spot",
-       "tone": "t-orange"
-      },
-      {
-       "src": "tf",
        "tag": "口徑",
        "tagcls": "warn",
        "date": "2026/08/07",
        "ts": "2026-08-07T18:10+08:00",
-       "title": "集邦六種 DRAM 報價更新頻率差五週　二手轉引失真的根源",
+       "title": "集邦 8/7 DRAM 報價與口徑　現貨日更、公開合約價卻停在 6 月",
        "deep": false,
-       "body": "這一則是給所有引用記憶體報價的人看的。集邦同一站的六種 DRAM 報價，更新日期完全不同：現貨顆粒 2026-08-07 18:10（日更）；<b>DRAM Contract Price 公開表頭直接標示「(2H Jun)」、Last Update 2026-06-30 11:00——公開合約價停在 6 月下半月，已落後五週</b>；Module Spot Price（模組現貨、週更）Last Update 2026-07-27 14:40。2H Jun 合約表含模組與顆粒：DDR5 8GB SO-DIMM 均價 115.00（▲2.68%）、DDR4 16GB SO-DIMM 227.00（0.00%）、DDR4 16Gb 2Gx8 42.00（▲5.00%）、DDR4 4Gb 256Mx16 13.00（▲8.33%）。模組現貨：DDR5 UDIMM 16GB 4800/5600 均價 215.00（▲1.90%）、DDR5 RDIMM 32GB 均價 1,545.00（▼-0.64%）、DDR4 UDIMM 16GB 3200 均價 156.00（0.00%）。另註記：Jul. Specialty DRAM 於 7/31 更新、3Q26 Mobile DRAM 合約價於 8/3 更新、NAND Flash Spot 頁 Last Update 2026-07-27、NAND 合約公開表為 (2H Jun)、PC-Client OEM SSD 合約為 (2Q'26)。所以當媒體在 8 月寫「集邦最新 DRAM 合約價」，實際可能引自 6 月下半月的公開表或 7/31 的付費報告——<b>顆粒日更、模組週更、合約半月／季更三種頻率混用，拿來比較同一日的漲跌毫無意義</b>。",
+       "body": "<b>窗口內唯一的一手報價（現貨、顆粒／chip、未稅、日更，Last Update 2026-08-07 18:10 GMT+8，晚盤 17:50 公佈）</b>：DDR5 16Gb (2Gx8) 4800/5600 盤平均 51.60（盤高 68.00、盤低 33.00，▲0.19%）；DDR4 16Gb (2Gx8) 3200 盤平均 86.268（盤高 113.00、盤低 40.60，▼-0.48%）；DDR4 8Gb (1Gx8) 3200 盤平均 42.45（▲0.50%）；DDR3 4Gb 1600/1866 盤平均 13.976（▲0.20%）；GDDR5 8Gb 11.636（0.00%）、GDDR6 8Gb 11.637（▲0.21%）。eTT（未測試顆粒）另立一檔且全日持平：DDR5 16Gb eTT 23.64、DDR4 16Gb eTT 11.40、DDR4 8Gb eTT 4.208。<b>DDR4 主流顆粒盤高 113.00 對盤低 40.60、相差近 2.8 倍</b>，現貨成交已極度分散——媒體引用「DDR4 現貨價」若不標明是盤平均、日高、日低還是 eTT，同一天的數字可以差三倍以上。更關鍵的是更新頻率：同一站六種報價的日期完全不同。<b>DRAM Contract Price 公開表頭直接標示「(2H Jun)」、Last Update 2026-06-30 11:00——公開合約價停在 6 月下半月，已落後五週</b>；Module Spot Price（模組現貨、週更）停在 2026-07-27 14:40。2H Jun 合約表：DDR5 8GB SO-DIMM 均價 115.00（▲2.68%）、DDR4 16GB SO-DIMM 227.00（0.00%）、DDR4 16Gb 2Gx8 42.00（▲5.00%）。模組現貨：DDR5 UDIMM 16GB 均價 215.00（▲1.90%）、DDR5 RDIMM 32GB 均價 1,545.00（▼-0.64%）、DDR4 UDIMM 16GB 3200 均價 156.00（0.00%）。另 NAND Flash Spot 頁停在 7/27、NAND 合約公開表為 (2H Jun)、PC-Client OEM SSD 合約為 (2Q'26)。所以當媒體在 8 月寫「集邦最新 DRAM 合約價」，實際可能引自 6 月下半月的公開表或 7/31 的付費報告——<b>顆粒日更、模組週更、合約半月／季更三種頻率混用，拿來比較同一日的漲跌毫無意義</b>。",
        "bullets": [
-        "現貨顆粒日更（8/7）、模組現貨週更（7/27）、公開合約價停在 2H Jun（6/30）",
-        "集邦自家 7 月評述：PC DRAM 合約價續漲但升幅收斂、買賣雙方僵持、原廠產能將顯著縮減",
-        "媒體 8 月引用的「最新合約價」很可能是 6 月數字——這正是收這家的全部意義"
+        "現貨顆粒 8/7 日更：DDR5 16Gb 51.60、DDR4 16Gb 86.268；DDR4 盤高/盤低相差近 2.8 倍",
+        "公開合約價停在 2H Jun（6/30 更新）、模組現貨停在 7/27——與現貨日更差最多五週",
+        "集邦 7 月評述：PC DRAM 合約價續漲但升幅收斂、買賣雙方僵持、原廠產能將顯著縮減"
        ],
        "url": "https://www.trendforce.com.tw/price/dram/dram_contract",
        "tone": "t-orange"
@@ -2227,23 +2210,6 @@
        "tone": "t-orange"
       },
       {
-       "src": "politico",
-       "tag": "選情",
-       "tagcls": "warn",
-       "date": "2026/08/07",
-       "ts": "2026-08-07T07:25+08:00",
-       "title": "油價讓共和黨選情承壓　白宮訊息指引近幾週幾乎停止",
-       "deep": false,
-       "body": "伊朗戰事已進入第五個月，汽油均價維持在每加侖 4 美元以上，<b>平均較開戰前高出超過 1 美元／加侖</b>，即使伊朗、阿曼與美方都表示協議接近。政治面的訊號比油價本身更值得追蹤：白宮開戰初期提供給共和黨的訊息指引，近幾週已幾乎停止，六名知情人士證實。副總統 Vance 週四在參院共和黨閉門午餐中主談伊朗戰事（四名在場人士證實），向參議員保證通過該區域的船舶數量足以讓油價相對穩定，第五位與會者稱反應正面。一名眾議院共和黨人的描述最能說明選民關切的排序——「油價、食品價格和戰爭」，<b>戰爭排在最後</b>。對市場的含意是政策方向的可預測性提高：油價已成為期中選舉的核心政治變數，這使白宮有強烈動機儘快促成海峽協議，對原油形成政策性的上檔壓抑。但要留意這是雙面的——正因為壓抑來自政治需求而非供需改善，一旦談判破局或選後政治壓力解除，那層壓抑會消失得很快。",
-       "bullets": [
-        "戰事進入第五個月，汽油均價維持 4 美元以上，較開戰前高逾 1 美元/加侖",
-        "白宮給共和黨的訊息指引近幾週幾乎停止；Vance 親自到閉門午餐安撫",
-        "選民關切排序是「油價、食品價格、戰爭」——油價形成政策性的上檔壓抑"
-       ],
-       "url": "https://www.politico.com/news/2026/08/06/the-iran-was-is-rattling-republicans-and-they-say-the-white-house-isnt-helping-01028239",
-       "tone": "t-orange"
-      },
-      {
        "src": "thehill",
        "tag": "國防預算",
        "tagcls": "",
@@ -2424,5 +2390,5 @@
    ]
   }
  ],
- "cards": 125
+ "cards": 123
 }
