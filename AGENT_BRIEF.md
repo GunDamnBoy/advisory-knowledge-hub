@@ -45,9 +45,9 @@ CNBC (cnbc.com/world)、MarketWatch (marketwatch.com)、Tom's Hardware (tomshard
 - **The Economist（`econ`）＝全球宏觀與政治經濟的框架性分析。** 它提供的不是速報而是**解釋框架**，對每月 House View 的歐洲、地緣政治、央行三節價值最高。歸 **B 組**。**週刊節奏的特殊處理見第 1.3 節。**
 
 來源徽章 class：`b-bbg`/`b-wsj`/`b-nyt`/`b-ft`/`b-nikkei`/`b-wapo`/`b-barrons`/`b-cnbc`/`b-ibd`/`b-mw`/`b-toms`/`b-ogj`/`b-politico`/`b-thehill`/`b-wscn`/`b-anue`/`b-moneydj`/`b-twse`/`b-semi`/`b-fierce`/`b-stat`/`b-kh`/`b-mint`/`b-tf`/`b-econ`/`b-pub`（另有已停用但保留的 `b-ked`）。
-（卡片 `src` 值＝去掉 `b-` 前綴：`bbg`、`wsj`、…、`twse`、`semi`、`fierce`、`stat`、`kh`、`mint`、**`tf`**、**`econ`**、`pub`。`pub` 保留給上列以外的通訊社與官方公告——**FRED、FDA、WGC 的數據卡都用 `pub`**。**Reuters 一律用 `reuters` 而非 `pub`**。）
+（卡片 `src` 值＝去掉 `b-` 前綴：`bbg`、`wsj`、…、`twse`、`semi`、`fierce`、`stat`、`kh`、`mint`、**`tf`**、**`econ`**、`pub`。`pub` 保留給上列以外的通訊社與官方公告——**FRED、FDA、WGC 的數據卡都用 `pub`**。**`reuters` 與 `ked` 為已停用代碼，保留供歷史封存渲染，不要用在新卡片上**。）
 
-各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲；**Reuters＝亞洲時區最快、官方聲明與 Kpler／LSEG 數據的一手轉述、無付費牆摩擦**；**鉅亨網＝台股盤勢與台灣本地財經**；**MoneyDJ＝台廠供應鏈與個股拆解**；**TWSE／公開資訊觀測站＝月營收、三大法人買賣超、融資餘額、法說會行事曆等官方數據**；**SemiAnalysis＝AI 資料中心、加速器架構、記憶體與 CoWoS 供應鏈的第一手深度拆解，數字顆粒度是其他來源沒有的**；**Fierce Biotech／STAT＝新藥、臨床試驗、FDA 與藥價政策**；**Korea Herald＝韓國**；**Mint＝印度**；**TrendForce 集邦＝記憶體／面板／功率半導體的一手報價與產能追蹤**；**The Economist＝全球宏觀與政治經濟的框架性分析，週刊節奏見第 1.3 節**。
+各來源擅長：Bloomberg＝全球即時＋亞洲；WSJ／NYT＝美國政經；FT＝全球／科技／市場；Nikkei＝亞洲供應鏈／匯率；WaPo＝美政治／地緣；Barron's／IBD／MarketWatch＝美股與選股視角；Tom's Hardware＝半導體/GPU/資料中心；OGJ＝油氣/LNG；華爾街見聞＝中文彙整西方財經＋亞洲；**鉅亨網＝台股盤勢與台灣本地財經**；**MoneyDJ＝台廠供應鏈與個股拆解**；**TWSE／公開資訊觀測站＝月營收、三大法人買賣超、融資餘額、法說會行事曆等官方數據**；**SemiAnalysis＝AI 資料中心、加速器架構、記憶體與 CoWoS 供應鏈的第一手深度拆解，數字顆粒度是其他來源沒有的**；**Fierce Biotech／STAT＝新藥、臨床試驗、FDA 與藥價政策**；**Korea Herald＝韓國**；**Mint＝印度**；**TrendForce 集邦＝記憶體／面板／功率半導體的一手報價與產能追蹤**；**The Economist＝全球宏觀與政治經濟的框架性分析，週刊節奏見第 1.3 節**。
 
 **新增子類別對應的主力來源**（2026/08/04 第 9 次修訂，這張對照表是為了避免「加了子類別卻沒人負責去餵它」）：
 
