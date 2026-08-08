@@ -16,7 +16,9 @@
 | 3 | `scripts/check.py` | **發布前檢查的唯一權威版本**（QUOTA／SRCOK／DEDUP_EXEMPT 三張表都在這） | 每日排程第 5 步執行；維護體檢也用它 |
 | 4 | `scripts/read_article.js` | **標準文章讀法的唯一權威版本** | 主 agent 每天讀一次、轉發給 subagent |
 | 5 | 排程任務 `advisory-dashboard-daily` 的 prompt | **精簡工作流**：步驟順序＋brief 節次指標，**不再重複規格內容** | 排程觸發時直接執行 |
-| 6 | `index.html` ＋ `data/*.json` | 前端外殼＋每日封存 | 瀏覽器 |
+| 6 | `scripts/metrics.py` | **歷史指標**：掃 data/*.json 算跨版趨勢、各組緩衝、來源貢獻矩陣 | 維護／優化時執行 |
+| 7 | `prompts/YYYY-MM-DD-v{N}.md` | **排程 prompt 的存檔副本**（正本不在 repo、不在 git） | 回溯時讀 |
+| 8 | `index.html` ＋ `data/*.json` | 前端外殼＋每日封存 | 瀏覽器 |
 
 **單一來源原則（2026/08/08 第 14 次修訂確立）**：程式碼只存在於 `scripts/`，規格只存在於 brief，prompt 只描述流程。改程式碼不必動 brief 與 prompt；改規格不必動 prompt（除非流程本身變了）。這消滅了歷史上最常見的「兩份程式碼不同步」故障模式，也把每日固定 token 開銷降了約四成。
 
@@ -29,8 +31,9 @@
 1. 讀 `AGENT_BRIEF.md` 全文＋`CHANGELOG.md` 第一筆＋排程 prompt（`list_scheduled_tasks` 取 `path` 後 Read）。
 2. **先跑 `python3 scripts/check.py <最新日期>` 看健康度**，再比對 brief／prompt 是否不同步。
 3. 改程式碼→只改 `scripts/*`；改規格→改 `AGENT_BRIEF.md`；改流程→`update_scheduled_task` 整份取代 prompt。
-4. 在 `CHANGELOG.md` 最上方加變更紀錄。
-5. 若動到來源清單，`index.html` 三處徽章要跟（見第 4 節）。
+4. **改了 prompt 就存一份快照**到 `prompts/YYYY-MM-DD-v{N}.md`——`update_scheduled_task` 是整份取代且正本不在 git 內，**不存就永遠消失**（v1–v13 的 prompt 已不可考）。
+5. 在 `CHANGELOG.md` 最上方加變更紀錄，並更新該檔的**版本總覽表**（一行一版的關鍵參數與影響檔案）。
+6. 若動到來源清單，`index.html` 三處徽章要跟（見第 4 節）。
 7. **不要跑任何 git 指令**（含 `git status`）——本機 `com.kenny.dashpush` 每 180 秒自動推送，跑 git 會留下 `.git/index.lock` 擋住推送。要看狀態只用 `cat`／`ls`／`grep`。
 
 ---
