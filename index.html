@@ -94,7 +94,7 @@
   .b-ogj{background:#fefce8;color:#854d0e;border-color:#fde68a}
   .b-politico{background:#fdf2f8;color:#a21caf;border-color:#f5d0fe}
   .b-thehill{background:#f0f9ff;color:#0369a1;border-color:#bae6fd}
-  .b-reuters{background:#fff1eb;color:#9a3412;border-color:#fdba74}
+  .b-reuters{background:#fff1eb;color:#9a3412;border-color:#fdba74}  /* 已停用（2026-08-08），保留供 2026-08-05 封存檔渲染 */
   .b-anue{background:#ecfeff;color:#0e7490;border-color:#a5f3fc}
   .b-moneydj{background:#f5f3ff;color:#5b21b6;border-color:#ddd6fe}
   .b-twse{background:#fff1f2;color:#9f1239;border-color:#fecdd3}
@@ -220,7 +220,7 @@ const BADGE={bbg:"Bloomberg",wsj:"WSJ",nyt:"NYT",ft:"FT",nikkei:"Nikkei",wapo:"W
   tf:"TrendForce",econ:"The Economist",pub:"官方／通訊社"};
 // SRCBAR＝頁面上的「主要來源」徽章列，只放現役來源；ked 已停用故不列，但 BADGE 與 CSS 必須保留，
 // 否則 2026-08-05 那一版的 3 則 KED 卡片會渲染出沒有樣式的空徽章。歷史封存不回頭修改。
-const SRCBAR=["bbg","wsj","nyt","ft","nikkei","wapo","barrons","cnbc","ibd","mw","toms","ogj","politico","thehill","wscn","reuters","anue","moneydj","twse","semi","fierce","stat","kh","mint","tf","econ"];
+const SRCBAR=["bbg","wsj","nyt","ft","nikkei","wapo","barrons","cnbc","ibd","mw","toms","ogj","politico","thehill","wscn","anue","moneydj","twse","semi","fierce","stat","kh","mint","tf","econ"];
 const PILLS=7;               // 日期列直接顯示的天數，更早的收進下拉選單
 const cache={};              // date -> day json
 let idx=null, cur=null;
