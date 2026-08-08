@@ -20,23 +20,17 @@
 
 **單一來源原則（2026/08/08 第 14 次修訂確立）**：程式碼只存在於 `scripts/`，規格只存在於 brief，prompt 只描述流程。改程式碼不必動 brief 與 prompt；改規格不必動 prompt（除非流程本身變了）。這消滅了歷史上最常見的「兩份程式碼不同步」故障模式，也把每日固定 token 開銷降了約四成。
 
-**最重要的一條規則：第 1 項與第 2 項是一組兩份，改任一邊都必須同步另一邊。**
-兩者不同步時，排程會拿到互相矛盾的指示，而且不會報錯——它會安靜地照其中一份做。
-
-改完務必在 `AGENT_BRIEF.md` 第 8 節「變更紀錄」加一筆，寫清楚**為什麼改**（動機通常比改了什麼更難重建）。
-
-排程 prompt 沒有版本控制，只有 `AGENT_BRIEF.md` 在 git 裡。所以**brief 才是真正的來源**，prompt 是它的投影。
+**最重要的一條規則：brief（規格）與 prompt（流程）改任一邊都要檢查另一邊是否受影響**；兩者不同步時排程會安靜地照其中一份做、不會報錯。改完務必在 `CHANGELOG.md` 最上方加一筆，寫清楚**為什麼改**（動機通常比改了什麼更難重建）。排程 prompt 沒有版本控制，repo 內的檔案都在 git 裡。
 
 ---
 
 ## 2. 修改的標準流程
 
-1. 讀 `AGENT_BRIEF.md`（全部）與排程 prompt（用 `list_scheduled_tasks` 取得 `path` 後 Read）。
-2. **先比對兩者是否已經不同步**，有的話先修好再談新需求。
-3. 改 `AGENT_BRIEF.md`。
-4. 用 `mcp__scheduled-tasks__update_scheduled_task` 同步排程 prompt。
-5. 在第 8 節加變更紀錄。
-6. 若動到來源清單，記得 `index.html` 的徽章也要加（見第 4 節）。
+1. 讀 `AGENT_BRIEF.md` 全文＋`CHANGELOG.md` 第一筆＋排程 prompt（`list_scheduled_tasks` 取 `path` 後 Read）。
+2. **先跑 `python3 scripts/check.py <最新日期>` 看健康度**，再比對 brief／prompt 是否不同步。
+3. 改程式碼→只改 `scripts/*`；改規格→改 `AGENT_BRIEF.md`；改流程→`update_scheduled_task` 整份取代 prompt。
+4. 在 `CHANGELOG.md` 最上方加變更紀錄。
+5. 若動到來源清單，`index.html` 三處徽章要跟（見第 4 節）。
 7. **不要跑任何 git 指令**（含 `git status`）——本機 `com.kenny.dashpush` 每 180 秒自動推送，跑 git 會留下 `.git/index.lock` 擋住推送。要看狀態只用 `cat`／`ls`／`grep`。
 
 ---
@@ -67,7 +61,7 @@
 2. `index.html`：加一條 `.b-<code>{...}` CSS、`BADGE` 物件加一筆、`SRCBAR` 陣列加一個代碼。三處都要，缺一個徽章會沒有樣式。
 3. `AGENT_BRIEF.md` 第 5 節：把它放進某個 subagent 分組，並評估時間預算。
 4. 排程 prompt 同步以上。
-5. 第 8 節加變更紀錄。
+5. `CHANGELOG.md` 加變更紀錄。
 
 ---
 
