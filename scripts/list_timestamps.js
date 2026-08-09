@@ -28,4 +28,37 @@ for(const a of document.querySelectorAll('a[href]')){
   }
   out.push({path:p.slice(0,120), title:(a.innerText||'').trim().slice(0,90), ts:t, rel});
 }
-JSON.stringify({count:out.length, withTs:out.filter(x=>x.ts).length, items:out.slice(0,60)});
+// 第四層備援：DOM 完全沒有時間戳時，掃 Next.js 的 __NEXT_DATA__。
+// Bloomberg 就是這種——2026/08/09 實測列表頁 33 條連結全部沒有 <time> 也沒有相對時間，
+// 但 __NEXT_DATA__ 裡有 62 篇的「slug＋標題＋發布時間」，一次請求就取代 35 次逐篇 fetch。
+// 附帶好處：部分 Bloomberg 文章頁的 article:published_time 是空的，這裡反而拿得到。
+const nextItems=[];
+if(out.filter(x=>x.ts||x.rel).length===0 && window.__NEXT_DATA__){
+  const seen2=new Set();
+  const TIME=/^(published(At)?|datePublished|firstPublished(At)?)$/i;
+  (function walk(o,d){
+    if(!o||typeof o!=='object'||d>12) return;
+    if(Array.isArray(o)){for(const x of o) walk(x,d+1); return;}
+    let t=null,slug=null,title=null;
+    for(const k of Object.keys(o)){
+      const v=o[k];
+      if(typeof v!=='string') continue;
+      if(TIME.test(k)&&/^20\d{2}-\d{2}-\d{2}T/.test(v)) t=v;
+      if(/^(slug|id|url|canonical|longURL)$/i.test(k)&&/\/news\/articles\/|^20\d{2}-\d{2}-\d{2}\//.test(v)) slug=v;
+      if(/^(headline|title|seoHeadline)$/i.test(k)&&v.length>15&&!title) title=v;
+    }
+    if(t&&(slug||title)){
+      const key=(slug||title).slice(0,60);
+      if(!seen2.has(key)){seen2.add(key);nextItems.push({path:slug||'',title:(title||'').slice(0,90),ts:t,rel:''});}
+    }
+    for(const k of Object.keys(o)) walk(o[k],d+1);
+  })(window.__NEXT_DATA__,0);
+  nextItems.sort((a,b)=>b.ts.localeCompare(a.ts));
+}
+const items=(out.filter(x=>x.ts||x.rel).length===0 && nextItems.length) ? nextItems : out;
+JSON.stringify({
+  count:items.length,
+  withTs:items.filter(x=>x.ts).length,
+  source:(items===nextItems?'__NEXT_DATA__':'DOM'),
+  items:items.slice(0,60)
+});
