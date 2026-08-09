@@ -16,9 +16,11 @@
 | 3 | `scripts/check.py` | **發布前檢查的唯一權威版本**（QUOTA／SRCOK／DEDUP_EXEMPT 三張表都在這） | 每日排程第 5 步執行；維護體檢也用它 |
 | 4 | `scripts/read_article.js` | **標準文章讀法的唯一權威版本** | 主 agent 每天讀一次、轉發給 subagent |
 | 5 | 排程任務 `advisory-dashboard-daily` 的 prompt | **精簡工作流**：步驟順序＋brief 節次指標，**不再重複規格內容** | 排程觸發時直接執行 |
-| 6 | `scripts/metrics.py` | **歷史指標**：掃 data/*.json 算跨版趨勢、各組緩衝、來源貢獻矩陣 | 維護／優化時執行 |
-| 7 | `prompts/YYYY-MM-DD-v{N}.md` | **排程 prompt 的存檔副本**（正本不在 repo、不在 git） | 回溯時讀 |
-| 8 | `index.html` ＋ `data/*.json` | 前端外殼＋每日封存 | 瀏覽器 |
+| 6 | `scripts/list_timestamps.js` | **列表頁預篩的唯一權威版本**（一次取回連結＋時間戳，取代逐篇 fetch） | 主 agent 每天讀一次、轉發給 subagent |
+| 7 | `scripts/subagent_preamble.md` | **採集員共用前言**（讀法／合規／回報格式） | 同上 |
+| 8 | `scripts/metrics.py` | **歷史指標**：掃 data/*.json 算跨版趨勢、各組緩衝、來源貢獻矩陣 | 維護／優化時執行 |
+| 9 | `prompts/YYYY-MM-DD-v{N}.md` | **排程 prompt 的存檔副本**（正本不在 repo、不在 git） | 回溯時讀 |
+| 10 | `index.html` ＋ `data/*.json` | 前端外殼＋每日封存 | 瀏覽器 |
 
 **單一來源原則（2026/08/08 第 14 次修訂確立）**：程式碼只存在於 `scripts/`，規格只存在於 brief，prompt 只描述流程。改程式碼不必動 brief 與 prompt；改規格不必動 prompt（除非流程本身變了）。這消滅了歷史上最常見的「兩份程式碼不同步」故障模式，也把每日固定 token 開銷降了約四成。
 
@@ -52,6 +54,9 @@
 - **每一次大改動當天都會留下新的不同步，沒有例外。** 第 2 次修訂漏了 brief、第 4 次修訂漏了三處（JS 讀法、檢查腳本、E 組用語）。改完當下**一定要再比對一次同步清單**，不要等隔天體檢才發現。最容易漏的是**兩段程式碼**（發布前檢查腳本、`javascript_tool` 讀法），因為它們藏在文件中段、不像散文那樣一眼看得出差異。
 - **排程 prompt 是整份取代，不是局部編輯。** `update_scheduled_task` 送出的 `prompt` 會完全覆蓋舊的，漏帶的段落等於被刪除。改之前先 Read 一次現有全文。
 - **本 repo 與 `~/podcast-knowledge-digest` 有 7 個同名檔案**：`AGENT_BRIEF.md`、`MAINTENANCE.md`、`README.md`、`index.html`、`data/index.json`、`data/2026-07-30.json`、`data/2026-08-02.json`。**任何腳本一律用絕對路徑**（brief 第 5 節的檢查腳本已改用 `REPO` 常數）。
+- **預篩時間戳不要逐篇 fetch——會把來源惹毛。** 8/09 A 組對 Bloomberg 連發約 35 次預篩請求觸發網路層風控，當日該來源成卡 0 篇，而開場可用性測試原本是通過的。**「列表頁通、文章頁全擋」就是風控被觸發的特徵**，不是站台掛掉；觸發後重試無效（8/09 重試四次、另開分頁、40 分鐘後仍被擋）。一律用 `scripts/list_timestamps.js` 從列表頁預篩，單一來源文章頁上限 15 篇。
+- **風控有兩種，別用同一套處置。** 「進門就擋」（Reuters：八天七天零產出）→ 移除來源；「自傷型」（Bloomberg：平時全站最大來源，被自己的請求頻率擋掉）→ 改採集方式。**判斷依據是 `metrics.py --src` 的歷史產出，不是單日結果。**
+- **NYT 的阻擋會自癒，不要為它改規則。** 兩次都是排程時段文章頁全 0、同日稍晚手動測完全正常（8/05→8/06 恢復；8/09 同日 09:50 實測 37 段／11,271 字）。四步診斷照跑、記錄、當日放棄。
 - **批次改文件不要用帶 `re.S` 的貪婪正則。** 2026-08-08 一支 `(   - .*\n)+` 配上 `re.S` 把 35k 字元的 brief 吃到剩 5.7k。防範三件套：替換前先量測 match 長度是否在預期範圍、用精確頭尾錨點而非萬用字元、改完立刻驗證檔案總長。
 - **誤刪檔案內容時，可用 Python + zlib 直接讀 `.git/objects` 救回**（純讀取、不產生 index.lock，不違反「不跑 git 指令」的規則）。8/08 就是靠解析 HEAD → tree → blob 從最近一次 dashpush 自動 commit 救回 brief。**dashpush 每 180 秒 commit 一次，也就是說任何檔案的災難性錯誤有最多 3 分鐘的空窗會被推上去**——出事時第一件事是確認壞版本有沒有已被 commit。
 - **維護作業若為了改另一條產線而連了 podcast 資料夾，做完要記得移除。** 排程任務的工作資料夾會保留這次連線——2026-08-03 就發生過：在排程執行的工作階段裡連了 podcast repo，結果 `advisory-dashboard-daily` 的 Working folders 多出一個它根本用不到、卻有寫入權的 Public repo。**目前沒有工具可以程式化移除，只能在 App 的 Working folders 面板手動拿掉。**
