@@ -26,6 +26,24 @@
 - 段落 ≤3 或 <800 字 **且**出現明確攔截字串 → 才算被擋
 - **段落數少時先懷疑選擇器沒對上，再懷疑被擋**——Barron's 已經四次以不同形式製造這種誤判
 
+## 3.5 各來源的已知眉角（實測，不要重新踩）
+
+**只看跟你這組相關的那幾列就好。**
+
+| 來源 | 眉角 |
+|---|---|
+| **Bloomberg** | **列表頁沒有任何 `<time>` 或相對時間**——`list_timestamps.js` 會自動改掃 `window.__NEXT_DATA__`（實測一次取回 62 篇的 slug＋標題＋時間）。**部分文章頁的 `article:published_time` 是空的**，那種只能用列表頁拿到的時間。**極易因請求頻率被擋**，文章頁上限 15 篇 |
+| **NYT** | 阻擋會自癒。若文章頁 `innerText.length` 全為 0：等 10 秒 → 先開 `/international` 再點連結 → 換新分頁 → 試首頁確認不是整站。四步都失敗就當日放棄、回報，**不要重試到底** |
+| Barron's | **兩種版型**：標準新聞版靠 `p[class*="Paragraph"]`，Investor Circle／Technical Analysis 版靠 `div[class*="paragraph"]`（兩者都在 `read_article.js` 裡）。渲染慢，務必等輪詢結束 |
+| Mint | 段落要用全頁 `p` 才抓得到（腳本的 `<8 段就退回全頁 p` 保險絲會處理） |
+| Korea Herald | **列表頁必須用 `/Business`，`/section/business` 是殘頁**；時間戳時區是 **+09:00，換算台北要減 1 小時** |
+| The Economist | 時間戳是 **UTC，換算台北要加 8 小時**；付費牆是硬牆，依內文量標準判定即可。**The World in Brief 每日早報不要收**（是各家新聞的彙整，不是原創） |
+| TrendForce | **以中文站 `trendforce.com.tw` 為主**；報價務必標明合約價／現貨價、DDR4／DDR5、顆粒／模組、月度／週度，**並註明每個數字各自的更新日期** |
+| IBD | **只能 `navigate`**，用 `fetch()` 取 HTML 只會拿到付費牆前導段 |
+| STAT News | 付費文 DOM 上仍有 16 段／2,181 字，扣掉記者簡介與訂閱區塊後只剩約 3 段／600 字——依內文量標準判定被擋就換篇 |
+| SemiAnalysis | 約每週 1～2 篇、不是日更。**窗口內沒有新文是正常狀態，不是採集失敗**，不必記為降級，**更不要收窗口外的舊文** |
+| Bloomberg／Barron's／MarketWatch | `get_page_text` 會嚴重低估內文，只適合掃標題 |
+
 ## 4. 合規紅線（不可協商）
 
 - 嚴禁繞過付費牆、反爬蟲、CAPTCHA、archive 鏡像站或快取
