@@ -13,7 +13,8 @@ const t=document.querySelector('meta[property="article:published_time"]')?.conte
   || document.querySelector('meta[name="article.published"]')?.content   // Barron's 備援
   || document.querySelector('time[datetime]')?.getAttribute('datetime') || '';
 let paras=[...document.querySelectorAll(SEL)].map(p=>p.innerText.trim()).filter(x=>x.length>60);
-if(paras.length<8){   // 選擇器沒對上時的保險絲（Mint 需要）
-  paras=[...document.querySelectorAll('p')].map(p=>p.innerText.trim()).filter(x=>x.length>60);
+if(paras.length<8){   // 選擇器沒對上時的保險絲（Mint 需要）——但全頁 p 抓到的更少就不換（避免把短訊換成導覽雜訊）
+  const alt=[...document.querySelectorAll('p')].map(p=>p.innerText.trim()).filter(x=>x.length>60);
+  if(alt.join(' ').length>paras.join(' ').length) paras=alt;
 }
-JSON.stringify({published:t, n:paras.length, chars:paras.join(' ').length, text:paras.join('\n')});
+JSON.stringify({published:t, title:document.title, n:paras.length, chars:paras.join(' ').length, text:paras.join('\n')});

@@ -64,6 +64,7 @@
   .tag.warn{background:#fff7ed;color:#ea580c;border-color:#fed7aa}
   .tag.pos{background:#f0fdf4;color:#16a34a;border-color:#bbf7d0}
   .tag.deep{background:#eef2ff;color:#4338ca;border-color:#c7d2fe}
+  .tag.thread{background:#fdf4ff;color:#86198f;border-color:#f0abfc}
   .date{margin-left:auto;font-size:11.5px;color:var(--txt3)}
   .card h3{font-size:16px;font-weight:750;line-height:1.5;margin-bottom:10px;color:var(--txt)}
   .card.wide h3{font-size:18px}
@@ -128,7 +129,14 @@
   .takeaways li{font-size:14.2px;color:var(--txt2);padding-left:24px;position:relative;line-height:1.78}
   .takeaways li::before{content:"▸";position:absolute;left:4px;top:0;color:var(--accent);font-weight:800}
   .takeaways li b{color:var(--txt);font-weight:750}
+  .thermo-wrap{position:relative;margin:26px 0 4px}
+  .thermo-mk{position:absolute;top:-17px;transform:translateX(-50%);font-size:10.5px;font-weight:800;color:var(--txt);z-index:2}
+  .thermo-mk span{background:#fff;border:1px solid var(--line2);border-radius:9px;padding:1px 7px;box-shadow:0 1px 3px rgba(16,32,46,.08)}
+  .thermo-mk::after{content:"";position:absolute;left:50%;transform:translateX(-50%);top:15px;border:4px solid transparent;border-top-color:var(--txt2)}
   .thermo{display:flex;gap:0;height:8px;border-radius:5px;overflow:hidden;margin:18px 0 4px}
+  .thermo-wrap .thermo{margin:0}
+  .threads{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:-8px 0 16px}
+  .threads .lbl{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
   .thermo div{flex:1}
   .thermo .g{background:var(--green)} .thermo .y{background:var(--yellow)}
   .thermo .o{background:var(--orange)} .thermo .r{background:var(--red)}
@@ -163,6 +171,10 @@
   .daybar button:hover{border-color:var(--line2);color:var(--txt)}
   .daybar button.active{background:var(--accent);border-color:var(--accent);color:#fff}
   .daybar button.today::after{content:"·今日";font-size:10px;opacity:.75;margin-left:4px}
+  .daybar button .tv{font-size:10px;opacity:.72;margin-left:4px;font-weight:600}
+  .daybar a.daylink{background:#fff;border:1px solid var(--line);color:var(--txt2);font-size:13px;font-weight:700;
+    padding:6px 13px;border-radius:20px;text-decoration:none;white-space:nowrap;transition:.15s}
+  .daybar a.daylink:hover{border-color:var(--accent);color:var(--accent)}
   .daybar select{background:#fff;border:1px solid var(--line);color:var(--txt2);font-size:13px;font-weight:700;
     padding:6px 10px;border-radius:20px;font-family:inherit;cursor:pointer}
   .daybar .archive-note{font-size:11.5px;color:var(--txt3);margin-left:auto}
@@ -233,11 +245,12 @@ function cardHTML(c){
   const wide=c.deep?" wide":"";
   const deep=c.deep?'<span class="tag deep">深度</span>':"";
   const tag='<span class="tag'+(c.tagcls?" "+c.tagcls:"")+'">'+c.tag+"</span>";
+  const th=c.thread?'<span class="tag thread">'+c.thread+"</span>":"";
   const body=c.deep
     ? '<div class="longread">'+c.body.map(p=>"<p>"+p+"</p>").join("")+"</div>"
     : '<p class="lead">'+c.body+"</p>";
   return '<div class="card'+wide+" "+c.tone+'">'
-    +'<div class="card-top"><span class="badge b-'+c.src+'">'+BADGE[c.src]+"</span>"+deep+tag
+    +'<div class="card-top"><span class="badge b-'+c.src+'">'+BADGE[c.src]+"</span>"+deep+tag+th
     +'<span class="date">'+c.date+"</span></div>"
     +"<h3>"+c.title+"</h3>"+body
     +"<ul>"+c.bullets.map(b=>"<li>"+b+"</li>").join("")+"</ul>"
@@ -257,15 +270,30 @@ function sectionHTML(s){
     +'<div class="sec-intro">'+s.intro+"</div>"
     +s.groups.map(groupHTML).join("")+"</section>";
 }
+function threadStrip(date){
+  // 「延續中的主題」：從 index.json 各日 entry 的 threads 計算連續天數，零額外請求
+  const i=idx.days.findIndex(x=>x.date===date);
+  const ts=(idx.days[i]||{}).threads||[];
+  if(!ts.length) return "";
+  const chips=ts.map(t=>{
+    let n=1,j=i+1;
+    while(j<idx.days.length&&(idx.days[j].threads||[]).includes(t)){n++;j++}
+    return '<span class="tag thread">'+t+(n>1?" · 第"+n+"天":"")+"</span>";
+  }).join("");
+  return '<div class="threads"><span class="lbl">延續中的主題</span>'+chips+"</div>";
+}
 function overviewHTML(d){
   const o=d.overview;
+  const lv=parseInt(o.thermo.level);
+  const mk=isNaN(lv)?"":'<div class="thermo-mk" style="left:'+Math.min(Math.max(lv,0),100)+'%"><span>'+lv+"</span></div>";
   return '<section class="tabpane active" data-p="overview"><div class="brief">'
     +'<div class="bl"><span class="pill">三分鐘總覽</span><h2>'+d.date.replace(/-/g,"/")+" · "+d.weekday+"</h2></div>"
     +'<div class="snap">'+o.snap.map(s=>'<div class="s"><div class="k">'+s.k+'</div><div class="v '+s.tone+'">'+s.v+"</div></div>").join("")+"</div>"
+    +threadStrip(d.date)
     +'<div class="focus">'+o.focus.map(f=>'<div class="f"><div class="k">'+f.k+'</div><div class="v">'+f.v+"</div></div>").join("")+"</div>"
     +'<div class="sub-h">'+o.takeawaysTitle+"</div>"
     +'<ul class="takeaways">'+o.takeaways.map(t=>"<li>"+t+"</li>").join("")+"</ul>"
-    +'<div class="thermo"><div class="g"></div><div class="y"></div><div class="o"></div><div class="r"></div></div>'
+    +'<div class="thermo-wrap">'+mk+'<div class="thermo"><div class="g"></div><div class="y"></div><div class="o"></div><div class="r"></div></div></div>'
     +'<div class="thermo-lbl"><span>風險偏好 · 低</span><span>'+o.thermo.note+"</span><span>高</span></div>"
     +'<div class="srcbar"><span class="lbl">主要來源（15）</span>'
     +SRCBAR.map(s=>'<span class="badge b-'+s+'">'+BADGE[s]+"</span>").join("")+"</div></div>"
@@ -311,14 +339,16 @@ function renderDaybar(){
   let h='<span class="lbl">日期</span>';
   h+=head.map(d=>{
     const cls=[d.date===cur?"active":"",d.date===today?"today":""].filter(Boolean).join(" ");
+    const tv=(d.thermo!=null)?'<span class="tv">'+d.thermo+"</span>":"";   // 風險溫度計歷史值（v17）
     return '<button data-d="'+d.date+'"'+(cls?' class="'+cls+'"':"")+">"
-      +md(d.date)+" "+d.weekday+"</button>";
+      +md(d.date)+" "+d.weekday+tv+"</button>";
   }).join("");
   if(rest.length){
     h+='<select id="daymore"><option value="">更早（'+rest.length+" 天）…</option>"
       +rest.map(d=>'<option value="'+d.date+'"'+(d.date===cur?" selected":"")+">"
       +d.date.replace(/-/g,"/")+" "+d.weekday+"</option>").join("")+"</select>";
   }
+  h+='<a class="daylink" href="search.html">全站搜尋</a>';
   h+='<span class="archive-note">共 '+idx.days.length+" 天封存 · 全部保留</span>";
   bar.innerHTML=h;
   bar.querySelectorAll("button").forEach(b=>b.onclick=()=>load(b.dataset.d));

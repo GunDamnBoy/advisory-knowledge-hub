@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全站搜尋 · 投顧知識庫儀表板</title>
+<style>
+  :root{
+    --bg:#eef2f7; --card:#ffffff; --line:#e2e8f0; --line2:#cbd5e1;
+    --txt:#16202e; --txt2:#3f4d61; --txt3:#7d8ba0;
+    --accent:#2563eb; --green:#16a34a; --red:#dc2626; --chip:#eef2f7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    background:var(--bg);color:var(--txt);line-height:1.75;padding-bottom:60px}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px}
+  header{border-bottom:1px solid var(--line);background:rgba(255,255,255,.92);backdrop-filter:blur(10px);position:sticky;top:0;z-index:50}
+  .head-inner{display:flex;align-items:center;gap:14px;padding:16px 0;flex-wrap:wrap}
+  h1{font-size:19px;font-weight:800}
+  .back{font-size:13px;font-weight:700;color:var(--accent);text-decoration:none;margin-left:auto}
+  .back:hover{text-decoration:underline}
+  .bar{display:flex;gap:10px;padding:16px 0;flex-wrap:wrap}
+  .bar input{flex:1;min-width:220px;background:#fff;border:1px solid var(--line2);border-radius:12px;
+    padding:11px 16px;font-size:15px;font-family:inherit;outline:none}
+  .bar input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+  .bar select{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;
+    font-size:13.5px;font-weight:700;color:var(--txt2);font-family:inherit;cursor:pointer}
+  .stat{font-size:12.5px;color:var(--txt3);margin-bottom:14px}
+  .hit{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 17px;margin-bottom:10px;transition:.15s}
+  .hit:hover{border-color:var(--line2);box-shadow:0 3px 10px rgba(16,32,46,.07)}
+  .hit .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;font-size:11.5px}
+  .hit .d{font-weight:800;color:var(--accent);text-decoration:none}
+  .hit .d:hover{text-decoration:underline}
+  .hit .g{color:var(--txt3)}
+  .tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--chip);color:var(--txt2);border:1px solid var(--line)}
+  .tag.thread{background:#fdf4ff;color:#86198f;border-color:#f0abfc}
+  .badge{font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px;border:1px solid var(--line2);background:#fff;color:var(--txt2)}
+  .hit h3{font-size:15px;font-weight:750;line-height:1.5;margin-bottom:5px}
+  .hit h3 a{color:var(--txt);text-decoration:none}
+  .hit h3 a:hover{color:var(--accent)}
+  .hit .sn{font-size:13px;color:var(--txt2);line-height:1.7}
+  mark{background:#fef08a;color:inherit;border-radius:3px;padding:0 1px}
+  .loading,.empty{text-align:center;color:var(--txt3);font-size:14px;padding:60px 0}
+  .prog{font-size:12px;color:var(--txt3)}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="head-inner">
+  <h1>全站搜尋</h1><span class="prog" id="prog"></span>
+  <a class="back" href="index.html">← 回儀表板</a>
+</div></div></header>
+<div class="wrap">
+  <div class="bar">
+    <input id="q" type="search" placeholder="搜尋標題、內文、標籤、主題…（至少 2 個字）" autofocus>
+    <select id="fsrc"><option value="">全部來源</option></select>
+    <select id="fgrp"><option value="">全部分組</option></select>
+  </div>
+  <div class="stat" id="stat"></div>
+  <div id="out"><div class="loading">載入封存中…</div></div>
+</div>
+<script>
+const BADGE={bbg:"Bloomberg",wsj:"WSJ",nyt:"NYT",ft:"FT",nikkei:"Nikkei",wapo:"WaPo",
+  barrons:"Barron's",cnbc:"CNBC",ibd:"IBD",mw:"MarketWatch",toms:"Tom's HW",ogj:"OGJ",
+  politico:"Politico",thehill:"The Hill",wscn:"華爾街見聞",reuters:"Reuters",anue:"鉅亨網",
+  moneydj:"MoneyDJ",twse:"TWSE／官方",semi:"SemiAnalysis",fierce:"Fierce Biotech",
+  stat:"STAT News",ked:"KED Global",kh:"Korea Herald",mint:"Mint",
+  tf:"TrendForce",econ:"The Economist",pub:"官方／通訊社"};
+const strip=h=>String(h).replace(/<[^>]+>/g,"");
+let DOCS=[];
+const $=s=>document.querySelector(s);
+
+async function boot(){
+  let idx;
+  try{
+    idx=await (await fetch("data/index.json",{cache:"no-cache"})).json();
+  }catch(e){ $("#out").innerHTML='<div class="empty">無法載入 data/index.json（'+e.message+'）。請從網站或 localhost 開啟。</div>'; return; }
+  const days=idx.days||[];
+  let done=0;
+  // 依日期新→舊逐批載入（每批 5 天），邊載邊可搜
+  for(let i=0;i<days.length;i+=5){
+    const batch=days.slice(i,i+5);
+    await Promise.all(batch.map(async m=>{
+      try{
+        const d=await (await fetch(m.file,{cache:"no-cache"})).json();
+        for(const s of d.sections||[]) for(const g of s.groups||[]) for(const c of g.cards||[]){
+          const body=Array.isArray(c.body)?c.body.join(" "):String(c.body||"");
+          DOCS.push({date:d.date,grp:g.label,src:c.src,tag:c.tag||"",thread:c.thread||"",
+            title:strip(c.title),url:c.url,deep:!!c.deep,
+            text:strip(body+" "+(c.bullets||[]).join(" "))});
+        }
+      }catch(e){}
+      done++; $("#prog").textContent="已載入 "+done+"／"+days.length+" 天";
+    }));
+    render();   // 每批完成就重跑一次目前的查詢
+  }
+  $("#prog").textContent=days.length+" 天 · "+DOCS.length+" 則卡片";
+  fillFilters(); render();
+}
+function fillFilters(){
+  const srcs=[...new Set(DOCS.map(x=>x.src))].sort();
+  $("#fsrc").innerHTML='<option value="">全部來源</option>'+srcs.map(s=>'<option value="'+s+'">'+(BADGE[s]||s)+"</option>").join("");
+  const grps=[...new Set(DOCS.map(x=>x.grp))];
+  $("#fgrp").innerHTML='<option value="">全部分組</option>'+grps.map(g=>'<option value="'+g+'">'+g+"</option>").join("");
+}
+function esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}
+function hl(s,q){return q?s.replace(new RegExp(esc(q),"gi"),m=>"<mark>"+m+"</mark>"):s}
+function snippet(t,q){
+  const i=t.toLowerCase().indexOf(q.toLowerCase());
+  if(i<0) return t.slice(0,120)+(t.length>120?"…":"");
+  const a=Math.max(0,i-45), b=Math.min(t.length,i+q.length+75);
+  return (a>0?"…":"")+t.slice(a,b)+(b<t.length?"…":"");
+}
+function render(){
+  const q=$("#q").value.trim(), src=$("#fsrc").value, grp=$("#fgrp").value;
+  if(q.length<2 && !src && !grp){
+    $("#stat").textContent="輸入關鍵字，或用來源／分組篩選。可搜中文與英文，涵蓋全部封存日。";
+    $("#out").innerHTML=""; return;
+  }
+  const ql=q.toLowerCase();
+  let hits=DOCS.filter(x=>
+    (!src||x.src===src)&&(!grp||x.grp===grp)&&
+    (q.length<2||x.title.toLowerCase().includes(ql)||x.text.toLowerCase().includes(ql)
+      ||x.tag.toLowerCase().includes(ql)||x.thread.toLowerCase().includes(ql)));
+  $("#stat").textContent="共 "+hits.length+" 則符合"+(hits.length>200?"（僅顯示前 200 則）":"");
+  hits=hits.slice(0,200);
+  $("#out").innerHTML=hits.map(x=>
+    '<div class="hit"><div class="top">'
+    +'<a class="d" href="index.html#'+x.date+'">'+x.date.replace(/-/g,"/")+"</a>"
+    +'<span class="badge">'+(BADGE[x.src]||x.src)+"</span>"
+    +'<span class="g">'+x.grp+"</span>"
+    +(x.tag?'<span class="tag">'+x.tag+"</span>":"")
+    +(x.thread?'<span class="tag thread">'+x.thread+"</span>":"")
+    +"</div><h3><a href='"+x.url+"' target='_blank' rel='noopener'>"+hl(x.title,q)+"</a></h3>"
+    +'<div class="sn">'+hl(snippet(x.text,q),q)+"</div></div>"
+  ).join("")||'<div class="empty">沒有符合的卡片</div>';
+}
+let tmr=null;
+$("#q").addEventListener("input",()=>{clearTimeout(tmr);tmr=setTimeout(render,180)});
+$("#fsrc").addEventListener("change",render);
+$("#fgrp").addEventListener("change",render);
+boot();
+</script>
+</body>
+</html>
