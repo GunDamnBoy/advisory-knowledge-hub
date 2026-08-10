@@ -35,6 +35,11 @@ def main():
     w=d.get('window')
     assert w,'★致命：頂層缺 window 欄'
     frm=dt.datetime.fromisoformat(w['from']); to=dt.datetime.fromisoformat(w['to'])
+    fails=[]
+    if not(frm.hour==7 and frm.minute==0 and (dt.date.fromisoformat(TODAY)-frm.date()).days==1):
+        print('★窗口起點異常：%s（應為前一日 07:00 台北，固定起點見 brief 第 3 節）'%w['from']); fails.append('窗口起點')
+    if d.get('date')!=TODAY:
+        print('★頂層 date 與檔名不一致：',d.get('date')); fails.append('頂層date')
     # 判定依據是「窗口起點那一天」——窗口是「前一日 07:00 → 當日上午」，主體是前一日。
     # 用 to（當日）判會誤判：8/08 那輪 to 是週六但窗口主體是週五，素材其實很充足（123 則）。
     weekend = frm.weekday()>=5          # 5=週六 6=週日
@@ -42,9 +47,12 @@ def main():
     lo,hi = WEEKEND_RANGE if weekend else (95,125)
     cards=[(g['label'],c) for s in d['sections'] for g in s['groups'] for c in g['cards']]
     def T(c):
-        try: return dt.datetime.fromisoformat(c['ts'])
+        try:
+            x=dt.datetime.fromisoformat(c['ts'])
+            return x if x.tzinfo else None   # 沒帶時區＝壞 ts（比較 naive/aware 會 TypeError 崩潰）
         except Exception: return None   # 缺 ts 不中斷——檢查機制自己安靜失效比沒有檢查更危險
     def islist(u):
+        if re.search(r'[?&][^=&]{1,20}=[A-Za-z0-9-]{8,}',u): return False   # 文章 ID 在查詢字串（MoneyDJ 等）
         p=re.sub(r'^https?://[^/]+','',u).split('?')[0].strip('/')
         if not p: return True
         last=p.split('/')[-1]
@@ -56,15 +64,32 @@ def main():
     badsrc=[(c.get('src'),c['title'][:30]) for _,c in cards if c.get('src') not in SRCOK]
     listy=sorted({c['url'] for _,c in cards if islist(c['url']) and not exempt(c['url'])})
     days=json.load(open('%s/data/index.json'%REPO))['days']
-    prevmeta=next((x for x in days if x['date']!=TODAY),None)   # 不可直接用 days[1]
+    prevmeta=max((x for x in days if x['date']<TODAY),key=lambda x:x['date'],default=None)   # 取「小於該日的最大日期」——歷史重跑時不能拿最新版來比
     prev=json.load(open('%s/%s'%(REPO,prevmeta['file']))) if prevmeta else {'sections':[]}
     prevurl={c['url'] for s in prev['sections'] for g in s['groups'] for c in g['cards']}
     dup=[c['title'] for _,c in cards if c['url'] in prevurl and not exempt(c['url'])]
+    if TODAY>='2026-08-11':   # v17（時間序列化）起生效，歷史檔不回溯套用
+        th=(d.get('overview') or {}).get('thermo') or {}
+        lv=str(th.get('level',''))
+        if not(lv.isdigit() and 0<=int(lv)<=100):
+            print('★thermo.level 須為 0–100 整數字串（散文放 note）：',repr(lv)); fails.append('thermo')
+        for sn in (d.get('overview') or {}).get('snap',[]):
+            if not isinstance(sn.get('num'),(int,float)):
+                print('★snap 項缺 num 數值欄：',sn.get('k')); fails.append('snap.num'); break
+        ent=next((x for x in days if x['date']==TODAY),None)
+        if not ent or not isinstance(ent.get('thermo'),int) or not isinstance(ent.get('threads'),list):
+            print('★index.json 當日 entry 缺 thermo（整數）或 threads（陣列）'); fails.append('index欄位')
+    for _,c in cards:
+        tv=c.get('thread')
+        if tv is not None and not(isinstance(tv,str) and 2<=len(tv)<=16):
+            print('★thread 代號格式錯（2–16 字的字串）：',repr(tv)); fails.append('thread'); break
     u=collections.defaultdict(list)
     for lab,c in cards: u[c['url']].append(lab)
     multi={k:v for k,v in u.items() if len(v)>1 and not exempt(k)}
     viol=[(v,k) for k,v in multi.items() if not(len(v)<=3 and len(set(v))==len(v))]
-    n=len(cards); fails=[]
+    n=len(cards)
+    if d.get('cards')!=n:
+        print('★頂層 cards 數字與實際卡數不一致：%s vs %d'%(d.get('cards'),n)); fails.append('頂層cards')
     print('模式：'+('週末（下限已放寬）' if weekend else '平日'))
     print('總數',n,'OK' if lo<=n<=hi else '★不在 %d–%d'%(lo,hi))
     if not lo<=n<=hi: fails.append('總數')
