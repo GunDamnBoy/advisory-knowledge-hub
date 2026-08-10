@@ -210,7 +210,8 @@ The Economist 是**週刊**，但與 SemiAnalysis 的「純週更」不同，它
 `index.html` 已改為**讀 JSON 的單頁應用**，內容與外殼分離。每天產出的是資料檔，不是 HTML。
 
 ```
-index.html            # 外殼：CSS ＋ 渲染邏輯 ＋ 日期切換列（約 23KB，很少需要改）
+index.html            # 外殼：CSS ＋ 渲染邏輯 ＋ 日期切換列（約 27KB，很少需要改）
+search.html           # 全站搜尋頁（2026/08/10 新增）：讀全部封存做前端搜尋，不需要每日維護
 data/index.json       # 封存索引：days 陣列，由新到舊
 data/2026-08-02.json  # 每日內容，一天一個檔，永久保留
 data/2026-07-30.json
@@ -225,10 +226,15 @@ data/2026-07-30.json
               "stamp": "2026/08/04 11:40 (台北) · 週二亞洲盤中",
               "headline": "當日心得標題", "cards": 87,
               "keptDates": ["2026/08/03","2026/08/04"],
+              "thermo": 64, "threads": ["日銀升息路徑","財報季"],
               "file": "data/2026-08-04.json" } ] }
 ```
 
 （`count` ＝ `days` 的長度，每天 +1。`cards` 在 24 小時窗口制下約 80～95。`keptDates` ＝ 窗口涵蓋到的日期，跨午夜所以通常兩個。）
+
+**`thermo` 與 `threads`（2026/08/10 第 17 次修訂新增，當日 entry 必填）**：
+- `thermo` ＝ 當日 `overview.thermo.level` 的整數值。前端日期列會顯示歷史溫度，跨日就是一條風險偏好時間序列。
+- `threads` ＝ 當日全部卡片用到的 `thread` 代號（去重後的陣列，沒有就給 `[]`）。**寫之前先看 `days` 前幾天的 `threads`——同一條故事沿用同一代號**，代號一變，連續天數就斷了。前端據此渲染「延續中的主題 · 第 N 天」。
 
 **`data/YYYY-MM-DD.json`** 的頂層鍵：`date`／`weekday`／`stamp`／`headline`／`window`／`keptDates`／`cards`／`overview`／`essay`／`sections`／`about`。
 
@@ -236,9 +242,12 @@ data/2026-07-30.json
 - **`keptDates`**：語意已變。窗口跨午夜，所以它現在就是「窗口涵蓋到的日期」，通常是兩個（前一日與當日）。保留此欄純為向下相容，**前端並未使用**，不要花力氣在它身上。
 
 - `overview`：`snap`（6 格，各含 `k`/`v`/`tone`，tone＝`up`/`dn`/`fl`）、`focus`（4 張，`k`/`v`）、`takeawaysTitle`、`takeaways`（7 條）、`thermo`（`level`/`note`）、`watch`（`d`/`t`）
+  - **`snap` 每格另附 `num` 與 `chgPct`（2026/08/10 第 17 次修訂新增，必填）**：`num`＝該指標的數值（如 `7757.64`），`chgPct`＝漲跌百分比數值（如 `0.62`、跌為負；不適用時給 `null`，如殖利率用 bp 表示的情況）。`v` 仍是顯示字串，`num`/`chgPct` 是給機器讀的——下游 House View 與 convergence-weekly 靠這兩欄把每日快照串成時間序列，**別再讓數字被鎖在 HTML 字串裡**。
+  - **`thermo.level` 必須是 0–100 的整數字串**（如 `"64"`），質性描述一律放 `note`。8/11 前有幾天寫成散文（「偏熱但分歧擴大」），時間序列因此斷點——check.py 自 2026/08/11 起強制檢查。
 - `essay`：`title`／`by`／`kick`／`paras`（5–6 段）
 - `sections`：三個區塊（id＝`macro`/`industry`/`politics`），各含 `title`/`en`/`intro`/`groups`；`groups` 內為 `label`/`accent`（``/`tw`/`macro`/`mat`）/`cards`
-- **卡片 dict**：`src`（來源代碼）／`tag`／`tagcls`（``/`hot`/`warn`/`pos`）／`date`（`YYYY/MM/DD`，顯示用）／**`ts`**／`title`／`deep`（bool）／`body`（deep 時為段落 list，否則字串）／`bullets`／`url`／`tone`（`t-green`/`t-yellow`/`t-orange`/`t-red`）
+- **卡片 dict**：`src`（來源代碼）／`tag`／`tagcls`（``/`hot`/`warn`/`pos`）／`date`（`YYYY/MM/DD`，顯示用）／**`ts`**／`title`／`deep`（bool）／`body`（deep 時為段落 list，否則字串）／`bullets`／`url`／`tone`（`t-green`/`t-yellow`/`t-orange`/`t-red`）／**`thread`（選填）**
+  - **`thread`（2026/08/10 第 17 次修訂新增，選填）**＝跨日延續的故事線代號，2～16 字（如「日銀升息路徑」「財報季」）。**只給真正跨日發展的題材**（政策路徑、財報季、併購案進程、戰事），單日事件不要硬掛。**先查 `index.json` 前幾天的 `threads` 沿用既有代號**；一天掛 thread 的卡片以 3～6 張為宜，寧缺勿濫。前端會在卡片顯示代號、在總覽顯示「延續中的主題 · 第 N 天」，convergence-weekly 直接以此欄追主題。
   - **`ts`（2026/08/03 第 4 次修訂新增，必填）**＝原文的發布時間，ISO 8601 含時區偏移，例如 `"2026-08-04T04:32+08:00"`。**一律換算成台北時間（+08:00）再寫入**，不要混用來源當地時區，否則窗口比對會出錯。
   - 取 `ts` 的方式：優先讀文章頁的 `<time datetime="...">` 或 `meta[property="article:published_time"]`；讀不到就用文章上顯示的日期時間換算；**連日期都只有「X hours ago」這種相對時間時，以擷取時刻往前推該時數估算，並在 `ts` 後面不做任何標記——但若估算誤差可能跨越窗口起點，寧可不收這篇。**
   - `date` 欄仍必填且必須與 `ts` 的台北日期一致（前端只顯示 `date`，不讀 `ts`）。
@@ -265,7 +274,7 @@ data/2026-07-30.json
    - 跨資產快照列（`.snap`）：S&P 500、那斯達克、布蘭特油、黃金、美元/日圓、30 年美債或銅等 6 格（漲綠 `.up`／跌紅 `.dn`／平 `.fl`）。
    - 四張焦點卡（`.focus`）：當日最重要的四條主軸。
    - 七大重點 takeaways（`.takeaways`）：濃縮當日跨版面重點。
-   - 溫度條＋情緒註解、主要來源徽章列、本週盯盤時程（`.watch`）。
+   - 溫度條＋情緒註解（溫度條上會依 `thermo.level` 顯示數值標記）、快照列下方的「延續中的主題」列（由 `index.json` 的 `threads` 自動計算連續天數）、主要來源徽章列、本週盯盤時程（`.watch`）。
 2. **摘要與心得**：讀完當日 25 家後，寫一篇**約 1,000 字**的綜合彙整＋觀點（`.essay`）。要有一句 kick 破題、5～6 段分主題論述（如 AI 資本支出、財報冷熱、能源地緣、央行/債市、亞洲/台股），結尾給「投顧視角小結」與 2～3 個可驗證盯盤節點。非投資建議。
 3. **市場總經**（section id＝`macro`，7 組）：**美股與財報**／**央行、利率與匯率**／**台灣**／**中國**／**日本**／**亞太（韓國、印度、東南亞）**／**歐洲**（各分組用 `.group-label`）。
 4. **產業與主題**（section id＝`industry`，6 組）：**AI 與半導體**／**金融、併購與企業**／**能源與原物料**／**生技健護**／**信用債**／**黃金**。
