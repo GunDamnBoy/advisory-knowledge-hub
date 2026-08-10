@@ -35,8 +35,9 @@ def main():
     w=d.get('window')
     assert w,'★致命：頂層缺 window 欄'
     frm=dt.datetime.fromisoformat(w['from']); to=dt.datetime.fromisoformat(w['to'])
-    # 窗口起點或終點落在週六(5)/週日(6) → 套用週末下限
-    weekend = frm.weekday()>=5 or to.weekday()>=5
+    # 判定依據是「窗口起點那一天」——窗口是「前一日 07:00 → 當日上午」，主體是前一日。
+    # 用 to（當日）判會誤判：8/08 那輪 to 是週六但窗口主體是週五，素材其實很充足（123 則）。
+    weekend = frm.weekday()>=5          # 5=週六 6=週日
     quota = WEEKEND_QUOTA if weekend else QUOTA
     lo,hi = WEEKEND_RANGE if weekend else (95,125)
     cards=[(g['label'],c) for s in d['sections'] for g in s['groups'] for c in g['cards']]
