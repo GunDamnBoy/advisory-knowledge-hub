@@ -232,7 +232,12 @@ data/2026-07-30.json
 
 （`count` ＝ `days` 的長度，每天 +1。`cards` 在 24 小時窗口制下約 80～95。`keptDates` ＝ 窗口涵蓋到的日期，跨午夜所以通常兩個。）
 
-**`thermo` 與 `threads`（2026/08/10 第 17 次修訂新增，當日 entry 必填）**：
+**`thermo`／`threads`／`watch`／`pulse`／`snap`（第 17、18 次修訂新增，當日 entry 必填）——index.json 是系統的「跨日記憶」**：寫今天的 entry 之前，先讀前幾天的 entry，thread 沿用、pulse 比對翻轉、watch 寫回顧，全部不用打開任何舊的日檔。
+
+- `watch` ＝ 當日 `overview.watch` 的鏡像（`d`/`t` 兩欄即可）。**明天的產出要靠它寫「昨日節點回顧」。**
+- `pulse` ＝ 當日 `overview.pulse` 的鏡像（`k`/`dir` 兩欄即可）。前端據此標記立場翻轉。
+- `snap` ＝ 當日 `overview.snap` 的數值鏡像（`k`/`num`/`chgPct` 三欄）。前端累積 ≥10 天後自動標「近 N 日最大波動」旗標，**writer 不用做任何異常判斷**。
+- 
 - `thermo` ＝ 當日 `overview.thermo.level` 的整數值。前端日期列會顯示歷史溫度，跨日就是一條風險偏好時間序列。
 - `threads` ＝ 當日全部卡片用到的 `thread` 代號（去重後的陣列，沒有就給 `[]`）。**寫之前先看 `days` 前幾天的 `threads`——同一條故事沿用同一代號**，代號一變，連續天數就斷了。前端據此渲染「延續中的主題 · 第 N 天」。
 
@@ -244,6 +249,8 @@ data/2026-07-30.json
 - `overview`：`snap`（6 格，各含 `k`/`v`/`tone`，tone＝`up`/`dn`/`fl`）、`focus`（4 張，`k`/`v`）、`takeawaysTitle`、`takeaways`（7 條）、`thermo`（`level`/`note`）、`watch`（`d`/`t`）
   - **`snap` 每格另附 `num` 與 `chgPct`（2026/08/10 第 17 次修訂新增，必填）**：`num`＝該指標的數值（如 `7757.64`），`chgPct`＝漲跌百分比數值（如 `0.62`、跌為負；不適用時給 `null`，如殖利率用 bp 表示的情況）。`v` 仍是顯示字串，`num`/`chgPct` 是給機器讀的——下游 House View 與 convergence-weekly 靠這兩欄把每日快照串成時間序列，**別再讓數字被鎖在 HTML 字串裡**。
   - **`thermo.level` 必須是 0–100 的整數字串**（如 `"64"`），質性描述一律放 `note`。8/11 前有幾天寫成散文（「偏熱但分歧擴大」），時間序列因此斷點——check.py 自 2026/08/11 起強制檢查。
+  - **`pulse`（2026/08/10 第 18 次修訂新增，必填）**＝五資產每日立場列，固定五筆、順序與鍵名逐字為 **美股／美債／美元／黃金／原油**，各含 `k`、`dir`（只能是 `偏多`/`中性`/`偏空`）、`note`（≤30 字的一句理由）。**這是每日版的迷你 House View**：先看 `index.json` 昨天的 `pulse`，立場翻轉必須是有意識的決定、且 `note` 要講清楚為什麼翻。不確定就寫`中性`，不要天天翻來翻去。
+  - **`watchReview`（2026/08/10 第 18 次修訂新增，必填）**＝昨日盯盤節點回顧。從 `index.json` 前一天 entry 的 `watch` 逐條檢視，各含 `d`、`t`（照抄昨天的節點文字）、`verdict`（只能是 `應驗`/`落空`/`未決`）、`note`（一句話講實際發生了什麼，附數字）。**這是本站與一般新聞摘要的分水嶺——拋出去的預測要回頭對答案。** 判定要誠實：模稜兩可就是`未決`，不要把落空硬拗成應驗；`落空`的 note 尤其要寫清楚，那是最有學習價值的部分。前一天 entry 沒有 `watch`（不會發生，已回填）才可為空。
 - `essay`：`title`／`by`／`kick`／`paras`（5–6 段）
 - `sections`：三個區塊（id＝`macro`/`industry`/`politics`），各含 `title`/`en`/`intro`/`groups`；`groups` 內為 `label`/`accent`（``/`tw`/`macro`/`mat`）/`cards`
 - **卡片 dict**：`src`（來源代碼）／`tag`／`tagcls`（``/`hot`/`warn`/`pos`）／`date`（`YYYY/MM/DD`，顯示用）／**`ts`**／`title`／`deep`（bool）／`body`（deep 時為段落 list，否則字串）／`bullets`／`url`／`tone`（`t-green`/`t-yellow`/`t-orange`/`t-red`）／**`thread`（選填）**
@@ -275,6 +282,10 @@ data/2026-07-30.json
    - 四張焦點卡（`.focus`）：當日最重要的四條主軸。
    - 七大重點 takeaways（`.takeaways`）：濃縮當日跨版面重點。
    - 溫度條＋情緒註解（溫度條上會依 `thermo.level` 顯示數值標記）、快照列下方的「延續中的主題」列（由 `index.json` 的 `threads` 自動計算連續天數）、主要來源徽章列、本週盯盤時程（`.watch`）。
+   - **五資產立場列**（`overview.pulse` 渲染，翻轉時前端自動標記「翻轉·昨偏空」）。
+   - **昨日節點回顧**（`overview.watchReview` 渲染在盯盤時程之後，附「N 應驗 · N 落空」統計）。
+   - **姊妹庫晨間匯流條**（純前端、只在最新一天顯示）：AI 泡沫監控綜合溫度（讀該站 `<script id="dashboard-data">` 內嵌 JSON）、Podcast 知識庫今晨集數、每日五圖標題。**writer 不用產任何資料**，三站任一掛掉該格自動隱藏。
+   - **異常旗標**：快照格在 `index.json` 累積 ≥10 天 `snap` 數值後，當日變動幅度創期間新高會自動標「⚑ 近 N 日最大波動」。純前端計算。
 2. **摘要與心得**：讀完當日 25 家後，寫一篇**約 1,000 字**的綜合彙整＋觀點（`.essay`）。要有一句 kick 破題、5～6 段分主題論述（如 AI 資本支出、財報冷熱、能源地緣、央行/債市、亞洲/台股），結尾給「投顧視角小結」與 2～3 個可驗證盯盤節點。非投資建議。
 3. **市場總經**（section id＝`macro`，7 組）：**美股與財報**／**央行、利率與匯率**／**台灣**／**中國**／**日本**／**亞太（韓國、印度、東南亞）**／**歐洲**（各分組用 `.group-label`）。
 4. **產業與主題**（section id＝`industry`，6 組）：**AI 與半導體**／**金融、併購與企業**／**能源與原物料**／**生技健護**／**信用債**／**黃金**。

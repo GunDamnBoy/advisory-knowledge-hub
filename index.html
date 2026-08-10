@@ -381,6 +381,39 @@ function aboutHTML(d){
     +'<div class="disclaimer">'+a.limits+"</div></div></section>";
 }
 
+/* ---------- 姊妹庫晨間匯流條（純前端 fetch，失敗就不顯示；只在最新一天出現） ---------- */
+let SIS;
+async function loadSisters(){
+  if(SIS===undefined){
+    SIS={};
+    const grab=async(u,fn)=>{try{const r=await fetch(u,{cache:"no-cache"});if(r.ok)await fn(r)}catch(e){}};
+    await Promise.all([
+      grab("https://gundamnboy.github.io/podcast-knowledge-digest/data/index.json",
+        async r=>{const j=await r.json();SIS.pod=j.days&&j.days[0]}),
+      grab("https://gundamnboy.github.io/chart-of-the-day/data/index.json",
+        async r=>{const j=await r.json();SIS.chart=j.days&&j.days[0]}),
+      grab("https://gundamnboy.github.io/ai-bubble-monitor/",
+        async r=>{const h=await r.text();
+          const m=h.match(/<script[^>]*id="dashboard-data"[^>]*>([\s\S]*?)<\/script>/);
+          if(m){const j=JSON.parse(m[1]);
+            SIS.bub={c:j.composite,tw:j.tw&&j.tw.heat,d:(j.meta&&j.meta.built)||""}}})
+    ]);
+  }
+  const el=document.getElementById("sisters"); if(!el) return;
+  const cells=[];
+  if(SIS.bub) cells.push('<a class="sc" href="https://gundamnboy.github.io/ai-bubble-monitor/" target="_blank" rel="noopener">'
+    +'<span class="sk">AI 泡沫監控</span><span class="sv">綜合溫度 <b>'+SIS.bub.c+"</b> · 台股 "+SIS.bub.tw+"</span>"
+    +'<span class="sd">更新 '+SIS.bub.d+"（每週一）</span></a>");
+  if(SIS.pod) cells.push('<a class="sc" href="https://gundamnboy.github.io/podcast-knowledge-digest/" target="_blank" rel="noopener">'
+    +'<span class="sk">Podcast 知識庫</span><span class="sv">今晨 <b>'+SIS.pod.episodeCount+" 集</b>："
+    +(SIS.pod.shows||[]).slice(0,3).join("、")+((SIS.pod.shows||[]).length>3?"…":"")+"</span>"
+    +'<span class="sd">'+SIS.pod.date+" · 每日 03:00</span></a>");
+  if(SIS.chart) cells.push('<a class="sc" href="https://gundamnboy.github.io/chart-of-the-day/" target="_blank" rel="noopener">'
+    +'<span class="sk">每日五圖</span><span class="sv">'+SIS.chart.headline+"</span>"
+    +'<span class="sd">'+SIS.chart.date+" · 每日 11:30</span></a>");
+  el.innerHTML=cells.length?'<div class="sub-h">姊妹庫晨間匯流</div><div class="sisters">'+cells.join("")+"</div>":"";
+}
+
 /* ---------- 日期列 ---------- */
 function todayTPE(){
   const t=new Date(Date.now()+(new Date().getTimezoneOffset()*60000)+8*3600000);
@@ -437,6 +470,7 @@ async function load(date){
   $("#panes").innerHTML=stale+overviewHTML(d)+essayHTML(d)
     +d.sections.map(sectionHTML).join("")+aboutHTML(d);
   const tl=$("#tolatest"); if(tl)tl.onclick=e=>{e.preventDefault();load(idx.days[0].date)};
+  if(cur===idx.days[0].date) loadSisters();   // 匯流條只在最新一天顯示，歷史封存保持純快照
   document.querySelectorAll("nav.tabs button").forEach((b,i)=>b.classList.toggle("active",i===0));
   $("#foot").innerHTML="<b>投顧知識庫儀表板</b> · "+d.stamp+" · 15 家來源 · "
     +d.cards+" 則卡片 · 內容僅供研究參考，非投資建議";
