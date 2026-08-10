@@ -13,6 +13,7 @@
 
 | 版 | 日期 | 主題 | 來源 | 子類別 | 則數目標 | 深度卡 | 影響檔案 |
 |---|---|---|---|---|---|---|---|
+| 17 | 08-10 | 時序化・thread・搜尋＋4 bug | 25 | 15 | 95–125（週末 80–125） | 6–8 | scripts×4／brief／index.html／**新增 search.html**／prompt |
 | 16 | 08-10 | 週末模式、發稿日曆、探針策略 | 25 | 15 | 95–125（**週末 80–125**） | 6–8 | brief／prompt／check.py／preamble |
 | 15 | 08-09 | 預篩改走列表頁、共用前言外部化 | 25 | 15 | 95–125 | 6–8 | brief／prompt／**新增 list_timestamps.js・subagent_preamble.md** |
 | 14 | 08-08 | 每日 token 開銷結構性優化 | 25 | 15 | 95–125 | 6–8 | brief／prompt／**新增 CHANGELOG・scripts/** |
@@ -49,6 +50,32 @@
 ---
 
 ## 逐版明細
+
+### 2026-08-10（第 17 次修訂 · 時間序列化、主題連續劇、全站搜尋＋四個程式碼 bug）
+
+**動機**：使用者要求全面重審程式碼並構思新功能。審視發現**封存裡已經埋著兩個沒被利用的資產**——`overview.thermo` 有 0–100 的風險溫度數字、`overview.snap` 有每日全套報價，每天都在寫、但從來沒被跨日串起來。同時逐行審出四個真 bug。
+
+**四個 bug 修正**（全部只動 `scripts/`，附驗證）：
+
+1. **`list_timestamps.js` 會把 MoneyDJ 整站壓成一條**：連結正規化只留路徑，但 MoneyDJ 的文章 ID 在查詢字串（`NewsViewer.aspx?a=GUID`），全站文章共用同一路徑、被 `seen` 去重成 1 條。順帶發現文章連結的正則沒有 `i` 旗標，`/News/`（大寫）根本比對不到。修：查詢字串帶 ≥8 碼 ID 時保留、正則加 `i`。
+2. **`check.py` 歷史重跑時去重比對方向錯誤**：`prevmeta` 取「最新的非當日版本」，對 8/06 重跑會拿 8/10 來比。修：取「小於該日的最大日期」。修後五天重驗，8/06 正確比對 8/05。
+3. **naive `ts` 會讓 check.py 崩潰**：`fromisoformat` 接受不帶時區的字串，與 aware 的窗口比較時 TypeError 未捕捉。修：`T()` 檢查 `tzinfo`，naive 一律視為「缺/壞 ts」。單元測試確認：壞卡被列名、exit=1、不崩潰。
+4. **MoneyDJ 每天三則假警報**：「疑似列表頁」啟發式剝掉查詢字串後 `NewsViewer.aspx` 像列表頁。修：與 #1 同一判準。修後 8/10 重驗警告歸零。
+
+**低成本強化**：check.py 加窗口起點驗證（必須是前一日 07:00 台北，抓排程漂移）、頂層 `date`／`cards` 一致性檢查；metrics.py 補 v15/v16/v17 里程碑、`--groups` 對週末列改用週末下限（先前拿平日下限量週末、趨勢表誤導）、`--csv` 加 thermo 欄；read_article.js 回傳 `title`、全頁 p 保險絲改為「抓到更多才換」。
+
+**三個新功能**：
+
+- **時間序列化**：`thermo.level` 規格化為 0–100 整數字串（8/11 前有幾天寫成散文，序列因此有斷點）；`snap` 每格加 `num`／`chgPct` 數值欄；`index.json` 當日 entry 加 `thermo` 與 `threads`（歷史十天已回填 thermo，6 天有值）。前端：日期列顯示歷史溫度、溫度條加數值標記。**下游 House View 與 convergence-weekly 從此可以直接吃數字，不用再從 HTML 字串裡摳。**
+- **主題連續劇（thread）**：卡片選填 `thread` 代號（2–16 字，跨日沿用同一代號，一天 3～6 張為宜），總覽顯示「延續中的主題 · 第 N 天」（由 index.json 計算、零額外請求），metrics.py `--tags` 一併統計。convergence-weekly 以此欄直接追主題，不用自己做跨日字串比對。
+- **全站搜尋（search.html）**：前端載入全部封存做即時搜尋（標題／內文／標籤／thread，含來源與分組篩選、關鍵字高亮、分批載入邊載邊搜）。**每日快報從此升級成可查詢的知識庫**；純前端、不需要每日維護。
+- 另加 metrics.py `--tags`：近 8 天標籤頻率矩陣，看題材升溫／退燒。
+
+**check.py 的 v17 檢查自 2026-08-11 起生效**（thermo 整數、snap.num、index 欄位、thread 格式），歷史檔不回溯套用。8/11 是第一輪實跑，盯：writer 有沒有正確填 num/chgPct、thread 代號有沒有沿用。
+
+**觀察項（未動）**：華爾街見聞 8/10 首次全站 0 則（重度 SPA 未渲染、五種入口全試、sitemap 404）。比照 NYT 規則先觀察，連三天再處置。
+
+**影響檔案**：scripts/check.py、scripts/metrics.py、scripts/list_timestamps.js、scripts/read_article.js、AGENT_BRIEF.md §3.5/§4、index.html、**新增 search.html**、data/index.json（回填）、排程 prompt（v17，快照 prompts/2026-08-10-v17.md）。
 
 ### 2026-08-10（第 16 次修訂 · 週末模式、發稿日曆、探針策略）
 
