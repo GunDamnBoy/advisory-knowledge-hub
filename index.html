@@ -137,6 +137,27 @@
   .thermo-wrap .thermo{margin:0}
   .threads{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:-8px 0 16px}
   .threads .lbl{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+  .pulse{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:6px}
+  @media(max-width:760px){.pulse{grid-template-columns:repeat(2,1fr)}}
+  .pulse .p{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+  .pulse .pk{font-size:11px;color:var(--txt3);display:block;margin-bottom:2px}
+  .pulse .pd{font-size:13.5px;font-weight:800}
+  .pulse .pd.up{color:var(--green)} .pulse .pd.dn{color:var(--red)} .pulse .pd.fl{color:var(--txt2)}
+  .pulse .pchg{display:inline-block;font-size:10px;font-weight:800;color:#ea580c;background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:0 6px;margin-left:6px}
+  .pulse .pn{display:block;font-size:11.5px;color:var(--txt2);line-height:1.55;margin-top:3px}
+  .snap .s .flag{font-size:9.5px;color:var(--orange);font-weight:800;margin-top:2px}
+  .review{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+  .review .rv{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 13px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .review .rt{font-size:13px;color:var(--txt2)}
+  .review .rn{font-size:12.5px;color:var(--txt3);flex-basis:100%;padding-left:2px}
+  .sisters{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+  @media(max-width:760px){.sisters{grid-template-columns:1fr}}
+  .sisters .sc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 13px;text-decoration:none;display:block;transition:.15s}
+  .sisters .sc:hover{border-color:var(--accent);box-shadow:0 3px 10px rgba(16,32,46,.07)}
+  .sisters .sk{display:block;font-size:11px;color:var(--accent);font-weight:800;letter-spacing:.4px;margin-bottom:3px}
+  .sisters .sv{display:block;font-size:12.8px;color:var(--txt2);line-height:1.6}
+  .sisters .sv b{color:var(--txt);font-weight:800}
+  .sisters .sd{display:block;font-size:10.5px;color:var(--txt3);margin-top:3px}
   .thermo div{flex:1}
   .thermo .g{background:var(--green)} .thermo .y{background:var(--yellow)}
   .thermo .o{background:var(--orange)} .thermo .r{background:var(--red)}
@@ -282,23 +303,55 @@ function threadStrip(date){
   }).join("");
   return '<div class="threads"><span class="lbl">延續中的主題</span>'+chips+"</div>";
 }
+function snapFlag(k,chg,date){
+  // 異常旗標：當日 |chgPct| 超過歷史全部可比日的最大值才標（需 ≥10 個歷史點，v18 起累積）
+  if(chg==null||!idx) return "";
+  const i=idx.days.findIndex(x=>x.date===date);
+  const prior=idx.days.slice(i+1).map(e=>(e.snap||[]).find(s=>s.k===k))
+    .filter(s=>s&&s.chgPct!=null).map(s=>Math.abs(s.chgPct));
+  if(prior.length<10) return "";
+  return Math.abs(chg)>Math.max(...prior)?'<div class="flag">⚑ 近'+prior.length+'日最大波動</div>':"";
+}
+function pulseHTML(d){
+  const pu=d.overview.pulse; if(!pu||!pu.length) return "";
+  const i=idx.days.findIndex(x=>x.date===d.date);
+  const prev=((idx.days[i+1]||{}).pulse)||[];
+  const AR={"偏多":"▲","中性":"—","偏空":"▼"},CL={"偏多":"up","中性":"fl","偏空":"dn"};
+  return '<div class="sub-h">五資產立場</div><div class="pulse">'+pu.map(x=>{
+    const pv=(prev.find(p=>p.k===x.k)||{}).dir;
+    const chg=(pv&&pv!==x.dir)?'<span class="pchg">翻轉·昨'+pv+'</span>':"";
+    return '<div class="p"><span class="pk">'+x.k+'</span><span class="pd '+(CL[x.dir]||"fl")+'">'
+      +(AR[x.dir]||"")+" "+x.dir+"</span>"+chg+(x.note?'<span class="pn">'+x.note+"</span>":"")+"</div>";
+  }).join("")+"</div>";
+}
+function reviewHTML(d){
+  const wr=d.overview.watchReview; if(!wr||!wr.length) return "";
+  const CL={"應驗":"pos","落空":"hot","未決":""};
+  return '<div class="group-label"><span class="bar"></span>昨日節點回顧<span class="n">'
+    +wr.filter(x=>x.verdict==="應驗").length+" 應驗 · "+wr.filter(x=>x.verdict==="落空").length+" 落空</span></div>"
+    +'<div class="review">'+wr.map(x=>'<div class="rv"><span class="tag '+(CL[x.verdict]||"")+'">'+x.verdict+"</span>"
+    +'<span class="rt">'+x.t+"</span>"+(x.note?'<span class="rn">'+x.note+"</span>":"")+"</div>").join("")+"</div>";
+}
 function overviewHTML(d){
   const o=d.overview;
   const lv=parseInt(o.thermo.level);
   const mk=isNaN(lv)?"":'<div class="thermo-mk" style="left:'+Math.min(Math.max(lv,0),100)+'%"><span>'+lv+"</span></div>";
   return '<section class="tabpane active" data-p="overview"><div class="brief">'
     +'<div class="bl"><span class="pill">三分鐘總覽</span><h2>'+d.date.replace(/-/g,"/")+" · "+d.weekday+"</h2></div>"
-    +'<div class="snap">'+o.snap.map(s=>'<div class="s"><div class="k">'+s.k+'</div><div class="v '+s.tone+'">'+s.v+"</div></div>").join("")+"</div>"
+    +'<div class="snap">'+o.snap.map(s=>'<div class="s"><div class="k">'+s.k+'</div><div class="v '+s.tone+'">'+s.v+"</div>"+snapFlag(s.k,s.chgPct,d.date)+"</div>").join("")+"</div>"
     +threadStrip(d.date)
     +'<div class="focus">'+o.focus.map(f=>'<div class="f"><div class="k">'+f.k+'</div><div class="v">'+f.v+"</div></div>").join("")+"</div>"
     +'<div class="sub-h">'+o.takeawaysTitle+"</div>"
     +'<ul class="takeaways">'+o.takeaways.map(t=>"<li>"+t+"</li>").join("")+"</ul>"
+    +pulseHTML(d)
     +'<div class="thermo-wrap">'+mk+'<div class="thermo"><div class="g"></div><div class="y"></div><div class="o"></div><div class="r"></div></div></div>'
     +'<div class="thermo-lbl"><span>風險偏好 · 低</span><span>'+o.thermo.note+"</span><span>高</span></div>"
+    +'<div id="sisters"></div>'
     +'<div class="srcbar"><span class="lbl">主要來源（15）</span>'
     +SRCBAR.map(s=>'<span class="badge b-'+s+'">'+BADGE[s]+"</span>").join("")+"</div></div>"
     +'<div class="group-label"><span class="bar"></span>本週重點盯盤時程<span class="n">Key dates</span></div>'
     +'<div class="watch">'+o.watch.map(w=>'<div class="w"><span class="wd">'+w.d+'</span><span class="wt">'+w.t+"</span></div>").join("")+"</div>"
+    +reviewHTML(d)
     +"</section>";
 }
 function essayHTML(d){

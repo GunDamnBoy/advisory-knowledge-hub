@@ -93,6 +93,20 @@ def tags_block(rows):
         print('\n=== 主題連續劇（thread 出現總則數）===')
         for t,n_ in thr.most_common(20): print(f'  {t:<18}{n_}')
 
+def pulse_block(rows):
+    print('\n=== 五資產立場歷史（▲偏多 —中性 ▼偏空）===')
+    AR={'偏多':'▲','中性':'—','偏空':'▼'}
+    KEYS=['美股','美債','美元','黃金','原油']
+    print(f"{'日期':<12}"+''.join(f'{k:>5}' for k in KEYS))
+    for d,_ in rows:
+        pu=(d.get('overview') or {}).get('pulse')
+        if not pu: continue
+        m={x.get('k'):AR.get(x.get('dir'),'?') for x in pu}
+        print(f"{d['date']:<12}"+''.join(f'{m.get(k,"·"):>5}' for k in KEYS))
+    print('（翻轉處就是 House View 要解釋的地方；資料自 2026-08-11 起）')
+
 if __name__=='__main__':
     main()
-    if '--tags' in set(sys.argv[1:]): tags_block(load())
+    argv=set(sys.argv[1:])
+    if '--tags' in argv: tags_block(load())
+    if '--pulse' in argv: pulse_block(load())

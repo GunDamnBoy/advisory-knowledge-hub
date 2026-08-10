@@ -68,17 +68,36 @@ def main():
     prev=json.load(open('%s/%s'%(REPO,prevmeta['file']))) if prevmeta else {'sections':[]}
     prevurl={c['url'] for s in prev['sections'] for g in s['groups'] for c in g['cards']}
     dup=[c['title'] for _,c in cards if c['url'] in prevurl and not exempt(c['url'])]
-    if TODAY>='2026-08-11':   # v17（時間序列化）起生效，歷史檔不回溯套用
-        th=(d.get('overview') or {}).get('thermo') or {}
+    if TODAY>='2026-08-11':   # v17/v18（時間序列化＋回顧／立場）起生效，歷史檔不回溯套用
+        ov=d.get('overview') or {}
+        th=ov.get('thermo') or {}
         lv=str(th.get('level',''))
         if not(lv.isdigit() and 0<=int(lv)<=100):
             print('★thermo.level 須為 0–100 整數字串（散文放 note）：',repr(lv)); fails.append('thermo')
-        for sn in (d.get('overview') or {}).get('snap',[]):
+        for sn in ov.get('snap',[]):
             if not isinstance(sn.get('num'),(int,float)):
                 print('★snap 項缺 num 數值欄：',sn.get('k')); fails.append('snap.num'); break
+        # v18：五資產立場列（固定五鍵、固定方向詞）
+        PKEYS=['美股','美債','美元','黃金','原油']; DIRS={'偏多','中性','偏空'}
+        pu=ov.get('pulse')
+        if not(isinstance(pu,list) and [x.get('k') for x in pu]==PKEYS and all(x.get('dir') in DIRS for x in pu)):
+            print('★pulse 須為固定五鍵（美股/美債/美元/黃金/原油）且 dir∈偏多/中性/偏空'); fails.append('pulse')
+        # v18：昨日盯盤節點回顧（前一版 watch 非空 → 必須逐條回顧）
+        VOK={'應驗','落空','未決'}
+        pw=(next((x for x in days if prevmeta and x['date']==prevmeta['date']),{}) or {}).get('watch') or []
+        wr=ov.get('watchReview') or []
+        if pw and not wr:
+            print('★前一版有 %d 條盯盤節點，watchReview 不可空——驗證回圈是本站的差異化功能'%len(pw)); fails.append('watchReview')
+        for x in wr:
+            if x.get('verdict') not in VOK:
+                print('★watchReview.verdict 須為 應驗/落空/未決：',x.get('verdict')); fails.append('verdict'); break
+        # index.json 當日 entry 的跨日記憶欄位
         ent=next((x for x in days if x['date']==TODAY),None)
-        if not ent or not isinstance(ent.get('thermo'),int) or not isinstance(ent.get('threads'),list):
-            print('★index.json 當日 entry 缺 thermo（整數）或 threads（陣列）'); fails.append('index欄位')
+        need=lambda e:(isinstance(e.get('thermo'),int) and isinstance(e.get('threads'),list)
+                       and isinstance(e.get('watch'),list) and isinstance(e.get('pulse'),list)
+                       and isinstance(e.get('snap'),list))
+        if not ent or not need(ent):
+            print('★index.json 當日 entry 缺跨日記憶欄位（thermo/threads/watch/pulse/snap）'); fails.append('index欄位')
     for _,c in cards:
         tv=c.get('thread')
         if tv is not None and not(isinstance(tv,str) and 2<=len(tv)<=16):
