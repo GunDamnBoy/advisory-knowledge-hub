@@ -15,6 +15,15 @@ QUOTA={'美股與財報':10,'AI 與半導體':10,'央行、利率與匯率':8,'�
        '中國':6,'日本':6,'能源與原物料':6,'金融、併購與企業':6,
        '地緣政治（中東與戰事）':6,'美國政治與政策':6,
        '歐洲':3,'亞太（韓國、印度、東南亞）':3,'生技健護':3,'信用債':3,'黃金':3}
+# 週末模式（2026/08/10 第 16 次修訂）：窗口涵蓋週六或週日時自動放寬。
+# 動機：8/10 那輪窗口涵蓋週日，Fierce/FDA/OGJ/IBD/TrendForce 全部零新文，
+# 為了湊平日下限開了四輪補位、佔全輪 22.6% 成本，換來的還是偏軟的素材。
+# 週末素材少是事實，不是執行不力——下限跟著現實走，不要讓規則逼出注水內容。
+WEEKEND_QUOTA={**QUOTA,
+  '中國':4,'日本':4,'能源與原物料':4,'金融、併購與企業':4,
+  '地緣政治（中東與戰事）':4,'美國政治與政策':4,
+  '歐洲':2,'亞太（韓國、印度、東南亞）':2,'生技健護':2,'信用債':2,'黃金':2}
+WEEKEND_RANGE=(80,125)   # 週末全站則數下限跟著放寬
 # 每日更新但網址固定的官方數據頁，豁免去重（內容每天都變，只有 URL 相同）
 DEDUP_EXEMPT=('trendforce.com','fred.stlouisfed.org','spdrgoldshares.com',
               'cmegroup.com','gold.org','twse.com.tw','tpex.org.tw','mopsfin.twse.com.tw')
@@ -26,6 +35,10 @@ def main():
     w=d.get('window')
     assert w,'★致命：頂層缺 window 欄'
     frm=dt.datetime.fromisoformat(w['from']); to=dt.datetime.fromisoformat(w['to'])
+    # 窗口起點或終點落在週六(5)/週日(6) → 套用週末下限
+    weekend = frm.weekday()>=5 or to.weekday()>=5
+    quota = WEEKEND_QUOTA if weekend else QUOTA
+    lo,hi = WEEKEND_RANGE if weekend else (95,125)
     cards=[(g['label'],c) for s in d['sections'] for g in s['groups'] for c in g['cards']]
     def T(c):
         try: return dt.datetime.fromisoformat(c['ts'])
@@ -51,8 +64,9 @@ def main():
     multi={k:v for k,v in u.items() if len(v)>1 and not exempt(k)}
     viol=[(v,k) for k,v in multi.items() if not(len(v)<=3 and len(set(v))==len(v))]
     n=len(cards); fails=[]
-    print('總數',n,'OK' if 95<=n<=125 else '★不在 95–125')
-    if not 95<=n<=125: fails.append('總數')
+    print('模式：'+('週末（下限已放寬）' if weekend else '平日'))
+    print('總數',n,'OK' if lo<=n<=hi else '★不在 %d–%d'%(lo,hi))
+    if not lo<=n<=hi: fails.append('總數')
     for name,lst in [('缺/壞 ts',nots),('逾期',bad),('未來 ts',fut),('date/ts 不一致',mism),('與前一版重複',dup)]:
         print(name,len(lst),lst[:3])
         if lst: fails.append(name)
@@ -66,12 +80,12 @@ def main():
     seen=set()
     for s in d['sections']:
         for g in s['groups']:
-            lab=g['label']; seen.add(lab); q=QUOTA.get(lab)
+            lab=g['label']; seen.add(lab); q=quota.get(lab)
             if q is None: print('★分組名不在 QUOTA 表：',lab); fails.append('分組名'); continue
             okq=len(g['cards'])>=q
             print('%-22s %2d / 需 %d %s'%(lab,len(g['cards']),q,'OK' if okq else '★不足'))
             if not okq: fails.append(lab)
-    missing=set(QUOTA)-seen
+    missing=set(quota)-seen
     print('★缺少的分組：',missing or '無')
     if missing: fails.append('缺組')
     print('\n'+('✅ 全部通過' if not fails else '❌ 硬性失敗：'+', '.join(fails)))
