@@ -58,7 +58,7 @@
 
 - **盯盤節點回顧（`overview.watchReview`，必填）**：把昨天的 watch 逐條標 `應驗`/`落空`/`未決`＋一句話附數字。**這是本站與一般新聞摘要的分水嶺——拋出去的預測要回頭對答案**，跨月累積就是一份可引用的預測紀錄（「我們 X 日提示的節點已應驗」）。check.py 強制：前一版 watch 非空則回顧不可空；規格明訂「模稜兩可就是未決，落空的 note 最有價值」。前端渲染在盯盤時程之後，附「N 應驗 · N 落空」統計。
 - **五資產立場列（`overview.pulse`，必填）**：美股／美債／美元／黃金／原油固定五鍵，`dir`∈偏多/中性/偏空＋≤30 字理由。**每日版的迷你 House View**：月度 House View 可直接 diff「本月翻轉了幾次、何時翻的」。前端翻轉時自動標「翻轉·昨偏空」（比對 index 昨日 entry，零額外請求）；metrics.py 新增 `--pulse` 歷史矩陣。規格要求翻轉必須有意識、note 講清楚——防止立場天天漂移。
-- **姊妹庫晨間匯流條（純前端，writer 零負擔）**：總覽底部三格——AI 泡沫監控（綜合溫度＋台股過熱度）、Podcast 知識庫（今晨集數＋節目）、每日五圖（昨日標題）。**只在最新一天顯示**，歷史封存保持純快照；任一站掛掉該格自動隱藏。三站介面經實測確認：泡沫監控無公開 data JSON，但頁內有 `<script id="dashboard-data" type="application/json">` 內嵌完整資料（`composite`／`tw.heat`／`meta.built`），fetch HTML 後正則抽出即可；Podcast 與五圖都有標準 `data/index.json`。
+- **姊妹庫晨間匯流條（純前端，writer 零負擔）**：總覽底部三格——AI 泡沫監控（綜合溫度＋台股過熱度）、Podcast 知識庫（今晨集數＋節目）、每日五圖（昨日標題）。**只在最新一天顯示**，歷史封存保持純快照；任一站掛掉該格自動隱藏。三站介面經實測確認（同日稽核修正）：泡沫監控正本是 **`data.json`**（每交易日更新，`composite`／`tw.heat`／`meta.built`），頁內 `<script id="dashboard-data">` 只是**離線退路快照、可落後 45 天**——第一版誤讀快照（當日就差 3.3 分：56.6 vs 59.9），已改為 data.json 為主、快照為備援；Podcast 與五圖都有標準 `data/index.json`。
 - **異常旗標（純前端，writer 零負擔）**：index entry 新增 `snap` 數值鏡像，前端累積 ≥10 天後、當日 |chgPct| 創期間新高自動標「⚑ 近 N 日最大波動」。門檻 10 天是為了避免序列太短時天天觸發；約 8/21 起自動亮起。
 - **index.json entry 擴為五個跨日記憶欄位**：`thermo`／`threads`／`watch`／`pulse`／`snap`。歷史十天已回填 `watch` 鏡像（8/11 首跑就能寫回顧）；`pulse`／`snap` 自 8/11 起累積。
 - check.py v18 檢查與 v17 同日（2026-08-11）生效：pulse 五鍵與方向詞、watchReview 完整性與 verdict 白名單、index 五欄位。單元測試：完整假 8/11 檔 exit=0；缺 pulse、缺回顧、verdict 亂寫各自被具名攔截。

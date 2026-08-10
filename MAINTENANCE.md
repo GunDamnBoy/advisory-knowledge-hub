@@ -85,7 +85,7 @@
 **（2026-08-10 第 17 次修訂後新增）**
 
 - **8/11 是 v17＋v18 欄位的第一輪實跑**：盯 writer 有沒有正確填 `snap.num`／`chgPct`、`thermo.level` 整數字串、`thread` 代號沿用；**v18 重點盯品質而非格式**——watchReview 的判定誠不誠實（落空敢不敢寫落空）、pulse 翻轉有沒有給理由（check.py 只能擋格式）。若 8/11～8/13 品質不穩，優先修規格用語而不是撤功能。
-- **姊妹庫介面備忘**（2026/08/10 實測）：AI 泡沫監控**沒有公開 data JSON**（`data/latest.json`／`data/history.json` 皆 404），機器介面是頁內 `<script id="dashboard-data" type="application/json">`（`composite`／`tw.heat`／`meta.built`／`history[]`），index.html 的匯流條靠 fetch HTML＋正則抽出。**泡沫監控若改版把這個 script id 拿掉，匯流條該格會安靜消失**——那是優雅降級不是 bug，但要去 /bubble-maintain 那邊補回介面。Podcast 與五圖都有標準 `data/index.json`。
+- **姊妹庫介面備忘**（2026/08/10 實測＋同日稽核修正）：AI 泡沫監控的正本是 **`data.json`**（每交易日 GitHub Actions 更新；`composite`／`tw.heat`／`meta.built`／`quadrant`／`history[]`），頁內 `<script id="dashboard-data">` 只是離線退路快照、依其 healthcheck 容忍落後 45 天——**匯流條以 data.json 為主、快照為備援**（第一版誤讀快照，當日差 3.3 分）。**泡沫監控若改 data.json 的 `composite`／`tw.heat`／`meta.built` 三個鍵名，匯流條該格會安靜消失**——優雅降級不是 bug，但要去 /bubble-maintain 補介面。Podcast 與五圖都有標準 `data/index.json`（分別讀 `days[0]` 的 `date`/`episodeCount`/`shows` 與 `date`/`headline`）。
 - **index.json 是跨日記憶**：entry 五欄位 `thermo`／`threads`／`watch`／`pulse`／`snap`。改 schema 時記得它同時被三方讀：每日 writer（第 1 步）、check.py（v17/v18 檢查）、前端（threads 連續天數／pulse 翻轉／異常旗標）。
 - **華爾街見聞觀察中**：8/10 首次全站 0 則（重度 SPA 未渲染、五種入口全試、sitemap 404），其市場報價靜態渲染仍可用。比照 NYT 規則：連三天 0 則再處置（換入口或降級為僅報價源），判斷依據是 `metrics.py --src`。
 - **thermo 歷史序列有 5 個散文斷點**（07-30、08-02、08-03、08-07、08-08 為散文或缺值），時間序列從 8/04 起算、8/11 起才保證連續。

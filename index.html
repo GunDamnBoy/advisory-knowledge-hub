@@ -392,11 +392,16 @@ async function loadSisters(){
         async r=>{const j=await r.json();SIS.pod=j.days&&j.days[0]}),
       grab("https://gundamnboy.github.io/chart-of-the-day/data/index.json",
         async r=>{const j=await r.json();SIS.chart=j.days&&j.days[0]}),
-      grab("https://gundamnboy.github.io/ai-bubble-monitor/",
-        async r=>{const h=await r.text();
-          const m=h.match(/<script[^>]*id="dashboard-data"[^>]*>([\s\S]*?)<\/script>/);
-          if(m){const j=JSON.parse(m[1]);
-            SIS.bub={c:j.composite,tw:j.tw&&j.tw.heat,d:(j.meta&&j.meta.built)||""}}})
+      grab("https://gundamnboy.github.io/ai-bubble-monitor/data.json",
+        async r=>{const j=await r.json();
+          SIS.bub={c:j.composite,tw:j.tw&&j.tw.heat,d:(j.meta&&j.meta.built)||""}})
+        .then(async()=>{   // data.json 才是正本（每交易日更新）；頁內 dashboard-data 只是離線退路快照，可落後 45 天
+          if(SIS.bub) return;
+          await grab("https://gundamnboy.github.io/ai-bubble-monitor/",
+            async r=>{const h=await r.text();
+              const m=h.match(/<script[^>]*id="dashboard-data"[^>]*>([\s\S]*?)<\/script>/);
+              if(m){const j=JSON.parse(m[1]);
+                SIS.bub={c:j.composite,tw:j.tw&&j.tw.heat,d:(j.meta&&j.meta.built)||""}}})})
     ]);
   }
   const el=document.getElementById("sisters"); if(!el) return;
