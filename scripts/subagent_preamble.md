@@ -55,6 +55,17 @@
 
 **絕對不要選 WORK `120b7860-…`**——那台是已停用的辦公室機器。8/13 F 組在該提示後誤選 WORK 繼續作業（所幸只讀了免費與官方來源）。選錯不會報錯、也不會有任何跡象，只會安靜地在錯的機器上跑完整輪。
 
+### JSON／CSV 端點要先 navigate 到同網域再 fetch
+
+**不要 `navigate` 到 JSON 網址**——Chrome 會當成檔案下載而不是渲染，`innerText` 讀不到（8/13 台股 OpenAPI 三端點因此連續失敗逾五次）。
+
+正確做法：**先 `navigate` 到與端點同網域的任一頁面**，再用 `javascript_tool` 跑
+```
+await fetch('<端點網址>').then(r => r.text())
+```
+
+**同網域是硬性的，跨子網域也會被 CORS 擋**（8/14 實測）：停在 `www.twse.com.tw` 去 fetch `openapi.twse.com.tw` 會失敗。同網域的多個端點可以在同一頁一次抓完，**換網域才要重新 navigate**。
+
 ## 3. 讀正文的方法
 
 用 `scripts/read_article.js`（主 agent 會附全文）。判定標準：
