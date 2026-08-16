@@ -24,6 +24,10 @@ WEEKEND_QUOTA={**QUOTA,
   '地緣政治（中東與戰事）':4,'美國政治與政策':4,
   '歐洲':2,'亞太（韓國、印度、東南亞）':2,'生技健護':2,'信用債':2,'黃金':2}
 WEEKEND_RANGE=(80,125)   # 週末全站則數下限跟著放寬
+# 卡片字數區間（2026/08/16 第 22 次修訂新增）。只警告不擋——字數是品質指標不是正確性指標，
+# 為了湊字數注水比超標更糟。但不量就會安靜漂移：8/15 一般卡 702 字、規格當時寫 450–600。
+LEN_REG=(650,800)    # 一般卡：lead ＋ bullets
+LEN_DEEP=(900,1200)  # 深度卡：多段 longread
 # 每日更新但網址固定的官方數據頁，豁免去重（內容每天都變，只有 URL 相同）
 DEDUP_EXEMPT=('trendforce.com','fred.stlouisfed.org','spdrgoldshares.com',
               'cmegroup.com','gold.org','twse.com.tw','tpex.org.tw','mopsfin.twse.com.tw')
@@ -106,6 +110,19 @@ def main():
     for lab,c in cards: u[c['url']].append(lab)
     multi={k:v for k,v in u.items() if len(v)>1 and not exempt(k)}
     viol=[(v,k) for k,v in multi.items() if not(len(v)<=3 and len(set(v))==len(v))]
+    # ---- 卡片字數（警告層級，不計入 fails）----
+    if TODAY>='2026-08-16':
+        L=lambda c:(len(' '.join(c['body']) if isinstance(c['body'],list) else c['body'])
+                    +sum(len(b) for b in c.get('bullets',[])))
+        reg=[L(c) for _,c in cards if not c.get('deep')]
+        dp =[L(c) for _,c in cards if c.get('deep')]
+        for name,arr,(lo_,hi_) in [('一般卡',reg,LEN_REG),('深度卡',dp,LEN_DEEP)]:
+            if not arr: continue
+            avg=sum(arr)//len(arr); out=sum(1 for x in arr if not lo_<=x<=hi_)
+            mark='OK' if lo_<=avg<=hi_ else ('★偏短' if avg<lo_ else '★偏長')
+            print('%s %d 張 平均 %d 字（規格 %d–%d）%s；逾越區間 %d 張'
+                  %(name,len(arr),avg,lo_,hi_,mark,out))
+
     n=len(cards)
     if d.get('cards')!=n:
         print('★頂層 cards 數字與實際卡數不一致：%s vs %d'%(d.get('cards'),n)); fails.append('頂層cards')
