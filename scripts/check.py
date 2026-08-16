@@ -26,8 +26,11 @@ WEEKEND_QUOTA={**QUOTA,
 WEEKEND_RANGE=(80,125)   # 週末全站則數下限跟著放寬
 # 卡片字數區間（2026/08/16 第 22 次修訂新增）。只警告不擋——字數是品質指標不是正確性指標，
 # 為了湊字數注水比超標更糟。但不量就會安靜漂移：8/15 一般卡 702 字、規格當時寫 450–600。
-LEN_REG=(650,800)    # 一般卡：lead ＋ bullets
-LEN_DEEP=(900,1200)  # 深度卡：多段 longread
+# 區間 2026/08/16 傍晚由 (650,800) 放寬為 (550,900)：8/16 實測 103 張一般卡為乾淨單峰
+# （最短 570、中位 700、最長 1081），40 張逾越純屬自然離散、不是品質問題。
+# 但「每天都亮的警告」很快會被當成背景噪音——放寬後涵蓋 102/103 張，逾越才重新有訊號價值。
+LEN_REG=(550,900)    # 一般卡：lead ＋ bullets
+LEN_DEEP=(900,1300)  # 深度卡：多段 longread（同步放寬上緣，8/15 實測平均 1135）
 # 每日更新但網址固定的官方數據頁，豁免去重（內容每天都變，只有 URL 相同）
 DEDUP_EXEMPT=('trendforce.com','fred.stlouisfed.org','spdrgoldshares.com',
               'cmegroup.com','gold.org','twse.com.tw','tpex.org.tw','mopsfin.twse.com.tw')
