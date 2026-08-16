@@ -96,11 +96,11 @@ await fetch('<端點網址>').then(r => r.text())
 | Barron's | **兩種版型**：標準新聞版靠 `p[class*="Paragraph"]`，Investor Circle／Technical Analysis 版靠 `div[class*="paragraph"]`（兩者都在 `read_article.js` 裡）。渲染慢，務必等輪詢結束 |
 | Mint | 段落要用全頁 `p` 才抓得到（腳本的 `<8 段就退回全頁 p` 保險絲會處理） |
 | Korea Herald | **列表頁必須用 `/Business`，`/section/business` 是殘頁**；時間戳時區是 **+09:00，換算台北要減 1 小時** |
-| The Economist | 時間戳是 **UTC，換算台北要加 8 小時**；付費牆是硬牆，依內文量標準判定即可。**The World in Brief 每日早報不要收**（是各家新聞的彙整，不是原創） |
+| The Economist | 時間戳在 `meta[property="article:published_time"]`，是 **UTC，換算台北要加 8 小時**；付費牆是硬牆，依內文量標準判定即可。**三種節奏**：週刊正文於**週四晚間至週五凌晨（台北）整批上線**，出刊日窗口內常一次出現十幾篇；線上專文平日 0～3 篇；**The World in Brief 每日早報不要收**（是各家新聞的彙整，不是原創）。**它的價值是解釋框架不是時效，優先挑分析而非消息**——Leaders、Finance & economics、Briefing 三版優先，Business 版的公司報導可略過（其他來源已覆蓋） |
 | TrendForce | **以中文站 `trendforce.com.tw` 為主**。**`/news/` 列表頁會乾淨載入但 `innerText` 只有約 318 字元（8/13 實測），報價一律走 `/price/`**；報價務必標明合約價／現貨價、DDR4／DDR5、顆粒／模組、月度／週度，**並註明每個數字各自的更新日期** |
 | IBD | **只能 `navigate`**，用 `fetch()` 取 HTML 只會拿到付費牆前導段 |
 | STAT News | 付費文 DOM 上仍有 16 段／2,181 字，扣掉記者簡介與訂閱區塊後只剩約 3 段／600 字——依內文量標準判定被擋就換篇 |
-| SemiAnalysis | 約每週 1～2 篇、不是日更。**窗口內沒有新文是正常狀態，不是採集失敗**，不必記為降級，**更不要收窗口外的舊文** |
+| SemiAnalysis | Substack 電子報。入口 `https://newsletter.semianalysis.com/`，掃連結用 `a[href*="/p/"]`，文章永久連結為 `/p/<slug>`。**`ts` 好取**：首頁與文章頁都有 `<time datetime>`（UTC），文章頁另有 `meta[property="article:published_time"]`，換算台北 +8。選擇器建議加 `.available-content p, [class*="markup"] p`（單篇實測 107 段／25,441 字元）。**頁尾與側欄永遠掛著訂閱 CTA，不要據此判定被擋**，一律回歸內文量標準。約每週 1～2 篇、不是日更，**窗口內沒有新文是正常狀態，不是採集失敗**，不必記為降級，**更不要收窗口外的舊文** |
 | **CNBC** | **`/pro/` 與 Investing Club 的內容是獨立付費層、不在訂閱範圍內**——8/16 實測 3 篇正文皆 0 字（頁面 3,432 字元全為樣板）。**在預篩階段就把這兩類網址濾掉，不要點進去讀完才發現**；它們不算「被擋」，是訂閱範圍外。CNBC 一般新聞正常可讀 |
 | **MoneyDJ** | **週六日不出編輯稿**，窗口內條目多為**自動轉貼的 MOPS 重大訊息**——那些不是編輯素材，不要拿來充配額（8/16 實測配額 3 則全落空，最新編輯稿停在 8/14 16:04）。週末直接降低對它的期待，改由鉅亨與官方端點補 |
 | Bloomberg／Barron's／MarketWatch | `get_page_text` 會嚴重低估內文，只適合掃標題 |
