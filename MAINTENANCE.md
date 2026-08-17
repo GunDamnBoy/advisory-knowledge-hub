@@ -47,8 +47,9 @@
 
 ### 3.1 只能靠人記得的
 
-- **「不要跑 git」這條也管維護端，不是只管排程（2026/08/17 踩到）。** brief 第 5 節的禁令寫在「產出流程」底下，讀起來像是只約束每日執行；但**維護時為了確認改動有沒有進版而跑 `git status`／`git log`／`git show`，會留下同一個 `.git/index.lock`**，而沙箱**既不能 `rm` 也不能 `mv`**（`mv` 內部是 copy＋unlink，一樣被拒），**只能請使用者在 Mac 上手動刪**：`rm -f ~/advisory-knowledge-hub/.git/index.lock`。在那之前 `com.kenny.dashpush` 一直失敗，改動停在本機、不會上線，**而且沒有任何錯誤會浮到對話裡**。
-  **要確認改動有沒有落地就用非 git 的方式**：`grep` 工作區檔案、比對 `wc -c`。要確認有沒有推上去，就開線上網址看。
+- **「不要跑 git」這條也管維護端，不是只管排程（2026/08/17 踩到）。** brief 第 5 節的禁令寫在「產出流程」底下，讀起來像是只約束每日執行；但**維護時為了確認改動有沒有進版而跑 `git status`／`git log`／`git show`，會留下同一個 `.git/index.lock`**，而沙箱**既不能 `rm` 也不能 `mv`**（`mv` 內部是 copy＋unlink，一樣被拒），**只能請使用者在 Mac 上手動刪**：`rm -f ~/advisory-knowledge-hub/.git/index.lock`。
+  **實測後果沒有當下猜的嚴重，而當下就不該猜。** 鎖檔存在的那 35 分鐘（10:54–11:29）內，`com.kenny.dashpush` 仍於 10:55 與 10:58 兩度成功 commit 並推送（`refs/heads/main` 與 `refs/remotes/origin/main` 同為 `1b5cd2e`）。**我當時斷言「在刪掉之前 dashpush 會一直失敗」，那是沒有觀察就下的結論**——能講的只有「沙箱留下了它自己清不掉的鎖檔」。禁令照舊，但**代價要據實描述，不要拿推測當事實**（同類前例：把一個沒揭露的減法當成結論的依據）。
+  **要確認改動有沒有落地就用非 git 的方式**：`grep` 工作區檔案、比對 `wc -c`；要確認有沒有進版與推上去，**讀 `.git/logs/HEAD` 與 `.git/refs/heads/main`／`.git/refs/remotes/origin/main`**——那是純讀檔，不會產生鎖。
 
 **維護者行為（改這套系統時）**
 
