@@ -137,7 +137,7 @@ def main():
                 if not c_: continue
                 lab=('<%d'%b_) if a_ is None else ('%d+'%a_ if b_ is None else '%d-%d'%(a_,b_))
                 print('    %-11s %s %d'%(lab,'\u2588'*min(c_,30),c_))
-            print('    分布形狀：尖峰貼著下限＝規格被挑錯；左長尾＝素材真的薄')
+            if mark!='OK': print('    判讀：尖峰貼著下限＝規格被挑錯；左長尾＝素材真的薄')
 
     n=len(cards)
     if d.get('cards')!=n:
