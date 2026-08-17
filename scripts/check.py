@@ -119,12 +119,25 @@ def main():
                     +sum(len(b) for b in c.get('bullets',[])))
         reg=[L(c) for _,c in cards if not c.get('deep')]
         dp =[L(c) for _,c in cards if c.get('deep')]
+        def _q(a,p):
+            t=sorted(a); i=(len(t)-1)*p/100.0; f=int(i)
+            return t[f] if f>=len(t)-1 else int(round(t[f]+(t[f+1]-t[f])*(i-f)))
         for name,arr,(lo_,hi_) in [('一般卡',reg,LEN_REG),('深度卡',dp,LEN_DEEP)]:
             if not arr: continue
-            avg=sum(arr)//len(arr); out=sum(1 for x in arr if not lo_<=x<=hi_)
-            mark='OK' if lo_<=avg<=hi_ else ('★偏短' if avg<lo_ else '★偏長')
-            print('%s %d 張 平均 %d 字（規格 %d–%d）%s；逾越區間 %d 張'
-                  %(name,len(arr),avg,lo_,hi_,mark,out))
+            n_=len(arr); avg=sum(arr)//n_; med=_q(arr,50)
+            under=sum(1 for x in arr if x<lo_); over=sum(1 for x in arr if x>hi_)
+            mark='OK' if lo_<=med<=hi_ else ('★偏短' if med<lo_ else '★偏長')
+            print('%s %d 張（規格 %d–%d）%s'%(name,n_,lo_,hi_,mark))
+            print('  中位 %d／平均 %d｜最小 %d・P25 %d・P75 %d・最大 %d｜低於下限 %d 張・高於上限 %d 張'
+                  %(med,avg,min(arr),_q(arr,25),_q(arr,75),max(arr),under,over))
+            w=max(1,(hi_-lo_)//4); ed=[lo_+w*k for k in range(-2,5)]
+            for k in range(len(ed)+1):
+                a_=ed[k-1] if k>0 else None; b_=ed[k] if k<len(ed) else None
+                c_=sum(1 for x in arr if (a_ is None or x>=a_) and (b_ is None or x<b_))
+                if not c_: continue
+                lab=('<%d'%b_) if a_ is None else ('%d+'%a_ if b_ is None else '%d-%d'%(a_,b_))
+                print('    %-11s %s %d'%(lab,'\u2588'*min(c_,30),c_))
+            print('    分布形狀：尖峰貼著下限＝規格被挑錯；左長尾＝素材真的薄')
 
     n=len(cards)
     if d.get('cards')!=n:
